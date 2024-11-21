@@ -1,0 +1,169 @@
+[
+    {
+        "barcode": "JJD149990200039892279",
+        "barcodes": [
+            "JJD149990200039892279"
+        ],
+        "date": "2024-10-29T12:13:00Z",
+        "events": [
+            {
+                "category": "DATA_RECEIVED",
+                "localTimestamp": "2024-10-26T19:35:21+02:00",
+                "leg": {
+                    "network": "CDEx"
+                },
+                "status": "PRENOTIFICATION_RECEIVED",
+                "timestamp": "2024-10-26T17:35:21Z",
+                "type": "PIECE_EVENT"
+            },
+            {
+                "category": "DATA_RECEIVED",
+                "localTimestamp": "2024-10-26T19:35:22+02:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "PRENOTIFICATION_RECEIVED",
+                "timestamp": "2024-10-26T17:35:22Z",
+                "type": "PIECE_EVENT"
+            },
+            {
+                "category": "UNDERWAY",
+                "localTimestamp": "2024-10-29T13:13:00+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "PARCEL_SORTED_AT_HUB",
+                "timestamp": "2024-10-29T12:13:00Z",
+                "type": "PIECE_EVENT"
+            },
+            {
+                "category": "UNDERWAY",
+                "localTimestamp": "2024-10-30T07:25:46+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "PARCEL_ARRIVED_AT_LOCAL_DEPOT",
+                "timestamp": "2024-10-30T06:25:46Z",
+                "type": "PIECE_EVENT"
+            },
+            {
+                "category": "IN_DELIVERY",
+                "localTimestamp": "2024-10-30T12:59:03+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "plannedDeliveryTimeframe": "2024-10-30T13:05:00+01:00/2024-10-30T14:45:00+01:00",
+                "status": "OUT_FOR_DELIVERY",
+                "timestamp": "2024-10-30T11:59:03Z",
+                "type": "PIECE_EVENT"
+            },
+            {
+                "category": "DELIVERED",
+                "localTimestamp": "2024-10-30T14:09:41+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "DELIVERED",
+                "timestamp": "2024-10-30T13:09:41Z",
+                "type": "PIECE_EVENT",
+                "momentIndication": "2024-10-30T14:09:41+01:00"
+            }
+        ],
+        "type": "SHIPMENT",
+        "deliveredAt": "2024-10-30T14:09:41+01:00",
+        "created": "2024-10-26T17:35:21Z",
+        "view": {
+            "barcode": "JJD149990200039892279",
+            "shipmentVariant": "SHIPMENT",
+            "message": "DELIVERED_AT",
+            "moment": "2024-10-30T14:09:41+01:00",
+            "queryType": "Barcode",
+            "phases": [
+                {
+                    "phase": "DELIVERED",
+                    "events": [
+                        {
+                            "timestamp": "2024-10-30T13:09:41Z",
+                            "key": "DELIVERED",
+                            "exception": false
+                        }
+                    ]
+                },
+                {
+                    "phase": "IN_DELIVERY",
+                    "events": [
+                        {
+                            "timestamp": "2024-10-30T11:59:03Z",
+                            "key": "OUT_FOR_DELIVERY",
+                            "exception": false
+                        }
+                    ]
+                },
+                {
+                    "phase": "UNDERWAY",
+                    "events": [
+                        {
+                            "timestamp": "2024-10-30T06:25:46Z",
+                            "key": "PARCEL_ARRIVED_AT_LOCAL_DEPOT",
+                            "exception": false
+                        },
+                        {
+                            "timestamp": "2024-10-29T12:13:00Z",
+                            "key": "PARCEL_SORTED_AT_HUB",
+                            "exception": false
+                        }
+                    ]
+                },
+                {
+                    "phase": "DATA_RECEIVED",
+                    "events": [
+                        {
+                            "timestamp": "2024-10-26T17:35:21Z",
+                            "key": "PRENOTIFICATION_RECEIVED",
+                            "exception": false
+                        }
+                    ]
+                }
+            ],
+            "phaseDisplay": [
+                {
+                    "phase": "DATA_RECEIVED",
+                    "completed": true,
+                    "exception": false
+                },
+                {
+                    "phase": "UNDERWAY",
+                    "completed": true,
+                    "exception": false
+                },
+                {
+                    "phase": "IN_DELIVERY",
+                    "completed": true,
+                    "exception": false
+                },
+                {
+                    "phase": "DELIVERED",
+                    "completed": true,
+                    "exception": false
+                }
+            ],
+            "showAsReturn": false,
+            "expectedMailboxDelivery": false,
+            "deliveryNetwork": "NL Ecommerce",
+            "destinationType": "ADDRESS",
+            "isClimateNeutralDelivery": false,
+            "deliveryMomentView": {
+                "stateMessage": "DELIVERED_AT",
+                "deliveredAt": "2024-10-30T14:09:41+01:00",
+                "momentIndication": "2024-10-30T14:09:41+01:00",
+                "timeVisible": true,
+                "dateVisible": true,
+                "showServicePointDetails": "CLOSE_SERVICE_POINT_DETAILS"
+            },
+            "infoMessages": [],
+            "supportOption": "Chatbot"
+        },
+        "totalEvents": 6,
+        "isReturn": false
+    }
+]

@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"command": "cargo",
+			"args": [
+				"tarpaulin",
+				"--out",
+				"Lcov",
+				"--output-dir",
+				"coverage"
+			],
+			"group": "test",
+			"label": "rust: test coverage",
+			"detail": "Runs tarpaulin to generate a code coverage report."
+		}
+	]
+}

@@ -1,0 +1,175 @@
+{
+    "ResultList": [
+        {
+            "Id": "YT2430921266020692",
+            "Status": 20,
+            "TrackInfo": {
+                "WaybillNumber": "YT2430921266020692",
+                "TrackingNumber": "P200314803229308015",
+                "CustomerOrderNumber": "6374249070701",
+                "ChannelCodeIn": "",
+                "ChannelEnNameIn": "",
+                "AdditionalNotes": "<a href='https://track.pdlr.nl/trackntrace/${id}' target='_blank'>https://track.pdlr.nl/trackntrace/${id}</a>",
+                "DestinationCountryCode": "NL",
+                "OriginCountryCode": "CN",
+                "Weight": 2.11,
+                "TrackingStatus": 20,
+                "IntervalDays": 0.0,
+                "IntervalWorkdays": 0.0,
+                "LastTrackEvent": {
+                    "ProcessDate": "2024-11-07T23:36:00",
+                    "ProcessContent": "International flight has departed",
+                    "ProcessLocation": "HK",
+                    "ProcessCity": "Hong Kong",
+                    "TrackingStatus": 20,
+                    "CreatedOn": "2024-11-07T23:36:00",
+                    "FlowType": 0,
+                    "Pod": "",
+                    "Comments": null,
+                    "IsPod": false,
+                    "marks": null,
+                    "PodUrls": null,
+                    "returnTrackingNumber": "",
+                    "SignatureUrls": null
+                },
+                "CreatedOn": "2024-11-04T09:18:16",
+                "TrackEventDetails": [
+                    {
+                        "ProcessLocation": "",
+                        "CreatedOn": "2024-11-04T09:18:16",
+                        "ProcessContent": "Shipment information received"
+                    },
+                    {
+                        "ProcessLocation": "Mainland China, CN",
+                        "CreatedOn": "2024-11-04T19:22:04",
+                        "ProcessContent": "Arrived at origin facility"
+                    },
+                    {
+                        "ProcessLocation": "Mainland China, CN",
+                        "CreatedOn": "2024-11-05T03:46:43",
+                        "ProcessContent": "Departed from sort facility"
+                    },
+                    {
+                        "ProcessLocation": "Mainland China, CN",
+                        "CreatedOn": "2024-11-05T18:16:10",
+                        "ProcessContent": "Shipment is in transit to next facility"
+                    },
+                    {
+                        "ProcessLocation": "CN",
+                        "CreatedOn": "2024-11-06T04:16:01",
+                        "ProcessContent": "Arrived at the origin international airport"
+                    },
+                    {
+                        "ProcessLocation": "HK",
+                        "CreatedOn": "2024-11-07T23:36:00",
+                        "ProcessContent": "International flight has departed"
+                    }
+                ],
+                "IsServerPickup": false,
+                "Pod": "",
+                "IsPod": false,
+                "IsSignature": false,
+                "ltsDigest": "",
+                "PodUrls": null,
+                "SignatureUrls": null,
+                "TransportStage": "DO"
+            },
+            "TrackData": {
+                "ChildCount": 0,
+                "TrackStatus": "Take Off",
+                "IsAlert": false,
+                "DetailingId": "YT2430921266020692",
+                "ProcessGroupList": [
+                    {
+                        "ProcessGroupDate": "2024-11-07T00:00:00",
+                        "ProcessDetailList": [
+                            {
+                                "ProcessDate": "2024-11-07T23:36:00",
+                                "ProcessContent": "International flight has departed----HK",
+                                "Pod": "",
+                                "IsPod": false,
+                                "Comments": [],
+                                "marks": [],
+                                "returnTrackingNumber": "",
+                                "IsSignature": false,
+                                "SignatureUrls": []
+                            }
+                        ]
+                    },
+                    {
+                        "ProcessGroupDate": "2024-11-06T00:00:00",
+                        "ProcessDetailList": [
+                            {
+                                "ProcessDate": "2024-11-06T04:16:01",
+                                "ProcessContent": "Arrived at the origin international airport----CN",
+                                "Pod": "",
+                                "IsPod": false,
+                                "Comments": [],
+                                "marks": [],
+                                "returnTrackingNumber": "",
+                                "IsSignature": false,
+                                "SignatureUrls": []
+                            }
+                        ]
+                    },
+                    {
+                        "ProcessGroupDate": "2024-11-05T00:00:00",
+                        "ProcessDetailList": [
+                            {
+                                "ProcessDate": "2024-11-05T18:16:10",
+                                "ProcessContent": "Shipment is in transit to next facility----Mainland China, CN",
+                                "Pod": "",
+                                "IsPod": false,
+                                "Comments": [],
+                                "marks": [],
+                                "returnTrackingNumber": "",
+                                "IsSignature": false,
+                                "SignatureUrls": []
+                            },
+                            {
+                                "ProcessDate": "2024-11-05T03:46:43",
+                                "ProcessContent": "Departed from sort facility----Mainland China, CN",
+                                "Pod": "",
+                                "IsPod": false,
+                                "Comments": [],
+                                "marks": [],
+                                "returnTrackingNumber": "",
+                                "IsSignature": false,
+                                "SignatureUrls": []
+                            }
+                        ]
+                    },
+                    {
+                        "ProcessGroupDate": "2024-11-04T00:00:00",
+                        "ProcessDetailList": [
+                            {
+                                "ProcessDate": "2024-11-04T19:22:04",
+                                "ProcessContent": "Arrived at origin facility----Mainland China, CN",
+                                "Pod": "",
+                                "IsPod": false,
+                                "Comments": [],
+                                "marks": [],
+                                "returnTrackingNumber": "",
+                                "IsSignature": false,
+                                "SignatureUrls": []
+                            },
+                            {
+                                "ProcessDate": "2024-11-04T09:18:16",
+                                "ProcessContent": "Shipment information received",
+                                "Pod": "",
+                                "IsPod": false,
+                                "Comments": [],
+                                "marks": [],
+                                "returnTrackingNumber": "",
+                                "IsSignature": false,
+                                "SignatureUrls": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            "TrackNotification": [],
+            "ResendTrackList": []
+        }
+    ]
+}

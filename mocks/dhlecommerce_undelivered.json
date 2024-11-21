@@ -1,0 +1,227 @@
+[
+    {
+        "barcode": "CP894276701DE",
+        "barcodes": [
+            "CP894276701DE",
+            "CP894276701DE"
+        ],
+        "date": "2024-11-05T11:53:00Z",
+        "events": [
+            {
+                "category": "DATA_RECEIVED",
+                "localTimestamp": "2024-11-04T14:27:51+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "PRENOTIFICATION_RECEIVED",
+                "timestamp": "2024-11-04T13:27:51Z",
+                "type": "PIECE_EVENT"
+            },
+            {
+                "category": "UNDERWAY",
+                "localTimestamp": "2024-11-05T12:53:00+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "PARCEL_SORTED_AT_HUB",
+                "timestamp": "2024-11-05T11:53:00Z",
+                "type": "PIECE_EVENT"
+            },
+            {
+                "category": "UNDERWAY",
+                "localTimestamp": "2024-11-06T08:51:29+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "PARCEL_ARRIVED_AT_LOCAL_DEPOT",
+                "timestamp": "2024-11-06T07:51:29Z",
+                "type": "PIECE_EVENT"
+            },
+            {
+                "category": "IN_DELIVERY",
+                "localTimestamp": "2024-11-06T13:06:38+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "plannedDeliveryTimeframe": "2024-11-06T13:25:00+01:00/2024-11-06T14:25:00+01:00",
+                "status": "OUT_FOR_DELIVERY",
+                "timestamp": "2024-11-06T12:06:38Z",
+                "type": "PIECE_EVENT"
+            },
+            {
+                "category": "PROBLEM",
+                "localTimestamp": "2024-11-06T14:01:55+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "plannedDeliveryTimeframe": "2024-11-07T10:00:00+01:00/2024-11-07T18:00:00+01:00",
+                "status": "NOT_HOME",
+                "timestamp": "2024-11-06T13:01:55Z",
+                "type": "PIECE_EVENT"
+            },
+            {
+                "category": "PROBLEM",
+                "localTimestamp": "2024-11-06T14:06:32.503+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "NOT_HOME_SYSTEM_INTERVENTION_DELIVERY_AT_PARCELSHOP",
+                "timestamp": "2024-11-06T13:06:32.503Z",
+                "type": "PIECE_EVENT"
+            },
+            {
+                "category": "PROBLEM",
+                "localTimestamp": "2024-11-06T14:06:40+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "NOT_HOME_SYSTEM_INTERVENTION_DELIVERY_AT_PARCELSHOP",
+                "timestamp": "2024-11-06T13:06:40Z",
+                "type": "PIECE_EVENT",
+                "momentIndication": "2024-11-07T13:00:00+01:00"
+            },
+            {
+                "category": "INTERVENTION",
+                "localTimestamp": "2024-11-06T14:16:13.999+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "plannedDeliveryTimeframe": "2024-11-07T10:00:00+01:00/2024-11-07T18:00:00+01:00",
+                "status": "INTERVENTION_RECEIVER_REQUESTS_DELIVERY_AT_ANOTHER_TIME/DATE",
+                "timestamp": "2024-11-06T13:16:13.999Z",
+                "type": "PIECE_EVENT"
+            },
+            {
+                "category": "INTERVENTION",
+                "localTimestamp": "2024-11-06T14:16:14+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "plannedDeliveryTimeframe": "2024-11-07T10:00:00+01:00/2024-11-07T18:00:00+01:00",
+                "status": "INTERVENTION_RECEIVER_REQUESTS_DELIVERY_AT_ANOTHER_TIME/DATE",
+                "timestamp": "2024-11-06T13:16:14Z",
+                "type": "PIECE_EVENT"
+            },
+            {
+                "category": "EXCEPTION",
+                "localTimestamp": "2024-11-06T19:37:14+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "DELIVERY_DATE_CHANGED_BY_DEPOT_MANAGER",
+                "timestamp": "2024-11-06T18:37:14Z",
+                "type": "PIECE_EVENT"
+            },
+            {
+                "category": "UNDERWAY",
+                "localTimestamp": "2024-11-06T19:37:20+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "PARCEL_RETURNED_FROM_ROUTE",
+                "timestamp": "2024-11-06T18:37:20Z",
+                "type": "PIECE_EVENT"
+            }
+        ],
+        "type": "SHIPMENT",
+        "plannedDeliveryTimeframe": "2024-11-07T10:00:00+01:00/2024-11-07T18:00:00+01:00",
+        "created": "2024-11-04T13:27:51Z",
+        "view": {
+            "barcode": "CP894276701DE",
+            "shipmentVariant": "SHIPMENT",
+            "message": "EXPECTED_DELIVERY",
+            "interval": "2024-11-07T10:00:00+01:00/2024-11-07T18:00:00+01:00",
+            "queryType": "Barcode",
+            "phases": [
+                {
+                    "phase": "IN_DELIVERY",
+                    "events": [
+                        {
+                            "timestamp": "2024-11-06T13:16:13.999Z",
+                            "key": "INTERVENTION_RECEIVER_REQUESTS_DELIVERY_AT_ANOTHER_TIME/DATE",
+                            "exception": false
+                        },
+                        {
+                            "timestamp": "2024-11-06T13:06:32.503Z",
+                            "key": "NOT_HOME_SYSTEM_INTERVENTION_DELIVERY_AT_PARCELSHOP",
+                            "exception": true
+                        },
+                        {
+                            "timestamp": "2024-11-06T13:01:55Z",
+                            "key": "NOT_HOME",
+                            "exception": true
+                        },
+                        {
+                            "timestamp": "2024-11-06T12:06:38Z",
+                            "key": "OUT_FOR_DELIVERY",
+                            "exception": false
+                        }
+                    ]
+                },
+                {
+                    "phase": "UNDERWAY",
+                    "events": [
+                        {
+                            "timestamp": "2024-11-06T07:51:29Z",
+                            "key": "PARCEL_ARRIVED_AT_LOCAL_DEPOT",
+                            "exception": false
+                        },
+                        {
+                            "timestamp": "2024-11-05T11:53:00Z",
+                            "key": "PARCEL_SORTED_AT_HUB",
+                            "exception": false
+                        }
+                    ]
+                },
+                {
+                    "phase": "DATA_RECEIVED",
+                    "events": [
+                        {
+                            "timestamp": "2024-11-04T13:27:51Z",
+                            "key": "PRENOTIFICATION_RECEIVED",
+                            "exception": false
+                        }
+                    ]
+                }
+            ],
+            "phaseDisplay": [
+                {
+                    "phase": "DATA_RECEIVED",
+                    "completed": true,
+                    "exception": false
+                },
+                {
+                    "phase": "UNDERWAY",
+                    "completed": true,
+                    "exception": false
+                },
+                {
+                    "phase": "IN_DELIVERY",
+                    "completed": true,
+                    "exception": false
+                },
+                {
+                    "phase": "DELIVERED",
+                    "completed": false,
+                    "exception": false
+                }
+            ],
+            "showAsReturn": false,
+            "expectedMailboxDelivery": false,
+            "deliveryNetwork": "NL Ecommerce",
+            "destinationType": "ADDRESS",
+            "isClimateNeutralDelivery": false,
+            "deliveryMomentView": {
+                "stateMessage": "EXPECTED_DELIVERY",
+                "intervalIndication": "2024-11-07T10:00:00+01:00/2024-11-07T18:00:00+01:00",
+                "timeVisible": true,
+                "dateVisible": true,
+                "showServicePointDetails": "CLOSE_SERVICE_POINT_DETAILS"
+            },
+            "infoMessages": [],
+            "supportOption": "Chatbot"
+        },
+        "totalEvents": 11,
+        "isReturn": false
+    }
+]

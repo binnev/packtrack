@@ -1,0 +1,343 @@
+{
+    "colli": {
+        "3SIJVT005836083": {
+            "barcode": "3SIJVT005836083",
+            "partnerBarcode": null,
+            "identification": "3SIJVT005836083-NL-1234AB",
+            "deliveryShipmentIdentification": null,
+            "effectiveDate": "2024-10-27T00:00:00+02:00",
+            "context": {
+                "countryIsoNumber": 31,
+                "shipmentType": "Parcel"
+            },
+            "description": "000004197",
+            "deliveryAddressType": "Recipient",
+            "recipient": {
+                "names": {
+                    "companyName": null,
+                    "personName": "Recipient Name"
+                },
+                "address": {
+                    "street": "Recipient street",
+                    "houseNumber": "69",
+                    "houseNumberSuffix": null,
+                    "postalCode": "1234AB",
+                    "town": "Amsterdam",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "sender": {
+                "names": {
+                    "companyName": "Sender Company",
+                    "personName": ""
+                },
+                "address": {
+                    "street": "Sender street",
+                    "houseNumber": "420",
+                    "houseNumberSuffix": null,
+                    "postalCode": "2497CE",
+                    "town": "'s-Gravenhage",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "accountId": "82d9d62f-6a59-4bb3-903a-f82ec04752b9",
+            "isValidated": null,
+            "isMatched": null,
+            "deliveryAddress": {
+                "names": {
+                    "companyName": null,
+                    "personName": "Recipient Name"
+                },
+                "address": {
+                    "street": "Recipient street",
+                    "houseNumber": "69",
+                    "houseNumberSuffix": null,
+                    "postalCode": "1234AB",
+                    "town": "Amsterdam",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "retailDeliveryLocation": null,
+            "eta": {
+                "type": "Specific",
+                "start": "2024-10-29T11:40:00+01:00",
+                "end": "2024-10-29T13:40:00+01:00",
+                "minutesOverdue": null
+            },
+            "isDelivered": true,
+            "isAtRetailLocation": false,
+            "isPickedUpAtRetailLocation": false,
+            "isAbroadRetailLocation": false,
+            "beforeFirstDeliveryAttempt": true,
+            "expectedReturnDate": null,
+            "deliveryDate": "2024-10-29T11:43:02+01:00",
+            "isDeliveryDateChanged": false,
+            "routeInformation": null,
+            "isReturnShipment": false,
+            "hasProofOfDelivery": false,
+            "details": {
+                "cashOnDelivery": null,
+                "productCode": "3085",
+                "isBelgianProduct": false,
+                "productOptionNotifications": [],
+                "businessPartnerCode": "IJVT",
+                "businessPartnerNumber": "10606244",
+                "dimensions": {
+                    "height": 140.0,
+                    "width": 235.0,
+                    "depth": 310.0,
+                    "weight": 840.0
+                },
+                "deliveryPreferences": {
+                    "hasStandardDeliveryPlace": false,
+                    "hasNotAtHomeDeliveryPlace": false,
+                    "hasRetailDeliveryPlace": false,
+                    "isTooBigForRetail": false,
+                    "hasPbaDeliveryPlace": false,
+                    "hasStandardHomeAddressDeliveryPreference": false,
+                    "hasStandardRetailDeliveryPreference": false,
+                    "hasStandardPbaDeliveryPreference": false,
+                    "hasStandardParcelLockerAtHomeDeliveryPreference": false,
+                    "hasStandardSafePlaceDeliveryPreference": false,
+                    "hasNotAtHomeNeighborsDeliveryPreference": false,
+                    "hasNotAtHomeRetailDeliveryPreference": false,
+                    "hasNotAtHomeSafePlaceDeliveryPreference": false
+                },
+                "productOptions": [
+                    {
+                        "optionCode": "028",
+                        "characteristicCode": "122"
+                    },
+                    {
+                        "optionCode": "027",
+                        "characteristicCode": "122"
+                    },
+                    {
+                        "optionCode": "017",
+                        "characteristicCode": "122"
+                    }
+                ]
+            },
+            "statusPhase": {
+                "index": 4,
+                "message": "Shipment delivered",
+                "route": null
+            },
+            "lastObservation": "2024-10-29T11:43:02+01:00",
+            "extraInformation": [],
+            "observations": [
+                {
+                    "observationDate": "2024-10-29T08:16:15+01:00",
+                    "observationCode": "J05",
+                    "description": "Driver is en route"
+                },
+                {
+                    "observationDate": "2024-10-29T07:21:31+01:00",
+                    "observationCode": "J01",
+                    "description": "Shipment has been sorted"
+                },
+                {
+                    "observationDate": "2024-10-28T23:10:38+01:00",
+                    "observationCode": "B01",
+                    "description": "Shipment received by PostNL"
+                },
+                {
+                    "observationDate": "2024-10-28T17:22:32+01:00",
+                    "observationCode": "C02",
+                    "description": "Scanned at PostNL self-service point"
+                },
+                {
+                    "observationDate": "2024-10-28T04:15:00+01:00",
+                    "observationCode": "M02",
+                    "description": "Shipment is (almost) arrived at PostNL. It is very busy at the moment. We deliver the shipment as soon as possible."
+                },
+                {
+                    "observationDate": "2024-10-27T13:48:58.785+01:00",
+                    "observationCode": "A01",
+                    "description": "Shipment expected, but not yet arrived or processed at PostNL"
+                }
+            ],
+            "previouslyRerouted": false,
+            "inReroutableState": false,
+            "rerouteOptions": {
+                "otherTimeFrame": null,
+                "otherTimeFrameAvailable": false,
+                "postOfficeDelivery": false,
+                "packstationDelivery": false,
+                "reroutingUnauthorized": false,
+                "safePlaceDelivery": false,
+                "pbaDelivery": false,
+                "postOfficeDeliveryIdinFlow": false,
+                "safePlaceDeliveryIdinFlow": false,
+                "pbaDeliveryIdinFlow": false,
+                "postOfficeDeliverySustainableOption": false,
+                "pbaSustainableOption": false,
+                "isOriginalRerouteOwner": false,
+                "unavailableReasons": [
+                    2
+                ]
+            },
+            "relatedCollos": [],
+            "analyticsInfo": {
+                "features": {
+                    "none": "None"
+                },
+                "allObservations": [
+                    {
+                        "observationDate": "2024-10-27T13:48:58.785+01:00",
+                        "observationCode": "A01",
+                        "description": "Shipment expected, but not yet arrived or processed at PostNL"
+                    },
+                    {
+                        "observationDate": "2024-10-27T13:48:59+01:00",
+                        "observationCode": "A98",
+                        "description": "Pre-alerted shipment enriched by PostNL management."
+                    },
+                    {
+                        "observationDate": "2024-10-27T13:48:59.367+01:00",
+                        "observationCode": "A95",
+                        "description": "Delivery cannot be changed"
+                    },
+                    {
+                        "observationDate": "2024-10-28T04:15:00+01:00",
+                        "observationCode": "M02",
+                        "description": "Shipment is (almost) arrived at PostNL. It is very busy at the moment. We deliver the shipment as soon as possible."
+                    },
+                    {
+                        "observationDate": "2024-10-28T17:22:32+01:00",
+                        "observationCode": "C02",
+                        "description": "Scanned at PostNL self-service point"
+                    },
+                    {
+                        "observationDate": "2024-10-28T22:10:38+01:00",
+                        "observationCode": "A04",
+                        "description": "PIOS notice"
+                    },
+                    {
+                        "observationDate": "2024-10-28T23:10:38+01:00",
+                        "observationCode": "B01",
+                        "description": "Shipment received by PostNL"
+                    },
+                    {
+                        "observationDate": "2024-10-28T23:12:06.656+01:00",
+                        "observationCode": "A96",
+                        "description": "Delivery can be changed"
+                    },
+                    {
+                        "observationDate": "2024-10-29T07:21:31+01:00",
+                        "observationCode": "J01",
+                        "description": "Shipment has been sorted"
+                    },
+                    {
+                        "observationDate": "2024-10-29T07:23:58+01:00",
+                        "observationCode": "J40",
+                        "description": "Pre-alerted and sorted on journey"
+                    },
+                    {
+                        "observationDate": "2024-10-29T08:16:15+01:00",
+                        "observationCode": "J05",
+                        "description": "Driver is en route"
+                    },
+                    {
+                        "observationDate": "2024-10-29T08:16:15+01:00",
+                        "observationCode": "A19",
+                        "description": "ETA changed"
+                    },
+                    {
+                        "observationDate": "2024-10-29T11:43:02+01:00",
+                        "observationCode": "I01",
+                        "description": "Shipment delivered"
+                    }
+                ],
+                "productOptions": [
+                    {
+                        "optionCode": "028",
+                        "characteristicCode": "122"
+                    },
+                    {
+                        "optionCode": "027",
+                        "characteristicCode": "122"
+                    },
+                    {
+                        "optionCode": "017",
+                        "characteristicCode": "122"
+                    }
+                ],
+                "shipmentStage": "Delivered",
+                "inAdvancePeriod": null,
+                "reroutableType": null,
+                "validationStatusInfo": {
+                    "isValidated": false
+                }
+            },
+            "phaseBlock": {
+                "phaseContent": null,
+                "phaseAction": null,
+                "relatedFaqs": []
+            },
+            "showRetailMap": false,
+            "linkToNetworkPartner": null,
+            "networkPartnerName": null,
+            "networkPartnerCountry": null,
+            "customsFees": null,
+            "customerFeedbackInfo": {
+                "showFeedbackOptions": false,
+                "feedbackGiven": false
+            },
+            "isInternational": false,
+            "internationalStatus": {
+                "isForeignShipment": false,
+                "phase": "ReceivedByPostNl",
+                "delay": null
+            },
+            "showOriginalDeliveryAddress": false,
+            "alerts": [],
+            "firstMile": null,
+            "willBeReturnedAtRetail": false,
+            "retailPickupBarcode": "O3SIJVT005836083",
+            "returnPickupCancelled": false,
+            "uncertainRetailLocation": false,
+            "isSustainableDelivery": false,
+            "isSustainableOption": false,
+            "safePlaceFailure": null,
+            "hasOkActiveCampaign": false,
+            "okActiveCampaignInfo": null,
+            "isDeliveredAtPba": false,
+            "isPickedUpAtPba": false,
+            "isPincodeAtDoorShipment": false,
+            "pincodeStatus": null,
+            "floatingChatBot": null,
+            "shipmentAdvertisement": null,
+            "thirdPartyAdvertisements": null,
+            "extraAtHome": null
+        }
+    },
+    "processed": "2024-11-06T09:57:12.3430419+01:00"
+}

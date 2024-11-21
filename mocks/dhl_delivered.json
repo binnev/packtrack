@@ -1,0 +1,109 @@
+{
+    "shipments": [
+        {
+            "id": "JVGL0614394500301769",
+            "service": "parcel-nl",
+            "destination": {
+                "address": {
+                    "countryCode": "NL",
+                    "postalCode": "1234AB",
+                    "addressLocality": "Amsterdam"
+                }
+            },
+            "status": {
+                "timestamp": "2024-11-09T15:47:09+01:00",
+                "statusCode": "delivered",
+                "status": "DELIVERED_AT_NEIGHBOURS",
+                "description": "Delivered at the neighbours"
+            },
+            "details": {
+                "carrier": {
+                    "@type": "Organization",
+                    "organizationName": "ECOMMERCE"
+                },
+                "product": {
+                    "productName": "DFY - DHL FOR YOU"
+                },
+                "receiver": {
+                    "@type": "Person",
+                    "name": "Receiver Name"
+                },
+                "sender": {
+                    "@type": "Person",
+                    "name": "Sender Name"
+                },
+                "proofOfDeliverySignedAvailable": false,
+                "weight": {
+                    "value": 7.45
+                },
+                "dimensions": {
+                    "width": {
+                        "value": 46
+                    },
+                    "height": {
+                        "value": 20
+                    },
+                    "length": {
+                        "value": 55
+                    }
+                }
+            },
+            "events": [
+                {
+                    "timestamp": "2024-11-09T15:47:09+01:00",
+                    "statusCode": "delivered",
+                    "status": "DELIVERED_AT_NEIGHBOURS",
+                    "description": "Delivered at the neighbours"
+                },
+                {
+                    "timestamp": "2024-11-09T12:58:14+01:00",
+                    "statusCode": "transit",
+                    "status": "OUT_FOR_DELIVERY",
+                    "description": "Out for delivery with the courier"
+                },
+                {
+                    "timestamp": "2024-11-09T12:31:55+01:00",
+                    "statusCode": "transit",
+                    "status": "PARCEL_HANDED_OVER_TO_COURIER",
+                    "description": "Handed over to the courier"
+                },
+                {
+                    "timestamp": "2024-11-09T12:31:20+01:00",
+                    "statusCode": "transit",
+                    "status": "PARCEL_SCANNED_INTO_HAND-TERMINAL",
+                    "description": "Entered into handheld device of the courier"
+                },
+                {
+                    "timestamp": "2024-11-09T06:55:12+01:00",
+                    "statusCode": "transit",
+                    "status": "PARCEL_ARRIVED_AT_LOCAL_DEPOT",
+                    "description": "Arrived in your region"
+                },
+                {
+                    "timestamp": "2024-11-09T03:09:38+01:00",
+                    "statusCode": "transit",
+                    "status": "DELIVERY_PLANNED_IN_ROUTE",
+                    "description": "Delivery planned in the route of the courier"
+                },
+                {
+                    "timestamp": "2024-11-08T21:30:10+01:00",
+                    "statusCode": "transit",
+                    "status": "INFORMATION_ON_DELIVERY_TRANSMITTED",
+                    "description": "Delivery planned at the CityHub"
+                },
+                {
+                    "timestamp": "2024-11-08T21:23:42+01:00",
+                    "statusCode": "pre-transit",
+                    "status": "PRENOTIFICATION_RECEIVED",
+                    "description": "Shipment not yet received or processed"
+                },
+                {
+                    "timestamp": "2024-11-08T21:23:01+01:00",
+                    "statusCode": "transit",
+                    "status": "PARCEL_SORTED_AT_HUB",
+                    "description": "Processed at the sorting center"
+                }
+            ]
+        }
+    ]
+}

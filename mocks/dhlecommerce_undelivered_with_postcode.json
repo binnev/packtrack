@@ -1,0 +1,294 @@
+[
+    {
+        "id": "202411e0-1d18-7481-61cf-4f7580c4b49d",
+        "barcode": "JVGL06244768002038487552",
+        "barcodes": [
+            "JVGL06244768002038487552"
+        ],
+        "date": "2024-11-07T21:11:01Z",
+        "declaredWeight": 0.5,
+        "destination": {
+            "address": {
+                "countryCode": "NL",
+                "postalCode": "1234AB",
+                "street": "Streetname",
+                "city": "Amsterdam",
+                "houseNumber": "420"
+            },
+            "type": "ADDRESS"
+        },
+        "events": [
+            {
+                "category": "DATA_RECEIVED",
+                "localTimestamp": "2024-11-06T08:32:40.514+01:00",
+                "leg": {
+                    "accountId": "06244768",
+                    "declaredWeight": 0.5,
+                    "network": "MDP",
+                    "reference": "31173002"
+                },
+                "status": "PRENOTIFICATION_RECEIVED",
+                "timestamp": "2024-11-06T07:32:40.514Z",
+                "type": "LEG_EVENT"
+            },
+            {
+                "category": "DATA_RECEIVED",
+                "localTimestamp": "2024-11-06T08:32:42+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "DATA_RECEIVED_WITH_PREFIX_LABEL",
+                "timestamp": "2024-11-06T07:32:42Z",
+                "type": "PIECE_EVENT",
+                "references": [
+                    {
+                        "refType": "LocalNetworkIdentifier",
+                        "value": "1802352207"
+                    }
+                ]
+            },
+            {
+                "category": "UNDERWAY",
+                "facility": "UTH>411",
+                "height": 43,
+                "length": 71,
+                "localTimestamp": "2024-11-07T22:11:01+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "PARCEL_SORTED_AT_HUB",
+                "timestamp": "2024-11-07T21:11:01Z",
+                "type": "PIECE_EVENT",
+                "weight": 10.85,
+                "width": 60,
+                "references": [
+                    {
+                        "refType": "LocalNetworkIdentifier",
+                        "value": "1802352207"
+                    }
+                ]
+            },
+            {
+                "category": "UNDERWAY",
+                "facility": "UTRPAK",
+                "localTimestamp": "2024-11-08T07:24:27+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "route": "15",
+                "status": "PARCEL_ARRIVED_AT_LOCAL_DEPOT",
+                "timestamp": "2024-11-08T06:24:27Z",
+                "type": "PIECE_EVENT",
+                "weight": 10.85,
+                "references": [
+                    {
+                        "refType": "LocalNetworkIdentifier",
+                        "value": "1802352207"
+                    }
+                ]
+            },
+            {
+                "category": "IN_DELIVERY",
+                "facility": "UTRPAK",
+                "localTimestamp": "2024-11-08T13:07:05+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "plannedDeliveryTimeframe": "2024-11-08T13:40:00+01:00/2024-11-08T15:40:00+01:00",
+                "route": "15",
+                "status": "OUT_FOR_DELIVERY",
+                "timestamp": "2024-11-08T12:07:05Z",
+                "type": "PIECE_EVENT",
+                "weight": 10.85,
+                "references": []
+            }
+        ],
+        "height": 43,
+        "length": 71,
+        "options": [
+            "PHONE"
+        ],
+        "packageType": "Pakje,SMALL",
+        "product": {
+            "code": "DFY",
+            "description": "DHL FOR YOU"
+        },
+        "receiver": {
+            "address": {
+                "countryCode": "NL",
+                "postalCode": "1234AB",
+                "street": "Streetname",
+                "city": "Amsterdam",
+                "houseNumber": "420"
+            },
+            "email": "receiver.email@gmail.com",
+            "name": "Receiver Name",
+            "telephone": "012345678"
+        },
+        "reference": "31173002",
+        "shipper": {
+            "name": "Sender Name"
+        },
+        "shipperAccountNumber": "06244768",
+        "transitTime": {
+            "days": {
+                "total": 1,
+                "standard": 1,
+                "holiday": 0,
+                "remoteArea": 0,
+                "weekend": 0
+            },
+            "destination": {
+                "countryCode": "NL",
+                "postalCode": "1234AB"
+            },
+            "expectedDeliveryMoment": "2024-11-07T20:00:00Z",
+            "origin": {
+                "countryCode": "NL"
+            },
+            "product": {
+                "code": "DFY",
+                "description": "DHL FOR YOU"
+            },
+            "shipmentDate": "2024-11-06"
+        },
+        "type": "SHIPMENT",
+        "weight": 10.85,
+        "width": 60,
+        "plannedDeliveryTimeframe": "2024-11-08T13:40:00+01:00/2024-11-08T15:40:00+01:00",
+        "volumetricWeight": 36.636,
+        "created": "2024-11-06T07:32:40.514Z",
+        "lastUpdated": "2024-11-08T12:07:18.358745870Z",
+        "lastKnownDestination": {
+            "address": {
+                "countryCode": "NL",
+                "postalCode": "1234AB",
+                "street": "Streetname",
+                "city": "Amsterdam",
+                "houseNumber": "420"
+            },
+            "type": "ADDRESS"
+        },
+        "view": {
+            "barcode": "JVGL06244768002038487552",
+            "shipmentVariant": "SHIPMENT",
+            "receiver": {
+                "name": "Receiver Name",
+                "address": {
+                    "countryCode": "NL",
+                    "postalCode": "1234AB",
+                    "street": "Streetname",
+                    "city": "Amsterdam",
+                    "houseNumber": "420"
+                },
+                "email": "receiver.email@gmail.com",
+                "telephone": "012345678"
+            },
+            "shipper": {
+                "name": "Sender Name"
+            },
+            "message": "EXPECTED_DELIVERY",
+            "interval": "2024-11-08T13:40:00+01:00/2024-11-08T15:40:00+01:00",
+            "originalDestination": {
+                "address": {
+                    "countryCode": "NL",
+                    "postalCode": "1234AB",
+                    "street": "Streetname",
+                    "city": "Amsterdam",
+                    "houseNumber": "420"
+                },
+                "type": "ADDRESS"
+            },
+            "lastDestination": {
+                "address": {
+                    "countryCode": "NL",
+                    "postalCode": "1234AB",
+                    "street": "Streetname",
+                    "city": "Amsterdam",
+                    "houseNumber": "420"
+                },
+                "type": "ADDRESS"
+            },
+            "queryType": "BarcodeWithPostalCode",
+            "phases": [
+                {
+                    "phase": "IN_DELIVERY",
+                    "events": [
+                        {
+                            "timestamp": "2024-11-08T12:07:05Z",
+                            "key": "OUT_FOR_DELIVERY",
+                            "exception": false
+                        }
+                    ]
+                },
+                {
+                    "phase": "UNDERWAY",
+                    "events": [
+                        {
+                            "timestamp": "2024-11-08T06:24:27Z",
+                            "key": "PARCEL_ARRIVED_AT_LOCAL_DEPOT",
+                            "exception": false
+                        },
+                        {
+                            "timestamp": "2024-11-07T21:11:01Z",
+                            "key": "PARCEL_SORTED_AT_HUB",
+                            "exception": false
+                        }
+                    ]
+                },
+                {
+                    "phase": "DATA_RECEIVED",
+                    "events": [
+                        {
+                            "timestamp": "2024-11-06T07:32:40.514Z",
+                            "key": "PRENOTIFICATION_RECEIVED",
+                            "exception": false
+                        }
+                    ]
+                }
+            ],
+            "phaseDisplay": [
+                {
+                    "phase": "DATA_RECEIVED",
+                    "completed": true,
+                    "exception": false
+                },
+                {
+                    "phase": "UNDERWAY",
+                    "completed": true,
+                    "exception": false
+                },
+                {
+                    "phase": "IN_DELIVERY",
+                    "completed": true,
+                    "exception": false
+                },
+                {
+                    "phase": "DELIVERED",
+                    "completed": false,
+                    "exception": false
+                }
+            ],
+            "intervenable": true,
+            "showAsReturn": false,
+            "expectedMailboxDelivery": false,
+            "deliveryNetwork": "NL Ecommerce",
+            "shipmentOptions": [
+                "PHONE"
+            ],
+            "destinationType": "ADDRESS",
+            "isClimateNeutralDelivery": false,
+            "deliveryMomentView": {
+                "stateMessage": "EXPECTED_DELIVERY",
+                "intervalIndication": "2024-11-08T13:40:00+01:00/2024-11-08T15:40:00+01:00",
+                "timeVisible": true,
+                "dateVisible": true,
+                "showServicePointDetails": "CLOSE_SERVICE_POINT_DETAILS"
+            },
+            "infoMessages": [],
+            "supportOption": "Chatbot"
+        },
+        "totalEvents": 5,
+        "isReturn": false
+    }
+]
