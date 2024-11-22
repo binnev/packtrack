@@ -26,7 +26,14 @@ pub async fn main() -> Result<()> {
         None => api::track_all().await?,
         Some(Command::Url { command }) => handle_url_command(command).await?,
         Some(Command::Config { command }) => handle_config_command(command)?,
-        Some(Command::Track { url }) => api::track(&url).await?,
+        Some(Command::Track { input }) => {
+            let result = api::track(&input).await;
+            match result {
+                Ok(()) => {}
+                Err(Error::Url(err)) => println!("Error: {err}"),
+                Err(err) => return Err(err),
+            }
+        }
     }
     Ok(())
 }
@@ -86,8 +93,10 @@ enum Command {
         #[command(subcommand)]
         command: ConfigCommand,
     },
+    /// Track a single package.
     Track {
-        url: String,
+        /// Either a new URL, or a fragment of an existing URL
+        input: String,
     },
 }
 #[derive(Subcommand)]

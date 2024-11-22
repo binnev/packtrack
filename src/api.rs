@@ -22,8 +22,16 @@ pub async fn track_all() -> Result<()> {
     Ok(())
 }
 
-pub async fn track(url: &str) -> Result<()> {
-    let package = track_url(url).await?;
+pub async fn track(input: &str) -> Result<()> {
+    // Look for the input in the urls file. If we find a match, use that URL
+    // (this allows the user to input a barcode and we find the url for them).
+    // If no match, assume the input is a new url.
+    let url = match urls::find_one(input)? {
+        Some(url) => url,
+        None => input.to_owned(),
+    };
+
+    let package = track_url(&url).await?;
     println!("{} Package {}", package.channel, package.barcode);
     if let Some(sender) = package.sender.as_ref() {
         println!("\tfrom {sender}");

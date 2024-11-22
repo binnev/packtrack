@@ -13,6 +13,9 @@ pub enum UrlError {
 
     #[display("'{_0}' was not found in the URLs file")]
     NotFound(String),
+
+    #[display("Found multiple URLs that match '{_0}'")]
+    MultipleMatches(String),
 }
 
 pub async fn add(url: &str) -> Result<()> {
@@ -70,6 +73,23 @@ pub async fn list(query: Option<String>) -> Result<()> {
         println!("{url}");
     }
     Ok(())
+}
+
+pub fn find_one(query: &str) -> Result<Option<String>> {
+    let urls = load()?;
+    let url = _find_one(urls, query)?;
+    Ok(url)
+}
+fn _find_one(urls: Vec<String>, query: &str) -> Result<Option<String>> {
+    let mut matches = urls
+        .into_iter()
+        .filter(|url| url.contains(&query));
+    let url = matches.next();
+    if let Some(other_match) = matches.next() {
+        Err(UrlError::MultipleMatches(query.to_owned()).into())
+    } else {
+        Ok(url)
+    }
 }
 
 /// Load all URLs from the URLs file.
@@ -147,6 +167,16 @@ mod tests {
         assert_eq!(
             result.err().unwrap(),
             UrlError::AlreadyInFile("www.ups.org".into()).into()
+        );
+    }
+
+    #[test]
+    fn test_find_one() {
+        assert_eq!(_find_one(vec![], "foo"), Ok(None));
+        assert_eq!(_find_one(urls(), "ups"), Ok(Some("www.ups.org".into())));
+        assert_eq!(
+            _find_one(urls(), "org"),
+            Err(UrlError::MultipleMatches("org".into()).into())
         );
     }
 }

@@ -33,7 +33,7 @@
         - Parser
         - Cacher 
 - flag to control package display detail level (brief / detailed)
-- `track` command to also accept barcode
+- [x] `track` command to also accept barcode
 - [x] `url list` to accept a query term
 - [x] `track` cli command that accepts a url
 - [x] better display handling -- super hacky rn 
