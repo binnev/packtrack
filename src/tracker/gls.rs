@@ -29,12 +29,20 @@ impl Tracker for GlsTracker {
 #[derive(Deserialize, Default, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 struct GlsPackage {
-    parcel_no:       Option<String>,
-    address_info:    Option<AddressInfo>,
-    delivery_status: Option<DeliveryStatus>,
-    scans:           Option<Vec<GlsEvent>>,
+    parcel_no:          Option<String>,
+    address_info:       Option<AddressInfo>,
+    delivery_status:    Option<DeliveryStatus>,
+    scans:              Option<Vec<GlsEvent>>,
+    delivery_scan_info: Option<DeliveryScanInfo>,
 }
 impl GlsPackage {
+    fn delivered(&self) -> Option<UtcTime> {
+        self.delivery_scan_info
+            .as_ref()
+            .filter(|info| info.is_delivered.unwrap_or(false))
+            .and_then(|info| info.date_time)
+            .map(|time| time.and_utc())
+    }
     fn events(&self) -> Result<Vec<Event>> {
         let mut events = vec![];
         if let Some(scans) = &self.scans {
@@ -90,12 +98,18 @@ impl GlsPackage {
             recipient:  self.recipient(),
             eta:        self.eta(),
             eta_window: self.eta_window(),
-            delivered:  None, // TODO: Don't know what this looks like yet
             events:     self.events()?,
+            delivered:  self.delivered(),
         })
     }
 }
 
+#[derive(Deserialize, Clone, PartialEq, Debug)]
+#[serde(rename_all = "camelCase")]
+struct DeliveryScanInfo {
+    date_time:    Option<NaiveDateTime>,
+    is_delivered: Option<bool>,
+}
 #[derive(Deserialize, Clone, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 struct GlsEvent {
@@ -249,6 +263,7 @@ mod tests {
             .unwrap();
         assert_eq!(event.timestamp, utc("2024-11-20T10:00:07.226Z"));
         assert_eq!(event.text, "The parcel data was entered into the GLS IT system; the parcel was not yet handed over to GLS.");
+        assert_eq!(package.delivered, None);
         Ok(())
     }
     #[test]
@@ -274,6 +289,7 @@ mod tests {
             .unwrap();
         assert_eq!(event.timestamp, utc("2024-11-20T20:17:02.051Z"));
         assert_eq!(event.text, "The parcel has left the parcel center.");
+        assert_eq!(package.delivered, None);
         Ok(())
     }
     #[test]
@@ -302,6 +318,7 @@ mod tests {
             event.text,
             "The parcel is expected to be delivered during the day."
         );
+        assert_eq!(package.delivered, None);
         Ok(())
     }
     #[test]
@@ -321,6 +338,7 @@ mod tests {
             .unwrap();
         assert_eq!(event.timestamp, utc("2024-11-22T08:28:43Z"));
         assert_eq!(event.text, "The parcel has been delivered.");
+        assert_eq!(package.delivered.unwrap(), utc("2024-11-22T08:28:43Z"));
         Ok(())
     }
 }

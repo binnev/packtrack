@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 #![allow(unused)]
+#![feature(let_chains)]
 
 mod api;
 mod cli;
