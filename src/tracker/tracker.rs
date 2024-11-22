@@ -1,14 +1,22 @@
 use async_trait::async_trait;
 
-use crate::error::Result;
+use crate::{
+    error::Result,
+    tracker::{DhlTracker, GlsTracker, PostNLTracker},
+};
 use std::sync::Mutex;
 
 use super::models::Package;
 
 type Registry = Mutex<Vec<Box<dyn Fn() -> Box<dyn Tracker> + Send + Sync>>>;
 
+// TODO: find a good mechanism for this
 lazy_static::lazy_static! {
-    static ref REGISTRY: Registry = Mutex::new(Vec::new());
+    static ref REGISTRY: Registry = Mutex::new(vec![
+        Box::new(|| Box::new(PostNLTracker)),
+        Box::new(|| Box::new(DhlTracker)),
+        Box::new(|| Box::new(GlsTracker)),
+    ]);
 }
 
 #[async_trait]

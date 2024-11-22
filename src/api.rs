@@ -1,8 +1,5 @@
 use crate::error::{Error, Result};
 use crate::tracker::get_handler;
-use crate::tracker::DhlTracker;
-use crate::tracker::GlsTracker;
-use crate::tracker::PostNLTracker;
 use crate::tracker::{Package, PackageStatus};
 use crate::urls;
 use crate::{settings, tracker};
@@ -17,12 +14,6 @@ use std::{env, fs};
 
 pub async fn main() -> Result<()> {
     let start = Instant::now();
-    // TODO: make this a macro so I can do
-    // #[Tracker::register]
-    // struct MyTracker;
-    tracker::register(Box::new(|| Box::new(PostNLTracker)));
-    tracker::register(Box::new(|| Box::new(DhlTracker)));
-    tracker::register(Box::new(|| Box::new(GlsTracker)));
     let urls = urls::load()?;
     track_many(urls).await?;
     log::info!("Operation took {:?}", start.elapsed());
