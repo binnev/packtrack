@@ -1,38 +1,45 @@
-- option to sort packages in different ways
-    - status > time > carrier 
-        DELIVERED 
-            Today 12:00 PostNL ... 
-            Today 13:00 GLS ... 
-            Today 14:00 PostNL ... 
-    - status > carrier > time
-        DELIVERED 
-            GLS Today 13:00 ... 
-            PostNL Today 12:00 ... 
-            PostNL Today 14:00 ... 
-    - carrier > status > time 
-        POSTNL
-            Today 12:00 ... 
-            Today 14:00 ... 
-        GLS
-            Today 13:00 ... 
-    - a > b > c > ... 
-        - a = heading 
-        - b, c, ... = sequential sort-by args
-    - SortBy enum to parse names
-- tui spinners when waiting for tasks
-- show how long it took to gather each package
-- show URL next to errors so we know which error belongs to which URL
-- more advanced url file where you can add annotations, for those urls that don't contain your postcode. YAML?
-- `url prune` cli command to prune delivered packages 
+- functionality
+    - `config` command to allow setting a default postcode
+    - `url prune` cli command to prune delivered packages 
+    - more advanced url file where you can add annotations, for those urls that don't contain your postcode. YAML?
 - cache the responses for each package
     - so you can show the changes over time.
+        - show when a package has changed status
     - global --cache option
     - also reuse recently fetched responses
     - composed Tracker struct with child 
         - Requester 
         - Parser
         - Cacher 
-- flag to control package display detail level (brief / detailed)
+- display
+    - tui spinners when waiting for tasks
+    - flag to control package display detail level (brief / detailed)
+    - show how long it took to gather each package
+    - show URL next to errors so we know which error belongs to which URL
+    - wrap text to 80 characters
+    - extract more detail from events on a channel level if possible
+        - e.g. instead of `[Tue 29 Oct 08:30] UNDERWAY: PROCESSED_AT_LOCATION`, show more information about the processing, show any updates to eta, etc. 
+    - option to sort packages in different ways
+        - status > time > carrier 
+            DELIVERED 
+                Today 12:00 PostNL ... 
+                Today 13:00 GLS ... 
+                Today 14:00 PostNL ... 
+        - status > carrier > time
+            DELIVERED 
+                GLS Today 13:00 ... 
+                PostNL Today 12:00 ... 
+                PostNL Today 14:00 ... 
+        - carrier > status > time 
+            POSTNL
+                Today 12:00 ... 
+                Today 14:00 ... 
+            GLS
+                Today 13:00 ... 
+        - a > b > c > ... 
+            - a = heading 
+            - b, c, ... = sequential sort-by args
+        - SortBy enum to parse names
 - [x] `track` command to also accept barcode
 - [x] `url list` to accept a query term
 - [x] `track` cli command that accepts a url
