@@ -3,14 +3,17 @@
 - show URL next to errors so we know which error belongs to which URL
 - more advanced url file where you can add annotations, for those urls that don't contain your postcode. YAML?
 - `url prune` cli command to prune delivered packages 
-- `track` cli command that accepts a url
 - cache the responses for each package
     - so you can show the changes over time.
+    - global --cache option
     - also reuse recently fetched responses
     - composed Tracker struct with child 
         - Requester 
         - Parser
         - Cacher 
+- flag to control package display detail level (brief / detailed)
+- `url list` to accept a search flag
+- [x] `track` cli command that accepts a url
 - [x] better display handling -- super hacky rn 
     - ~~maybe give PackageStatus::Error an item containing the error?~~
     - ~~or properly type the `dict[status, Vec<Package> | Vec<Error>]`~~
