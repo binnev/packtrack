@@ -232,7 +232,7 @@ mod tests {
     #[test]
     fn test_deserialize_undelivered() -> Result<()> {
         let data = mocks::load_json("gls_undelivered")?;
-        let package = parse_package(data, "example.com")?;
+        let package = parse_package(data, url)?;
         assert_eq!(package.sender.unwrap(), "Sender Name");
         assert_eq!(package.recipient, None);
         assert_eq!(package.barcode, "57250013150034");
@@ -251,7 +251,7 @@ mod tests {
     #[test]
     fn test_deserialize_undelivered_with_eta() -> Result<()> {
         let data = mocks::load_json("gls_undelivered_with_eta")?;
-        let package = parse_package(data, "example.com")?;
+        let package = parse_package(data, url)?;
         assert_eq!(package.sender.unwrap(), "Sender Name");
         assert_eq!(package.recipient, None);
         assert_eq!(package.barcode, "57250013150034");
@@ -276,7 +276,7 @@ mod tests {
     #[test]
     fn test_deserialize_undelivered_3() -> Result<()> {
         let data = mocks::load_json("gls_undelivered_3")?;
-        let package = parse_package(data, "example.com")?;
+        let package = parse_package(data, url)?;
         assert_eq!(package.sender.unwrap(), "Sender Name");
         assert_eq!(package.recipient, None);
         assert_eq!(package.barcode, "57250013150034");
@@ -299,6 +299,25 @@ mod tests {
             event.text,
             "The parcel is expected to be delivered during the day."
         );
+        Ok(())
+    }
+    #[test]
+    fn test_deserialize_delivered() -> Result<()> {
+        let data = mocks::load_json("gls_delivered")?;
+        let package = parse_package(data, url)?;
+        assert_eq!(package.sender.unwrap(), "Sender Name");
+        assert_eq!(package.recipient, None);
+        assert_eq!(package.barcode, "57250013150034");
+        assert_eq!(package.eta, None);
+        assert_eq!(package.eta_window, None);
+        assert_eq!(package.events.len(), 11);
+        let event = package
+            .events
+            .into_iter()
+            .last()
+            .unwrap();
+        assert_eq!(event.timestamp, utc("2024-11-22T08:28:43Z"));
+        assert_eq!(event.text, "The parcel has been delivered.");
         Ok(())
     }
 }
