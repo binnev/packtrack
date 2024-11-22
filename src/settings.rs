@@ -11,12 +11,16 @@ use serde_json::{Map, Value};
 #[derive(Serialize, Deserialize)]
 pub struct Settings {
     pub urls_file: PathBuf, // owned equivalent to Path
+    pub postcode:  Option<String>,
 }
 impl Default for Settings {
     fn default() -> Self {
         let home = get_home_dir().expect("Couldn't compute home dir!");
         let urls_file = home.join("packtrack.urls");
-        Self { urls_file }
+        Self {
+            urls_file,
+            postcode: None,
+        }
     }
 }
 pub fn reset() -> Result<()> {
@@ -24,8 +28,6 @@ pub fn reset() -> Result<()> {
     save(&settings)
 }
 pub fn update(key: String, value: String) -> Result<()> {
-    println!("You passed {key}: {value}");
-
     // Serde doesn't support partial deserialization, so to get around this, we
     // insert the user's key/value pair into a mutable settings dict, and
     // deserialize that. This allows us to do a partial update while also
