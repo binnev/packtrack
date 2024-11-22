@@ -1,9 +1,19 @@
 /// URL management
 use crate::error::{Error, Result};
 use crate::settings;
+use derive_more::Display;
 use std::ops::Index;
 use std::path::Path;
 use std::{env, fs};
+
+#[derive(Debug, Display)]
+pub enum UrlError {
+    #[display("'{_0}' is already in the URLs file")]
+    AlreadyInFile(String),
+
+    #[display("'{_0}' was not found in the URLs file")]
+    NotFound(String),
+}
 
 pub async fn add(url: &str) -> Result<()> {
     log::info!("adding {url}");
@@ -15,7 +25,7 @@ pub async fn add(url: &str) -> Result<()> {
 fn _add(urls: &mut Vec<String>, url: &str) -> Result<()> {
     let url = url.into();
     if urls.iter().any(|u| u.contains(&url)) {
-        Err(Error::UrlAlreadyInFile(url))
+        Err(UrlError::AlreadyInFile(url).into())
     } else {
         urls.push(url);
         Ok(())
@@ -41,7 +51,7 @@ fn _remove(urls: &mut Vec<String>, pattern: &str) -> Result<Vec<String>> {
         removed.push(url);
     }
     if removed.len() == 0 {
-        Err(Error::PatternNotInFile(pattern.into()))
+        Err(UrlError::NotFound(pattern.into()).into())
     } else {
         Ok(removed)
     }
@@ -109,7 +119,7 @@ mod tests {
         let removed = _remove(&mut urls, "dhl.com");
         assert_eq!(
             removed.err().unwrap(),
-            Error::PatternNotInFile("dhl.com".into())
+            UrlError::NotFound("dhl.com".into()).into()
         );
     }
     #[test]
@@ -129,7 +139,7 @@ mod tests {
         let result = _add(&mut urls, "www.ups.org");
         assert_eq!(
             result.err().unwrap(),
-            Error::UrlAlreadyInFile("www.ups.org".into())
+            UrlError::AlreadyInFile("www.ups.org".into()).into()
         );
     }
 }
