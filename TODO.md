@@ -12,7 +12,7 @@
         - Parser
         - Cacher 
 - flag to control package display detail level (brief / detailed)
-- `url list` to accept a search flag
+- [x] `url list` to accept a query term
 - [x] `track` cli command that accepts a url
 - [x] better display handling -- super hacky rn 
     - ~~maybe give PackageStatus::Error an item containing the error?~~

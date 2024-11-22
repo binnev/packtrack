@@ -57,8 +57,15 @@ fn _remove(urls: &mut Vec<String>, pattern: &str) -> Result<Vec<String>> {
     }
 }
 
-pub async fn list() -> Result<()> {
-    let urls = load()?;
+pub async fn list(query: Option<String>) -> Result<()> {
+    let mut urls = load()?;
+    if let Some(s) = query {
+        urls = urls
+            .into_iter()
+            .filter(|url| url.contains(&s))
+            .collect();
+    }
+
     for url in urls {
         println!("{url}");
     }

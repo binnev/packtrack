@@ -48,7 +48,7 @@ async fn handle_url_command(command: UrlCommand) -> Result<()> {
             Err(Error::Url(err)) => println!("Error: {err}"),
             Err(err) => return Err(err),
         },
-        UrlCommand::List => urls::list().await?,
+        UrlCommand::List { query } => urls::list(query).await?,
     }
     Ok(())
 }
@@ -93,7 +93,7 @@ enum Command {
 #[derive(Subcommand)]
 enum UrlCommand {
     /// List the URLs currently in the file
-    List,
+    List { query: Option<String> },
     /// Add a URL to the urls file
     Add { url: String },
     /// Remove a URL from the urls file
