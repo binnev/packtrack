@@ -6,7 +6,7 @@ use serde::Deserialize;
 use serde_json::Value;
 
 use super::{models::UtcTime, tracker::Tracker, Event, Package, TimeWindow};
-use crate::{Error, Result};
+use crate::{settings, Error, Result};
 pub struct GlsTracker;
 
 #[async_trait]
@@ -15,7 +15,9 @@ impl Tracker for GlsTracker {
         url.contains("www.gls")
     }
     async fn track(&self, url: &str) -> Result<Package> {
-        let (barcode, postcode) = get_barcode_postcode(url)?;
+        let default_postcode = settings::load()?.postcode;
+        let (barcode, postcode) =
+            get_barcode_postcode(url, default_postcode.as_deref())?;
         let url = get_url(&barcode, &postcode);
         let response = reqwest::get(&url).await?;
         let text = response.text().await?;
@@ -154,27 +156,28 @@ fn parse_package(data: Value, url: &str) -> Result<Package> {
     log::info!("Successfully parsed package from {url}");
     package.to_package(url)
 }
-fn get_barcode_postcode(url: &str) -> Result<(String, String)> {
+fn get_barcode_postcode(
+    url: &str,
+    default_postcode: Option<&str>,
+) -> Result<(String, String)> {
     // https://www.gls-info.nl/tracking?parcelNo=123412341234&zipcode=1234AB
     log::info!("Parsing GLS url {url}");
-    let rx = Regex::new(
-        r"https://www.gls.*parcelNo=([A-Z0-9]+)&zipcode=([A-Z0-9]+)",
-    )?;
-
-    let captures = rx
+    let barcode = Regex::new(r".*parcelNo=([A-Z0-9]+).*")?
         .captures(url)
-        .ok_or(format!("Couldn't get barcode from {url}"))?;
-
-    let barcode = captures
-        .get(1)
+        .and_then(|caps| caps.get(1))
         .map(|m| m.as_str())
         .ok_or(format!("Couldn't get barcode from url {url}"))?
         .to_owned();
     log::info!("Parsed barcode {barcode}");
-    let postcode = captures
-        .get(2)
+
+    let postcode = Regex::new(r".*zipcode=([A-Z0-9]+).*")?
+        .captures(url)
+        .and_then(|caps| caps.get(1))
         .map(|m| m.as_str())
-        .ok_or("Couldn't get postcode from {url}")?
+        .or(default_postcode)
+        .ok_or(format!(
+            "Couldn't get postcode from url {url}, and no default postcode!"
+        ))?
         .to_owned();
     log::info!("Parsed postcode {postcode}");
     Ok((barcode, postcode))
@@ -198,6 +201,35 @@ mod tests {
 
     #[allow(non_upper_case_globals)]
     const url: &str = "www.example.com";
+
+    #[test]
+    fn test_get_barcode_postcode() {
+        // happy flow -- both barcode and postcode are present
+        assert_eq!(
+            get_barcode_postcode("url?parcelNo=69Z&zipcode=1234AB", None)
+                .unwrap(),
+            ("69Z".to_owned(), "1234AB".to_owned())
+        );
+        // happy flow -- only barcode present, but default postcode passed
+        assert_eq!(
+            get_barcode_postcode("url?parcelNo=69Z", Some("1234AB")).unwrap(),
+            ("69Z".to_owned(), "1234AB".to_owned())
+        );
+
+        // sad flows
+        assert_eq!(
+            get_barcode_postcode("foo.com", None)
+                .err()
+                .unwrap(),
+            "Couldn't get barcode from url foo.com".into()
+        );
+        assert_eq!(
+            get_barcode_postcode("url?parcelNo=1234", None)
+                .err()
+                .unwrap(),
+            "Couldn't get postcode from url url?parcelNo=1234, and no default postcode!".into()
+        );
+    }
 
     #[test]
     fn test_deserialize_empty_gls_package() {

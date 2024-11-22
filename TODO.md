@@ -1,7 +1,8 @@
 - functionality
-    - `config` command to allow setting a default postcode
+    - [x] `config` command to allow setting a default postcode
     - `url prune` cli command to prune delivered packages 
     - more advanced url file where you can add annotations, for those urls that don't contain your postcode. YAML?
+    - `raw` command that fetches raw data for a url/barcode
 - cache the responses for each package
     - so you can show the changes over time.
         - show when a package has changed status

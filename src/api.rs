@@ -1,8 +1,8 @@
 use crate::error::{Error, Result};
+use crate::tracker;
 use crate::tracker::get_handler;
 use crate::tracker::{Package, PackageStatus};
 use crate::urls;
-use crate::{settings, tracker};
 use chrono::{DateTime, Local, TimeZone};
 use enum_iterator::all;
 use log;

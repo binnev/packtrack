@@ -4,7 +4,7 @@ use serde::Deserialize;
 use serde_json::Value;
 
 use super::{models::UtcTime, tracker::Tracker, Event, Package, TimeWindow};
-use crate::Result;
+use crate::{settings, Result};
 
 pub struct DhlTracker;
 
@@ -53,7 +53,14 @@ fn get_dhl_barcode(url: &str) -> Result<String> {
         .ok_or(format!("Couldn't get barcode from {url}"))?
         .as_str()
         .to_owned();
-    Ok(barcode)
+    let settings = settings::load()?;
+    let default_postcode = settings.postcode.as_deref();
+    let out = if let Some(postcode) = default_postcode {
+        format!("{barcode}%2B{postcode}")
+    } else {
+        barcode
+    };
+    Ok(out)
 }
 
 fn get_ecommerce_barcode(url: &str) -> Result<String> {
@@ -74,8 +81,9 @@ fn get_ecommerce_barcode(url: &str) -> Result<String> {
         .get(2)
         .map(|m| m.as_str())
         .to_owned();
-
-    let out = if let Some(postcode) = postcode {
+    let settings = settings::load()?;
+    let default_postcode = settings.postcode.as_deref();
+    let out = if let Some(postcode) = postcode.or(default_postcode) {
         format!("{barcode}%2B{postcode}")
     } else {
         barcode

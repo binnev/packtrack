@@ -44,6 +44,7 @@ pub fn update(key: String, value: String) -> Result<()> {
     save(&sets)?;
     Ok(())
 }
+
 pub fn print() -> Result<()> {
     let dict = get_settings_as_dict()?;
     for (key, value) in dict.iter() {
@@ -52,6 +53,13 @@ pub fn print() -> Result<()> {
     Ok(())
 }
 pub fn load() -> Result<Settings> {
+    // don't use real settings in tests
+    // TODO: allow test to inject a non-default settings object
+    #[cfg(test)]
+    {
+        return Ok(Settings::default());
+    }
+
     let settings_path = get_settings_path()?;
     if settings_path.exists() {
         let content = fs::read_to_string(settings_path)?;
@@ -62,6 +70,10 @@ pub fn load() -> Result<Settings> {
     }
 }
 pub fn save(settings: &Settings) -> Result<()> {
+    // don't use real settings in tests
+    #[cfg(test)]
+    return Ok(());
+
     let config_dir = get_config_dir()?;
     fs::create_dir_all(config_dir)?; // create it if it doesn't exist
     let settings_path = get_settings_path()?;
