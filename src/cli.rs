@@ -1,7 +1,7 @@
 use crate::api;
 use crate::settings;
 use crate::urls;
-use crate::Result;
+use crate::{Error, Result};
 use clap::{command, Parser, Subcommand};
 use log::{self, LevelFilter};
 
@@ -24,16 +24,39 @@ pub async fn main() -> Result<()> {
     // Handle subcommands
     match cli.command {
         None => api::main().await?,
-        Some(Command::Url { command }) => match command {
-            UrlCommand::Add { url } => urls::add(url).await?,
-            UrlCommand::Remove { url } => urls::remove(url).await?,
-            UrlCommand::List => urls::list().await?,
+        Some(Command::Url { command }) => handle_url_command(command).await?,
+        Some(Command::Config { command }) => handle_config_command(command)?,
+    }
+    Ok(())
+}
+
+async fn handle_url_command(command: UrlCommand) -> Result<()> {
+    match command {
+        UrlCommand::Add { url } => match urls::add(&url).await {
+            Ok(()) => println!("Added {url}"),
+            Err(Error::Url(err)) => println!("Error: {err}"),
+            Err(err) => return Err(err),
         },
-        Some(Command::Config { command }) => match command {
-            ConfigCommand::List => settings::print()?,
-            ConfigCommand::Set { key, value } => settings::update(key, value)?,
-            ConfigCommand::Reset => settings::reset()?,
+        UrlCommand::Remove { url } => match urls::remove(url).await {
+            Ok(removed) => {
+                println!("Removed urls:");
+                for url in removed {
+                    println!("{url}");
+                }
+            }
+            Err(Error::Url(err)) => println!("Error: {err}"),
+            Err(err) => return Err(err),
         },
+        UrlCommand::List => urls::list().await?,
+    }
+    Ok(())
+}
+
+fn handle_config_command(command: ConfigCommand) -> Result<()> {
+    match command {
+        ConfigCommand::List => settings::print()?,
+        ConfigCommand::Set { key, value } => settings::update(key, value)?,
+        ConfigCommand::Reset => settings::reset()?,
     }
     Ok(())
 }

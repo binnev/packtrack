@@ -172,6 +172,7 @@ fn get_url(barcode: &str, postcode: &str) -> String {
 
 #[cfg(test)]
 mod tests {
+
     use serde_json::json;
 
     use super::*;
@@ -180,6 +181,8 @@ mod tests {
     fn utc(s: &str) -> UtcTime {
         s.parse().unwrap()
     }
+
+    #[allow(non_upper_case_globals)]
     const url: &str = "www.example.com";
 
     #[test]
