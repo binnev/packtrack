@@ -24,13 +24,13 @@ fn _add(urls: &mut Vec<String>, url: &str) -> Result<()> {
 pub async fn remove(pattern: String) -> Result<Vec<String>> {
     log::info!("removing URLs matching pattern {pattern}");
     let mut urls = load()?;
-    let removed = _remove(&mut urls, &pattern);
+    let removed = _remove(&mut urls, &pattern)?;
     log::info!("removed URLs: {removed:?}");
     save(urls)?;
     Ok(removed)
 }
 // making this a separate function so it's easier to test
-fn _remove(urls: &mut Vec<String>, pattern: &str) -> Vec<String> {
+fn _remove(urls: &mut Vec<String>, pattern: &str) -> Result<Vec<String>> {
     let mut removed: Vec<String> = vec![];
     while let Some(idx) = urls
         .iter()
@@ -40,7 +40,11 @@ fn _remove(urls: &mut Vec<String>, pattern: &str) -> Vec<String> {
         log::debug!("Removed URL: {url}");
         removed.push(url);
     }
-    removed
+    if removed.len() == 0 {
+        Err(Error::PatternNotInFile(pattern.into()))
+    } else {
+        Ok(removed)
+    }
 }
 
 pub async fn list() -> Result<()> {
@@ -73,37 +77,44 @@ mod tests {
 
     use super::*;
 
-    #[test]
-    fn test_remove_pattern() {
-        let mut urls: Vec<String> = vec![
+    fn urls() -> Vec<String> {
+        vec![
             "www.example.com".into(),
             "www.ups.org".into(),
             "www.dhl.org".into(),
-        ];
-        let removed = _remove(&mut urls, ".org");
+        ]
+    }
+
+    #[test]
+    fn test_remove_pattern() -> Result<()> {
+        let mut urls = urls();
+        let removed = _remove(&mut urls, ".org")?;
         assert_eq!(removed, vec!["www.ups.org", "www.dhl.org",]);
         let expected = vec!["www.example.com"];
         assert_eq!(urls, expected);
+        Ok(())
     }
     #[test]
-    fn test_remove_exact() {
-        let mut urls: Vec<String> = vec![
-            "www.example.com".into(),
-            "www.ups.org".into(),
-            "www.dhl.org".into(),
-        ];
-        let removed = _remove(&mut urls, "www.dhl.org");
+    fn test_remove_exact() -> Result<()> {
+        let mut urls = urls();
+        let removed = _remove(&mut urls, "www.dhl.org")?;
         assert_eq!(removed, vec!["www.dhl.org",]);
         let expected = vec!["www.example.com", "www.ups.org"];
         assert_eq!(urls, expected);
+        Ok(())
+    }
+    #[test]
+    fn test_remove_not_found() {
+        let mut urls = vec!["www.dhl.org".into()];
+        let removed = _remove(&mut urls, "dhl.com");
+        assert_eq!(
+            removed.err().unwrap(),
+            Error::PatternNotInFile("dhl.com".into())
+        );
     }
     #[test]
     fn test_add_happy() -> Result<()> {
-        let mut urls: Vec<String> = vec![
-            "www.example.com".into(),
-            "www.ups.org".into(),
-            "www.dhl.org".into(),
-        ];
+        let mut urls = urls();
         _add(&mut urls, "foo.bar")?;
         assert!(urls.contains(&"foo.bar".to_owned()));
         assert_eq!(
@@ -114,11 +125,7 @@ mod tests {
     }
     #[test]
     fn test_add_sad() {
-        let mut urls: Vec<String> = vec![
-            "www.example.com".into(),
-            "www.ups.org".into(),
-            "www.dhl.org".into(),
-        ];
+        let mut urls = urls();
         let result = _add(&mut urls, "www.ups.org");
         assert_eq!(
             result.err().unwrap(),

@@ -7,7 +7,10 @@ pub type Result<T> = core::result::Result<T, Error>;
 #[derive(Debug, From)]
 pub enum Error {
     // -- Internals
+
+    // URL management
     UrlAlreadyInFile(String),
+    PatternNotInFile(String),
 
     #[from]
     Custom(String),
