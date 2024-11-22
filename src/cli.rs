@@ -23,9 +23,10 @@ pub async fn main() -> Result<()> {
 
     // Handle subcommands
     match cli.command {
-        None => api::main().await?,
+        None => api::track_all().await?,
         Some(Command::Url { command }) => handle_url_command(command).await?,
         Some(Command::Config { command }) => handle_config_command(command)?,
+        Some(Command::Track { url }) => api::track(&url).await?,
     }
     Ok(())
 }
@@ -84,6 +85,9 @@ enum Command {
     Config {
         #[command(subcommand)]
         command: ConfigCommand,
+    },
+    Track {
+        url: String,
     },
 }
 #[derive(Subcommand)]

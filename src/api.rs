@@ -3,6 +3,7 @@ use crate::tracker::get_handler;
 use crate::tracker::{Package, PackageStatus};
 use crate::urls;
 use crate::{settings, tracker};
+use chrono::{DateTime, Local, TimeZone};
 use enum_iterator::all;
 use log;
 use std::collections::HashMap;
@@ -12,26 +13,53 @@ use std::path::Path;
 use std::time::Instant;
 use std::{env, fs};
 
-pub async fn main() -> Result<()> {
+// -- Public API
+pub async fn track_all() -> Result<()> {
     let start = Instant::now();
     let urls = urls::load()?;
-    track_many(urls).await?;
+    track_urls(urls).await?;
     log::info!("Operation took {:?}", start.elapsed());
     Ok(())
 }
 
+pub async fn track(url: &str) -> Result<()> {
+    let package = track_url(url).await?;
+    println!("{} Package {}", package.channel, package.barcode);
+    if let Some(sender) = package.sender.as_ref() {
+        println!("\tfrom {sender}");
+    }
+    if let Some(recipient) = package.recipient.as_ref() {
+        println!("\tto {recipient}");
+    }
+    if let Some(eta) = package.eta {
+        println!("\texpected delivery: {}", display_time(eta));
+    }
+    if let Some(window) = package.eta_window.as_ref() {
+        println!("\tdelivery window: {window}");
+    }
+    if let Some(time) = package.delivered {
+        println!("\tdelivered at {time}");
+    }
+    println!("\tevents:");
+    for event in package.events.iter() {
+        print!("\t\t{event}");
+    }
+    Ok(())
+}
+// -- Internals
+
 /// Get the Tracker implementation for the given URL, and track the package.
-pub async fn track_one(url: &str) -> Result<Package> {
+async fn track_url(url: &str) -> Result<Package> {
     let tracker = get_handler(url)?;
     tracker.track(url).await
 }
 
 /// Track all the URLs in the URLs file.
-pub async fn track_many(urls: Vec<String>) -> Result<()> {
+async fn track_urls(urls: Vec<String>) -> Result<()> {
     // fire off all the tasks in parallel
     let tasks: Vec<_> = urls
         .iter()
-        .map(|url| track_one(url))
+        .map(|url| track_url(url))
         .collect();
     let results = futures::future::join_all(tasks).await;
 
@@ -118,4 +146,21 @@ fn spaced(s: String) -> String {
         .map(|c| c.to_string())
         .collect::<Vec<_>>()
         .join(" ")
+}
+
+/// Display the date as "Fri 22 Nov" or "Today"
+pub fn display_date<T: TimeZone>(dt: DateTime<T>) -> String {
+    let local = dt.with_timezone(&Local);
+    let is_today = local.date_naive() == Local::now().date_naive();
+    if is_today {
+        "Today".into()
+    } else {
+        local.format("%a %d %b").to_string()
+    }
+}
+
+/// Display a datetime as "Fri 22 Nov 12:00"
+pub fn display_time<T: TimeZone>(dt: DateTime<T>) -> String {
+    let local = dt.with_timezone(&Local);
+    format!("{} {}", display_date(dt), local.format("%H:%M"))
 }
