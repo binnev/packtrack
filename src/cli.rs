@@ -26,7 +26,9 @@ pub async fn main() -> Result<()> {
         None => api::main().await?,
         Some(Command::Url { command }) => match command {
             UrlCommand::Add { url } => urls::add(url).await?,
-            UrlCommand::Remove { url } => urls::remove(url).await?,
+            UrlCommand::Remove { url } => {
+                urls::remove(url).await?;
+            }
             UrlCommand::List => urls::list().await?,
         },
         Some(Command::Config { command }) => match command {
