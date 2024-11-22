@@ -3,6 +3,7 @@
     - `url prune` cli command to prune delivered packages 
     - more advanced url file where you can add annotations, for those urls that don't contain your postcode. YAML?
     - `raw` command that fetches raw data for a url/barcode
+    - handle case where barcode in url != barcode from API
 - cache the responses for each package
     - so you can show the changes over time.
         - show when a package has changed status
