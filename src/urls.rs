@@ -1,18 +1,26 @@
 /// URL management
-use crate::error::Result;
+use crate::error::{Error, Result};
 use crate::settings;
 use std::ops::Index;
 use std::path::Path;
 use std::{env, fs};
 
-pub async fn add(url: String) -> Result<()> {
+pub async fn add(url: &str) -> Result<()> {
     log::info!("adding {url}");
     let mut urls = load()?;
-    urls.push(url);
+    _add(&mut urls, url)?;
     save(urls)?;
     Ok(())
 }
-
+fn _add(urls: &mut Vec<String>, url: &str) -> Result<()> {
+    let url = url.into();
+    if urls.iter().any(|u| u.contains(&url)) {
+        Err(Error::UrlAlreadyInFile(url))
+    } else {
+        urls.push(url);
+        Ok(())
+    }
+}
 pub async fn remove(pattern: String) -> Result<Vec<String>> {
     log::info!("removing URLs matching pattern {pattern}");
     let mut urls = load()?;
@@ -61,6 +69,8 @@ pub fn save(urls: Vec<String>) -> Result<()> {
 
 #[cfg(test)]
 mod tests {
+    use crate::error::Error;
+
     use super::*;
 
     #[test]
@@ -86,5 +96,33 @@ mod tests {
         assert_eq!(removed, vec!["www.dhl.org",]);
         let expected = vec!["www.example.com", "www.ups.org"];
         assert_eq!(urls, expected);
+    }
+    #[test]
+    fn test_add_happy() -> Result<()> {
+        let mut urls: Vec<String> = vec![
+            "www.example.com".into(),
+            "www.ups.org".into(),
+            "www.dhl.org".into(),
+        ];
+        _add(&mut urls, "foo.bar")?;
+        assert!(urls.contains(&"foo.bar".to_owned()));
+        assert_eq!(
+            urls,
+            vec!["www.example.com", "www.ups.org", "www.dhl.org", "foo.bar"]
+        );
+        Ok(())
+    }
+    #[test]
+    fn test_add_sad() {
+        let mut urls: Vec<String> = vec![
+            "www.example.com".into(),
+            "www.ups.org".into(),
+            "www.dhl.org".into(),
+        ];
+        let result = _add(&mut urls, "www.ups.org");
+        assert_eq!(
+            result.err().unwrap(),
+            Error::UrlAlreadyInFile("www.ups.org".into())
+        );
     }
 }
