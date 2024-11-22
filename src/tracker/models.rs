@@ -4,6 +4,8 @@ use std::fmt::Display;
 use chrono::{DateTime, Datelike, Local, TimeZone, Utc};
 use enum_iterator::Sequence;
 
+use crate::api::{display_date, display_time};
+
 #[derive(Debug, Clone)]
 pub struct Package {
     pub url:        String,
@@ -70,19 +72,6 @@ impl Display for Package {
             PackageStatus::InTransit => self.display_in_transit(f),
         }
     }
-}
-fn display_date<T: TimeZone>(dt: DateTime<T>) -> String {
-    let local = dt.with_timezone(&Local);
-    let is_today = local.date_naive() == Local::now().date_naive();
-    if is_today {
-        "Today".into()
-    } else {
-        local.format("%a %d %b").to_string()
-    }
-}
-fn display_time<T: TimeZone>(dt: DateTime<T>) -> String {
-    let local = dt.with_timezone(&Local);
-    format!("{} {}", display_date(dt), local.format("%H:%M"))
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
