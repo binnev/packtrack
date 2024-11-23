@@ -2,6 +2,7 @@ use crate::api;
 use crate::settings;
 use crate::urls;
 use crate::{Error, Result};
+use clap::Args;
 use clap::{command, Parser, Subcommand};
 use log::{self, LevelFilter};
 
@@ -9,7 +10,7 @@ pub async fn main() -> Result<()> {
     let cli = Cli::parse();
 
     // TODO: pass this to the logger configuration.
-    let log_level = match cli.verbosity {
+    let log_level = match cli.globals.verbosity {
         0_ => LevelFilter::Off,
         1 => LevelFilter::Error,
         2 => LevelFilter::Warn,
@@ -76,6 +77,12 @@ struct Cli {
     #[command(subcommand)]
     command: Option<Command>,
 
+    #[clap(flatten)]
+    globals: GlobalArgs,
+}
+
+#[derive(Args)]
+struct GlobalArgs {
     /// Set verbosity. `-v` = 1, `-vvv` = 3
     #[arg(short, long, action = clap::ArgAction::Count, global=true)]
     verbosity: u8,
