@@ -9,6 +9,7 @@ mod mocks;
 mod settings;
 mod tracker;
 mod urls;
+mod utils;
 
 use crate::error::{Error, Result};
 

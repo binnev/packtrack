@@ -1,4 +1,8 @@
-use crate::{settings, Result};
+use crate::{
+    settings,
+    utils::{get_home_dir, load_json, project_dirs, save_json},
+    Result,
+};
 use std::{
     env, fs,
     path::{Path, PathBuf},
@@ -53,33 +57,10 @@ pub fn print() -> Result<()> {
     Ok(())
 }
 pub fn load() -> Result<Settings> {
-    // don't use real settings in tests
-    // TODO: allow test to inject a non-default settings object
-    #[cfg(test)]
-    {
-        return Ok(Settings::default());
-    }
-
-    let settings_path = get_settings_path()?;
-    if settings_path.exists() {
-        let content = fs::read_to_string(settings_path)?;
-        let settings: Settings = serde_json::from_str(&content)?;
-        Ok(settings)
-    } else {
-        Ok(Settings::default())
-    }
+    load_json(&get_settings_path()?)
 }
 pub fn save(settings: &Settings) -> Result<()> {
-    // don't use real settings in tests
-    #[cfg(test)]
-    return Ok(());
-
-    let config_dir = get_config_dir()?;
-    fs::create_dir_all(config_dir)?; // create it if it doesn't exist
-    let settings_path = get_settings_path()?;
-    let content = serde_json::to_string_pretty(settings)?;
-    fs::write(settings_path, content)?;
-    Ok(())
+    save_json(&get_settings_path()?, settings)
 }
 
 fn get_config_dir() -> Result<PathBuf> {
@@ -90,16 +71,6 @@ fn get_settings_path() -> Result<PathBuf> {
     get_config_dir().map(|config| config.join("settings.json"))
 }
 
-fn get_home_dir() -> Result<PathBuf> {
-    UserDirs::new()
-        .map(|dirs| dirs.home_dir().into())
-        .ok_or("Couldn't compute home dir!".into())
-}
-
-fn project_dirs() -> Result<ProjectDirs> {
-    ProjectDirs::from("com", "packtrack", "packtrack")
-        .ok_or("Couldn't configure ProjectDirs!".into())
-}
 fn get_settings_as_dict() -> Result<Map<String, Value>> {
     let sets = load()?;
     let value = serde_json::to_value(sets)?;
