@@ -63,18 +63,12 @@ fn get_cache_dir() -> Result<PathBuf> {
 
 /// In-memory cache implementation for testing
 #[cfg(test)]
-mod test_cache {
+pub mod test_cache {
     use super::*;
 
+    #[derive(Default)]
     pub struct TestCache {
-        contents: HashMap<String, String>,
-    }
-    impl TestCache {
-        fn new() -> Self {
-            Self {
-                contents: HashMap::new(),
-            }
-        }
+        pub contents: HashMap<String, String>,
     }
     #[async_trait]
     impl Cache for TestCache {
@@ -92,5 +86,49 @@ mod test_cache {
         async fn save(&self) -> Result<()> {
             Ok(()) // don't write to file in tests
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::test_cache::*;
+    use super::*;
+    use std::sync::Mutex;
+
+    #[tokio::test]
+    async fn test_sharing_cache() -> Result<()> {
+        let mut cache = TestCache::default();
+        let mutex = Mutex::new(cache);
+
+        let ref1 = &mutex;
+        let ref2 = &mutex;
+
+        assert_eq!(ref1.lock().unwrap().contents, HashMap::new());
+
+        ref1.lock()
+            .unwrap()
+            .insert("url".into(), "text".into())
+            .await?;
+
+        // the insert should succeed
+        assert_eq!(
+            ref1.lock().unwrap().contents,
+            HashMap::from([("url".into(), "text".into())])
+        );
+
+        ref2.lock()
+            .unwrap()
+            .insert("url2".into(), "text2".into())
+            .await?;
+
+        assert_eq!(
+            ref1.lock().unwrap().contents,
+            HashMap::from([
+                ("url".into(), "text".into()),
+                ("url2".into(), "text2".into()),
+            ])
+        );
+
+        Ok(())
     }
 }
