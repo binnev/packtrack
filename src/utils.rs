@@ -23,9 +23,11 @@ pub fn load_json<T: DeserializeOwned + Default>(path: &Path) -> Result<T> {
     return Ok(T::default()); // don't load from file in tests
 
     if path.exists() {
+        log::info!("Loading JSON file: {path:?}");
         let s = fs::read_to_string(path)?;
         Ok(serde_json::from_str(&s)?)
     } else {
+        log::info!("Couldn't find JSON file: {path:?}");
         Ok(T::default())
     }
 }

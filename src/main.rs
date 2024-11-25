@@ -4,6 +4,7 @@
 
 mod api;
 mod cache;
+mod cached_tracker;
 mod cli;
 mod error;
 mod mocks;

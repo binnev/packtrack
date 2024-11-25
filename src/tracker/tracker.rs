@@ -19,14 +19,22 @@ lazy_static::lazy_static! {
     ]);
 }
 
+/// Handles getting and parsing tracking data for a specific channel, e.g. DHL.
 #[async_trait]
 pub trait Tracker: Send + Sync {
     /// Lets caller code know whether the Tracker implementation is suitable for
     /// the given url, so that caller code can do dynamic dispatch.
     fn can_handle(&self, url: &str) -> bool;
 
-    /// Track the package
-    async fn track(&self, url: &str) -> Result<Package>;
+    /// Get raw data that can be cached
+    /// Using String as the data type because we can't guarantee the format of
+    /// the reponse (HTML / JSON etc).
+    /// `Result` because the request may not succeed
+    async fn get_raw(&self, url: &str) -> Result<String>;
+
+    /// Parse the result of `get_raw` into a Package.
+    /// `Result` because we may get parse errors.
+    fn parse(&self, text: String) -> Result<Package>;
 }
 
 /// Register the given Tracker implementation so that it can be selected

@@ -8,7 +8,6 @@ use crate::api::{display_date, display_time};
 
 #[derive(Debug, Clone)]
 pub struct Package {
-    pub url:        String,
     pub barcode:    String,
     pub channel:    String,
     pub sender:     Option<String>,

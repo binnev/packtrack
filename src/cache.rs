@@ -26,9 +26,10 @@ pub struct JsonCache {
 }
 impl JsonCache {
     // RAII: load from file when instantiating
-    fn new() -> Result<Self> {
+    pub fn new() -> Result<Self> {
         let cache_file = Self::get_file()?;
         let contents = utils::load_json(&cache_file)?;
+        log::info!("Loaded JSON cache from {cache_file:?}");
         Ok(Self { contents })
     }
     fn get_file() -> Result<PathBuf> {
@@ -38,19 +39,27 @@ impl JsonCache {
 #[async_trait]
 impl Cache for JsonCache {
     async fn get(&self, url: &str) -> Result<Option<&str>> {
-        Ok(self
+        let entry = self
             .contents
             .get(url)
-            .map(|s| s.as_str()))
+            .map(|s| s.as_str());
+
+        match entry {
+            Some(hit) => log::info!("Cache hit for {url}"),
+            None => log::info!("Cache miss for {url}"),
+        }
+        Ok(entry)
     }
     async fn insert(&mut self, url: String, text: String) -> Result<()> {
-        self.contents.insert(url, text);
+        self.contents.insert(url.clone(), text);
+        log::info!("Inserted new cache entry for {url}");
         Ok(())
     }
     // Save to file
     async fn save(&self) -> Result<()> {
         let cache_file = Self::get_file()?;
         utils::save_json(&cache_file, &self.contents)?;
+        log::info!("Saved JSON cache to {cache_file:?}");
         Ok(())
     }
 }

@@ -1,3 +1,5 @@
+use crate::cache::{Cache, JsonCache};
+use crate::cached_tracker::CachedTracker;
 use crate::error::{Error, Result};
 use crate::tracker;
 use crate::tracker::get_handler;
@@ -12,6 +14,7 @@ use std::iter::repeat;
 use std::path::Path;
 use std::time::Instant;
 use std::{env, fs};
+use tokio::sync::Mutex;
 
 // -- Public API
 pub async fn track_all() -> Result<()> {
@@ -30,8 +33,11 @@ pub async fn track(input: &str) -> Result<()> {
         Some(url) => url,
         None => input.to_owned(),
     };
-
-    let package = track_url(&url).await?;
+    let cache = Mutex::new(JsonCache::new()?);
+    let package = track_url(&url, &cache).await?;
+    {
+        cache.lock().await.save().await?;
+    }
     println!("{} Package {}", package.channel, package.barcode);
     if let Some(sender) = package.sender.as_ref() {
         println!("\tfrom {sender}");
@@ -57,19 +63,27 @@ pub async fn track(input: &str) -> Result<()> {
 // -- Internals
 
 /// Get the Tracker implementation for the given URL, and track the package.
-async fn track_url(url: &str) -> Result<Package> {
+async fn track_url(url: &str, cache: &Mutex<dyn Cache>) -> Result<Package> {
     let tracker = get_handler(url)?;
+    let mut tracker = CachedTracker {
+        tracker: tracker,
+        cache:   cache,
+    };
     tracker.track(url).await
 }
 
 /// Track all the URLs in the URLs file.
 async fn track_urls(urls: Vec<String>) -> Result<()> {
     // fire off all the tasks in parallel
+    let cache = Mutex::new(JsonCache::new()?);
     let tasks: Vec<_> = urls
         .iter()
-        .map(|url| track_url(url))
+        .map(|url| track_url(url, &cache))
         .collect();
     let results = futures::future::join_all(tasks).await;
+    {
+        cache.lock().await.save().await?;
+    }
 
     // sort the results by status / error
     let mut errors: Vec<Error> = vec![];

@@ -13,11 +13,19 @@ impl Tracker for PostNLTracker {
     fn can_handle(&self, url: &str) -> bool {
         url.contains("postnl")
     }
-    async fn track(&self, url: &str) -> Result<Package> {
+    async fn get_raw(&self, url: &str) -> Result<String> {
         let barcode = get_barcode(url)?;
-        let package = track_package(barcode).await?;
+        let url = get_url(barcode);
+        let response = reqwest::get(url).await?;
+        let text = response.text().await?;
+        Ok(text)
+    }
+
+    fn parse(&self, text: String) -> Result<Package> {
+        let value: Value = serde_json::from_str(&text)?;
+        let data = get_first_package(value)?;
+        let package: PostNLPackage = serde_json::from_value(data.clone())?;
         Ok(Package {
-            url:        url.to_owned(),
             barcode:    package.barcode.clone(),
             channel:    "PostNL".into(),
             sender:     package.sender(),
@@ -30,15 +38,6 @@ impl Tracker for PostNLTracker {
     }
 }
 
-async fn track_package(barcode: String) -> Result<PostNLPackage> {
-    let url = get_url(barcode);
-    let response = reqwest::get(url).await?;
-    let body = response.text().await?;
-    let value: Value = serde_json::from_str(&body)?;
-    let data = get_first_package(value)?;
-    let package: PostNLPackage = serde_json::from_value(data.clone())?;
-    Ok(package)
-}
 fn get_first_package(data: Value) -> Result<Value> {
     let (_, value) = data
         .get("colli")

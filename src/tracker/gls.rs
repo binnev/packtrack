@@ -14,17 +14,20 @@ impl Tracker for GlsTracker {
     fn can_handle(&self, url: &str) -> bool {
         url.contains("www.gls")
     }
-    async fn track(&self, url: &str) -> Result<Package> {
+    async fn get_raw(&self, url: &str) -> Result<String> {
         let default_postcode = settings::load()?.postcode;
         let (barcode, postcode) =
             get_barcode_postcode(url, default_postcode.as_deref())?;
         let url = get_url(&barcode, &postcode);
         let response = reqwest::get(&url).await?;
         let text = response.text().await?;
+        Ok(text)
+    }
+    fn parse(&self, text: String) -> Result<Package> {
         let data: Value = serde_json::from_str(&text).map_err(|err| {
             format!("Error parsing request.text to JSON: {err}")
         })?;
-        let package = parse_package(data, &url)?;
+        let package = parse_package(data)?;
         Ok(package)
     }
 }
@@ -88,9 +91,8 @@ impl GlsPackage {
             .and_then(|x| x.name.clone())
             .filter(|name| !name.is_empty()) // convert "" to None
     }
-    fn to_package(&self, url: &str) -> Result<Package> {
+    fn to_package(&self) -> Result<Package> {
         Ok(Package {
-            url:        url.to_owned(),
             barcode:    self
                 .parcel_no
                 .clone()
@@ -151,10 +153,10 @@ struct AddressInfo {
 struct Party {
     name: Option<String>,
 }
-fn parse_package(data: Value, url: &str) -> Result<Package> {
+fn parse_package(data: Value) -> Result<Package> {
     let package: GlsPackage = serde_json::from_value(data.clone())?;
-    log::info!("Successfully parsed package from {url}");
-    package.to_package(url)
+    log::info!("Successfully parsed package");
+    package.to_package()
 }
 fn get_barcode_postcode(
     url: &str,
@@ -245,7 +247,7 @@ mod tests {
     fn test_to_package_sad() {
         let pack = GlsPackage::default();
         assert_eq!(
-            pack.to_package(url).err().unwrap(),
+            pack.to_package().err().unwrap(),
             Error::from("No barcode!")
         );
     }
@@ -253,7 +255,7 @@ mod tests {
     #[test]
     fn test_deserialization_minimal() {
         let data = json!({"parcelNo": "1234"});
-        parse_package(data, url).unwrap();
+        parse_package(data).unwrap();
     }
     #[test]
     fn test_deserialization_error_event() {
@@ -262,7 +264,7 @@ mod tests {
             "scans": [{}]
         });
         assert_eq!(
-            parse_package(data, url).err().unwrap(),
+            parse_package(data).err().unwrap(),
             Error::from("No datetime on event!")
         );
 
@@ -270,7 +272,7 @@ mod tests {
             "parcelNo": "1234",
             "scans": [{"dateTime": "foo"}]
         });
-        assert!(parse_package(data, url)
+        assert!(parse_package(data)
             .err()
             .unwrap()
             .to_string()
@@ -281,7 +283,7 @@ mod tests {
     #[test]
     fn test_deserialize_undelivered() -> Result<()> {
         let data = mocks::load_json("gls_undelivered")?;
-        let package = parse_package(data, url)?;
+        let package = parse_package(data)?;
         assert_eq!(package.sender.unwrap(), "Sender Name");
         assert_eq!(package.recipient, None);
         assert_eq!(package.barcode, "57250013150034");
@@ -301,7 +303,7 @@ mod tests {
     #[test]
     fn test_deserialize_undelivered_with_eta() -> Result<()> {
         let data = mocks::load_json("gls_undelivered_with_eta")?;
-        let package = parse_package(data, url)?;
+        let package = parse_package(data)?;
         assert_eq!(package.sender.unwrap(), "Sender Name");
         assert_eq!(package.recipient, None);
         assert_eq!(package.barcode, "57250013150034");
@@ -327,7 +329,7 @@ mod tests {
     #[test]
     fn test_deserialize_undelivered_3() -> Result<()> {
         let data = mocks::load_json("gls_undelivered_3")?;
-        let package = parse_package(data, url)?;
+        let package = parse_package(data)?;
         assert_eq!(package.sender.unwrap(), "Sender Name");
         assert_eq!(package.recipient, None);
         assert_eq!(package.barcode, "57250013150034");
@@ -356,7 +358,7 @@ mod tests {
     #[test]
     fn test_deserialize_delivered() -> Result<()> {
         let data = mocks::load_json("gls_delivered")?;
-        let package = parse_package(data, url)?;
+        let package = parse_package(data)?;
         assert_eq!(package.sender.unwrap(), "Sender Name");
         assert_eq!(package.recipient, None);
         assert_eq!(package.barcode, "57250013150034");

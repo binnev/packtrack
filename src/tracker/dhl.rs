@@ -13,11 +13,19 @@ impl Tracker for DhlTracker {
     fn can_handle(&self, url: &str) -> bool {
         url.contains("dhl")
     }
-    async fn track(&self, url: &str) -> Result<Package> {
+    async fn get_raw(&self, url: &str) -> Result<String> {
         let barcode = get_barcode(url)?;
-        let package = track_package(barcode).await?;
+        let url = get_url(barcode);
+        let response = reqwest::get(url).await?;
+        let body = response.text().await?;
+        Ok(body)
+    }
+
+    fn parse(&self, text: String) -> Result<Package> {
+        let value: Value = serde_json::from_str(&text)?;
+        let data = get_first_package(value)?;
+        let package: DhlPackage = serde_json::from_value(data.clone())?;
         Ok(Package {
-            url:        url.to_owned(),
             barcode:    package.barcode.clone(),
             channel:    "DHL".into(),
             sender:     package.sender(),
@@ -28,16 +36,6 @@ impl Tracker for DhlTracker {
             events:     package.events(),
         })
     }
-}
-
-async fn track_package(barcode: String) -> Result<DhlPackage> {
-    let url = get_url(barcode);
-    let response = reqwest::get(url).await?;
-    let body = response.text().await?;
-    let value: Value = serde_json::from_str(&body)?;
-    let data = get_first_package(value)?;
-    let package: DhlPackage = serde_json::from_value(data.clone())?;
-    Ok(package)
 }
 
 fn get_barcode(url: &str) -> Result<String> {
