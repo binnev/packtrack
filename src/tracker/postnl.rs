@@ -1,11 +1,11 @@
-use super::models::{Event, Package, TimeWindow, UtcTime};
+use super::models::{Event, Package, TimeWindow};
 use super::tracker::Tracker;
+use crate::utils::UtcTime;
 use crate::Result;
 use async_trait::async_trait;
 use regex::Regex;
 use serde::Deserialize;
 use serde_json::Value;
-
 pub struct PostNLTracker;
 
 #[async_trait]

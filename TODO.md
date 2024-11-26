@@ -7,12 +7,15 @@
 - cache the responses for each package
     - so you can show the changes over time.
         - show when a package has changed status
-    - global --cache option
-    - also reuse recently fetched responses
-    - composed Tracker struct with child 
-        - Requester 
-        - Parser
-        - Cacher 
+    - don't store a new entry if a dupe exists
+    - global --cache options
+        - number of responses to store per url 
+        - how recent should an entry be to be reused
+        - force no cache
+    - [x] also reuse recently fetched responses
+    - [x] composed Tracker struct with child 
+        - Tracker
+        - Cache
 - display
     - tui spinners when waiting for tasks
     - flag to control package display detail level (brief / detailed)

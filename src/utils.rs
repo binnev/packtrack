@@ -4,6 +4,7 @@ use std::{
 };
 
 use crate::Result;
+use chrono::{DateTime, Utc};
 use directories::{ProjectDirs, UserDirs};
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
@@ -46,3 +47,5 @@ pub fn save_json(path: &Path, value: impl Serialize) -> Result<()> {
     fs::write(path, contents)?;
     Ok(())
 }
+
+pub type UtcTime = DateTime<Utc>;

@@ -4,7 +4,10 @@ use std::fmt::Display;
 use chrono::{DateTime, Datelike, Local, TimeZone, Utc};
 use enum_iterator::Sequence;
 
-use crate::api::{display_date, display_time};
+use crate::{
+    api::{display_date, display_time},
+    utils::UtcTime,
+};
 
 #[derive(Debug, Clone)]
 pub struct Package {
@@ -118,8 +121,6 @@ impl Display for PackageStatus {
         write!(f, "{self:?}")
     }
 }
-
-pub type UtcTime = DateTime<Utc>;
 
 #[cfg(test)]
 mod tests {

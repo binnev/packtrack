@@ -1,9 +1,10 @@
+use crate::utils::UtcTime;
 use async_trait::async_trait;
 use regex::Regex;
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{models::UtcTime, tracker::Tracker, Event, Package, TimeWindow};
+use super::{tracker::Tracker, Event, Package, TimeWindow};
 use crate::{settings, Result};
 
 pub struct DhlTracker;
