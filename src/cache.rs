@@ -23,7 +23,6 @@ pub trait Cache {
     async fn save(&self) -> Result<()>;
 }
 
-#[derive(Default)]
 pub struct JsonCache {
     contents:    HashMap<String, Vec<CacheEntry>>,
     /// max entries per url
@@ -59,17 +58,21 @@ impl JsonCache {
         Ok(get_cache_dir()?.join("packtrack-cache.json"))
     }
 }
+impl Default for JsonCache {
+    fn default() -> Self {
+        Self {
+            contents:    HashMap::new(),
+            max_entries: Some(10),
+            max_hit_age: Some(Duration::from_secs(30)),
+        }
+    }
+}
 #[async_trait]
 impl Cache for JsonCache {
     fn get(&self, url: &str) -> Result<Option<&str>> {
+        let now = Utc::now();
         let mut entries = self.contents.get(url);
-        match entries {
-            Some(_) => log::info!("Cache hit for {url}"),
-            None => log::info!("Cache miss for {url}"),
-        }
-        let min_created = self
-            .max_hit_age
-            .map(|max| Utc::now() - max);
+        let min_created = self.max_hit_age.map(|max| now - max);
 
         // 1. maybe filter by >= min_created
         // 2. select max
@@ -86,9 +89,20 @@ impl Cache for JsonCache {
                 filtered
                     .into_iter()
                     .max_by(|a, b| a.created.cmp(&b.created))
-            })
-            .map(|newest| newest.text.as_str());
-        Ok(entry)
+            });
+
+        match entry {
+            Some(entry) => {
+                let age = now - entry.created;
+                log::info!(
+                    "Reusing {}s old cache entry for {url}",
+                    age.num_seconds()
+                );
+            }
+            None => log::info!("Cache miss for {url}"),
+        }
+
+        Ok(entry.map(|e| e.text.as_str()))
     }
     fn insert(&mut self, url: String, text: String) -> Result<()> {
         let entry = CacheEntry {
