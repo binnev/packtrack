@@ -36,7 +36,10 @@ pub async fn track(input: &str) -> Result<()> {
     let cache = Mutex::new(JsonCache::new()?);
     let package = track_url(&url, &cache).await?;
     {
-        cache.lock().await.save().await?;
+        let cache = cache.lock().await;
+        if cache.modified {
+            cache.save().await?;
+        }
     }
     println!("{} Package {}", package.channel, package.barcode);
     if let Some(sender) = package.sender.as_ref() {
@@ -82,7 +85,10 @@ async fn track_urls(urls: Vec<String>) -> Result<()> {
         .collect();
     let results = futures::future::join_all(tasks).await;
     {
-        cache.lock().await.save().await?;
+        let cache = cache.lock().await;
+        if cache.modified {
+            cache.save().await?;
+        }
     }
 
     // sort the results by status / error

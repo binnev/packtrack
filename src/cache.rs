@@ -24,11 +24,12 @@ pub trait Cache {
 }
 
 pub struct JsonCache {
-    contents:    HashMap<String, Vec<CacheEntry>>,
+    contents:        HashMap<String, Vec<CacheEntry>>,
     /// max entries per url
-    max_entries: Option<usize>,
+    pub max_entries: Option<usize>,
     /// any entries older than this will not be reused
-    max_hit_age: Option<Duration>,
+    pub max_hit_age: Option<Duration>,
+    pub modified:    bool,
 }
 impl JsonCache {
     pub fn new() -> Result<Self> {
@@ -64,6 +65,7 @@ impl Default for JsonCache {
             contents:    HashMap::new(),
             max_entries: Some(10),
             max_hit_age: Some(Duration::from_secs(30)),
+            modified:    false,
         }
     }
 }
@@ -124,6 +126,7 @@ impl Cache for JsonCache {
             })
             .or_insert(vec![entry]);
         log::info!("Inserted new cache entry for {url}");
+        self.modified = true;
         Ok(())
     }
     // Save to file
@@ -181,7 +184,7 @@ mod tests {
     #[test]
     fn test_insert_with_no_max_values() -> Result<()> {
         let mut cache = JsonCache::default();
-        assert_eq!(cache.max_entries, None);
+        assert_eq!(cache.max_entries, Some(10));
         cache.insert("url".into(), "0".into())?;
         cache.insert("url".into(), "1".into())?;
         cache.insert("url".into(), "2".into())?;
@@ -238,6 +241,15 @@ mod tests {
         };
         assert_eq!(cache.get("url")?, None);
 
+        Ok(())
+    }
+
+    #[test]
+    fn test_is_modified() -> Result<()> {
+        let mut cache = JsonCache::default();
+        assert_eq!(cache.modified, false);
+        cache.insert("url".into(), "foo".into())?;
+        assert_eq!(cache.modified, true);
         Ok(())
     }
 }
