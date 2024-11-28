@@ -1,0 +1,1280 @@
+{
+    "statusCode": "200",
+    "statusText": "Successful",
+    "isLoggedInUser": false,
+    "trackedDateTime": "28/11/2024 17:14 EST",
+    "isBcdnMultiView": false,
+    "returnToDetails": {
+        "returnToURL": null,
+        "returnToApp": null
+    },
+    "trackDetails": [
+        {
+            "errorCode": null,
+            "errorText": null,
+            "requestedTrackingNumber": "1Z54V53E9199062187",
+            "trackingNumber": "1Z54V53E9199062187",
+            "isMobileDevice": false,
+            "packageStatus": "Onderweg",
+            "packageStatusType": "I",
+            "packageStatusCode": "005",
+            "progressBarType": "InTransit",
+            "progressBarPercentage": "46",
+            "simplifiedText": "",
+            "endOfDayResCMSKey": null,
+            "receivedBy": "",
+            "leaveAt": null,
+            "nextExpectedEvent": null,
+            "milestones": [
+                {
+                    "isCurrent": false,
+                    "isCompleted": true,
+                    "isFuture": false,
+                    "isRFIDIcon": false,
+                    "category": null,
+                    "subMilestone": null,
+                    "returnTrackingNumber": null,
+                    "date": "20/11/2024",
+                    "time": "12:38",
+                    "location": "Germany",
+                    "name": "Label Created",
+                    "nameKey": "cms.stapp.orderReceived"
+                },
+                {
+                    "isCurrent": false,
+                    "isCompleted": true,
+                    "isFuture": false,
+                    "isRFIDIcon": false,
+                    "category": null,
+                    "subMilestone": null,
+                    "returnTrackingNumber": null,
+                    "date": "28/11/2024",
+                    "time": "16:17",
+                    "location": "Utrecht, Netherlands",
+                    "name": "We have your Package",
+                    "nameKey": "cms.stapp.weHaveYourPkg"
+                },
+                {
+                    "isCurrent": true,
+                    "isCompleted": true,
+                    "isFuture": false,
+                    "isRFIDIcon": false,
+                    "category": null,
+                    "subMilestone": null,
+                    "returnTrackingNumber": null,
+                    "date": "28/11/2024",
+                    "time": "21:30",
+                    "location": "Utrecht, Netherlands",
+                    "name": "On the Way",
+                    "nameKey": "cms.stapp.inTransit"
+                },
+                {
+                    "isCurrent": false,
+                    "isCompleted": false,
+                    "isFuture": true,
+                    "isRFIDIcon": false,
+                    "category": null,
+                    "subMilestone": null,
+                    "returnTrackingNumber": null,
+                    "date": "",
+                    "time": "",
+                    "location": "",
+                    "name": "Out for Delivery",
+                    "nameKey": "cms.stapp.outForDelivery"
+                },
+                {
+                    "isCurrent": false,
+                    "isCompleted": false,
+                    "isFuture": true,
+                    "isRFIDIcon": false,
+                    "category": null,
+                    "subMilestone": null,
+                    "returnTrackingNumber": null,
+                    "date": "",
+                    "time": "",
+                    "location": "",
+                    "name": "Delivery",
+                    "nameKey": "cms.stapp.delivery"
+                }
+            ],
+            "altTrkNumInfo": null,
+            "alertCount": 0,
+            "isEligibleViewMoreAlerts": false,
+            "cdiLeaveAt": null,
+            "leftAtActionCMSKey": "cms.stapp.at",
+            "leftAt": "",
+            "showNoInfoDate": false,
+            "showPickupByDate": false,
+            "shipToAddress": {
+                "streetAddress1": "",
+                "streetAddress2": "",
+                "streetAddress3": "",
+                "city": "WESEL",
+                "state": "",
+                "province": "",
+                "country": "DE",
+                "zipCode": "",
+                "companyName": "",
+                "attentionName": "",
+                "isAddressCorrected": false,
+                "isReturnAddress": false,
+                "isHoldAddress": false
+            },
+            "shipFromAddress": null,
+            "consigneeAddress": null,
+            "deliveryAddress": null,
+            "signatureImage": "",
+            "trackHistoryDescription": null,
+            "additionalInformation": {
+                "serviceInformation": {
+                    "serviceName": "UPS Standard&#174;",
+                    "serviceLink": null,
+                    "serviceAttribute": null
+                },
+                "weight": "7.40",
+                "weightUnit": "KGS",
+                "codInformation": null,
+                "shippedOrBilledDate": "20/11/2024",
+                "referenceNumbers": null,
+                "postalServiceTrackingID": "",
+                "alternateTrackingNumbers": null,
+                "otherRequestedServices": null,
+                "descriptionOfGood": "",
+                "cargoReady": "",
+                "fileNumber": "",
+                "originPort": "",
+                "destinationPort": "",
+                "estimatedArrival": "",
+                "estimatedDeparture": "",
+                "poNumber": "",
+                "blNumber": "",
+                "appointmentMade": null,
+                "appointmentRequested": null,
+                "appointmentRequestedRange": null,
+                "manifest": "",
+                "isSmallPackage": true,
+                "shipmentVolume": null,
+                "numberOfPallets": null,
+                "shipmentCategory": "cms.stapp.package",
+                "pkgSequenceNum": null,
+                "pkgIdentificationCode": null,
+                "pkgID": null,
+                "product": null,
+                "numberOfPieces": null,
+                "wwef": false,
+                "wwePostal": false,
+                "showAltTrkLink": false,
+                "wweParcel": false,
+                "deliveryPreference": null,
+                "liftGateOnDelivery": null,
+                "liftGateOnPickup": null,
+                "pickupDropOffDate": null,
+                "pickupPreference": null
+            },
+            "specialInstructions": null,
+            "proofOfDeliveryUrl": null,
+            "upsAccessPoint": null,
+            "additionalPackagesCount": null,
+            "attentionNeeded": {
+                "actions": [],
+                "isCorrectMyAddress": false
+            },
+            "shipmentProgressActivities": [
+                {
+                    "date": "28/11/2024",
+                    "time": "21:30",
+                    "location": "Utrecht, Netherlands",
+                    "activityScan": "Vertrokken uit faciliteit",
+                    "milestoneName": {
+                        "name": "On the Way",
+                        "nameKey": "cms.stapp.inTransit"
+                    },
+                    "isInOverViewTable": false,
+                    "activityAdditionalDescription": null,
+                    "trailer": "",
+                    "isDisplayPodLink": false,
+                    "isRFIDIconEvent": false,
+                    "actCode": "DP",
+                    "gmtDate": "20241128",
+                    "gmtOffset": "+01:00",
+                    "gmtTime": "20:30:00",
+                    "alternateTrackingNumbers": null,
+                    "isBrokerageEvent": false
+                },
+                {
+                    "date": "28/11/2024",
+                    "time": "20:19",
+                    "location": "Utrecht, Netherlands",
+                    "activityScan": "Aangekomen bij faciliteit",
+                    "milestoneName": null,
+                    "isInOverViewTable": false,
+                    "activityAdditionalDescription": null,
+                    "trailer": "",
+                    "isDisplayPodLink": false,
+                    "isRFIDIconEvent": false,
+                    "actCode": "OR",
+                    "gmtDate": "20241128",
+                    "gmtOffset": "+01:00",
+                    "gmtTime": "19:19:16",
+                    "alternateTrackingNumbers": null,
+                    "isBrokerageEvent": false
+                },
+                {
+                    "date": "28/11/2024",
+                    "time": "16:17",
+                    "location": "Utrecht, Netherlands",
+                    "activityScan": "Afhaalscan ",
+                    "milestoneName": {
+                        "name": "We have your Package",
+                        "nameKey": "cms.stapp.weHaveYourPkg"
+                    },
+                    "isInOverViewTable": false,
+                    "activityAdditionalDescription": null,
+                    "trailer": "",
+                    "isDisplayPodLink": false,
+                    "isRFIDIconEvent": false,
+                    "actCode": "PU",
+                    "gmtDate": "20241128",
+                    "gmtOffset": "+01:00",
+                    "gmtTime": "15:17:57",
+                    "alternateTrackingNumbers": null,
+                    "isBrokerageEvent": false
+                },
+                {
+                    "date": "28/11/2024",
+                    "time": "15:37",
+                    "location": "Utrecht, Netherlands",
+                    "activityScan": "Uw pakket is momenteel in het UPS Access Point™ en is gepland om aan UPS aan te bieden.",
+                    "milestoneName": null,
+                    "isInOverViewTable": false,
+                    "activityAdditionalDescription": null,
+                    "trailer": "",
+                    "isDisplayPodLink": false,
+                    "isRFIDIconEvent": false,
+                    "actCode": "ZO",
+                    "gmtDate": "20241128",
+                    "gmtOffset": "+01:00",
+                    "gmtTime": "14:37:50",
+                    "alternateTrackingNumbers": null,
+                    "isBrokerageEvent": false
+                },
+                {
+                    "date": "28/11/2024",
+                    "time": "15:37",
+                    "location": "Utrecht, Netherlands",
+                    "activityScan": "Afgiftelocatie",
+                    "milestoneName": null,
+                    "isInOverViewTable": false,
+                    "activityAdditionalDescription": null,
+                    "trailer": "",
+                    "isDisplayPodLink": false,
+                    "isRFIDIconEvent": false,
+                    "actCode": "XD",
+                    "gmtDate": "20241128",
+                    "gmtOffset": "+01:00",
+                    "gmtTime": "14:37:00",
+                    "alternateTrackingNumbers": null,
+                    "isBrokerageEvent": false
+                },
+                {
+                    "date": "20/11/2024",
+                    "time": "12:38",
+                    "location": "Germany",
+                    "activityScan": "Verzender heeft een etiket aangemaakt, UPS heeft het pakket nog niet ontvangen. ",
+                    "milestoneName": {
+                        "name": "Label Created",
+                        "nameKey": "cms.stapp.orderReceived"
+                    },
+                    "isInOverViewTable": false,
+                    "activityAdditionalDescription": null,
+                    "trailer": "",
+                    "isDisplayPodLink": false,
+                    "isRFIDIconEvent": false,
+                    "actCode": "MP",
+                    "gmtDate": "20241120",
+                    "gmtOffset": "+01:00",
+                    "gmtTime": "11:38:47",
+                    "alternateTrackingNumbers": null,
+                    "isBrokerageEvent": false
+                }
+            ],
+            "shipmentGMTInfo": {
+                "shipFromGMTOffset": "+01:00",
+                "shipToGMTOffset": "+01:00"
+            },
+            "deliveryPhoto": null,
+            "trackingNumberType": "1Z",
+            "preAuthorizedForReturnData": null,
+            "shipToAddressLblKey": "cms.stapp.returnTo",
+            "isShipToAddressChangePending": false,
+            "trackSummaryView": null,
+            "senderShipperNumber": "54V53E",
+            "internalKey": ",,,",
+            "deliveryOptions": {
+                "notLoggedInMyChoicePage": {
+                    "isSignUpLogin": true,
+                    "showInfoNotice": false,
+                    "showGuestChangeDelivery": "",
+                    "showCorrectDeliveryAddress": null
+                },
+                "isLoggedInNoneMyChoicePage": false,
+                "isInfoNoticePage": false,
+                "deliveryChangeUrl": null,
+                "siiUrl": null,
+                "consumerHubUrl": null,
+                "myChoiceTandCUrl": null
+            },
+            "upsellOptions": {
+                "uapDeliveryChangeUrl": null,
+                "isNotLoggedInMyChoicePage": true,
+                "isLoggedInNoneMyChoicePage": false
+            },
+            "sendUpdatesOptions": {
+                "bridgePageType": "NoneMyChoiceBridgePage",
+                "myChoicePreferencesLink": "/lasso/login?loc=nl_NL&amp;returnto=%2Fppc%2Fppc.html%2FpreferencePage%2FmychoicePreference%2Fdeliveryalerts%3Floc%3Dnl_NL",
+                "isSMSSupported": true,
+                "isEligibleToRetrieveDelAlerts": false,
+                "qvnNotificationsInfo": {
+                    "isDisplayCurrentStatus": true,
+                    "isDisplayUnforeseenEventsOrDelays": true,
+                    "isDisplayShipmentDelivered": true,
+                    "isDisplayPackageReadyForPickup": false,
+                    "isPreCheckedCurrentStatus": false,
+                    "isPreCheckedUnforeseenEventsOrDelays": false,
+                    "isPreCheckedShipmentDelivered": false,
+                    "isPreCheckedPackageReadyForPickup": false,
+                    "languageOptions": [
+                        {
+                            "locale": "nl_NL",
+                            "language": "Nederland - Nederlands"
+                        },
+                        {
+                            "locale": "en_AF",
+                            "language": "Afghanistan - Engels"
+                        },
+                        {
+                            "locale": "en_AL",
+                            "language": "Albani&#235; - Engels"
+                        },
+                        {
+                            "locale": "en_DZ",
+                            "language": "Algerije - Engels"
+                        },
+                        {
+                            "locale": "fr_DZ",
+                            "language": "Algerije - Frans"
+                        },
+                        {
+                            "locale": "en_VI",
+                            "language": "Amerikaanse Maagdeneilanden - Engels"
+                        },
+                        {
+                            "locale": "en_AS",
+                            "language": "Amerikaans-Samoa - Engels"
+                        },
+                        {
+                            "locale": "en_AD",
+                            "language": "Andorra - Engels"
+                        },
+                        {
+                            "locale": "en_AO",
+                            "language": "Angola - Engels"
+                        },
+                        {
+                            "locale": "en_AI",
+                            "language": "Anguilla - Engels"
+                        },
+                        {
+                            "locale": "en_AG",
+                            "language": "Antigua - Engels"
+                        },
+                        {
+                            "locale": "en_AR",
+                            "language": "Argentini&#235; - Engels"
+                        },
+                        {
+                            "locale": "es_AR",
+                            "language": "Argentini&#235; - Spaans"
+                        },
+                        {
+                            "locale": "en_AM",
+                            "language": "Armeni&#235; - Engels"
+                        },
+                        {
+                            "locale": "en_AW",
+                            "language": "Aruba - Engels"
+                        },
+                        {
+                            "locale": "en_AU",
+                            "language": "Australi&#235; - Engels"
+                        },
+                        {
+                            "locale": "en_AZ",
+                            "language": "Azerbeidzjan - Engels"
+                        },
+                        {
+                            "locale": "en_AP",
+                            "language": "Azoren - Engels"
+                        },
+                        {
+                            "locale": "en_BS",
+                            "language": "Bahama&#39;s - Engels"
+                        },
+                        {
+                            "locale": "en_BH",
+                            "language": "Bahrein - Engels"
+                        },
+                        {
+                            "locale": "en_BD",
+                            "language": "Bangladesh - Engels"
+                        },
+                        {
+                            "locale": "en_BB",
+                            "language": "Barbados - Engels"
+                        },
+                        {
+                            "locale": "en_BE",
+                            "language": "Belgi&#235; - Engels"
+                        },
+                        {
+                            "locale": "fr_BE",
+                            "language": "Belgi&#235; - Frans"
+                        },
+                        {
+                            "locale": "nl_BE",
+                            "language": "Belgi&#235; - Nederlands"
+                        },
+                        {
+                            "locale": "en_BZ",
+                            "language": "Belize - Engels"
+                        },
+                        {
+                            "locale": "en_BJ",
+                            "language": "Benin - Engels"
+                        },
+                        {
+                            "locale": "en_BM",
+                            "language": "Bermuda - Engels"
+                        },
+                        {
+                            "locale": "en_BT",
+                            "language": "Bhutan - Engels"
+                        },
+                        {
+                            "locale": "es_BO",
+                            "language": "Bolivi&#235; - Spaans"
+                        },
+                        {
+                            "locale": "en_BO",
+                            "language": "Bolivi&#235;- Engels"
+                        },
+                        {
+                            "locale": "en_BL",
+                            "language": "Bonaire - Engels"
+                        },
+                        {
+                            "locale": "en_BA",
+                            "language": "Bosni&#235;-Herzegovina - Engels"
+                        },
+                        {
+                            "locale": "en_BW",
+                            "language": "Botswana - Engels"
+                        },
+                        {
+                            "locale": "en_BR",
+                            "language": "Brazili&#235; - Engels"
+                        },
+                        {
+                            "locale": "pt_BR",
+                            "language": "Brazili&#235; - Portugees"
+                        },
+                        {
+                            "locale": "bg_BG",
+                            "language": "Bulgarije - Bulgaars"
+                        },
+                        {
+                            "locale": "en_BG",
+                            "language": "Bulgarije - Engels"
+                        },
+                        {
+                            "locale": "en_BI",
+                            "language": "Burundi - Engels"
+                        },
+                        {
+                            "locale": "en_CA",
+                            "language": "Canada - Engels"
+                        },
+                        {
+                            "locale": "fr_CA",
+                            "language": "Canada - Frans"
+                        },
+                        {
+                            "locale": "en_CL",
+                            "language": "Chili - Engels"
+                        },
+                        {
+                            "locale": "es_CL",
+                            "language": "Chili - Spaans"
+                        },
+                        {
+                            "locale": "zh_CN",
+                            "language": "Vasteland China - Chinees"
+                        },
+                        {
+                            "locale": "zh_TW",
+                            "language": "&#160; Taiwan, China - Chinees"
+                        },
+                        {
+                            "locale": "zh_HK",
+                            "language": "&#160; Hongkong SAR, China - Chinees"
+                        },
+                        {
+                            "locale": "zh_MO",
+                            "language": "&#160; Macau SAR, China - Chinees"
+                        },
+                        {
+                            "locale": "en_CN",
+                            "language": "Vasteland China - Engels"
+                        },
+                        {
+                            "locale": "en_TW",
+                            "language": "&#160; Taiwan, China - Engels"
+                        },
+                        {
+                            "locale": "en_HK",
+                            "language": "&#160; Hongkong SAR, China - Engels"
+                        },
+                        {
+                            "locale": "en_MO",
+                            "language": "&#160; Macau SAR, China - Engels"
+                        },
+                        {
+                            "locale": "en_CO",
+                            "language": "Colombia - Engels"
+                        },
+                        {
+                            "locale": "es_CO",
+                            "language": "Colombia - Spaans"
+                        },
+                        {
+                            "locale": "en_CD",
+                            "language": "Congo - Engels"
+                        },
+                        {
+                            "locale": "en_CR",
+                            "language": "Costa Rica - Engels"
+                        },
+                        {
+                            "locale": "es_CR",
+                            "language": "Costa Rica - Spaans"
+                        },
+                        {
+                            "locale": "en_CW",
+                            "language": "Cura&#231;ao - Engels"
+                        },
+                        {
+                            "locale": "en_CY",
+                            "language": "Cyprus - Engels"
+                        },
+                        {
+                            "locale": "el_CY",
+                            "language": "Cyprus - Grieks"
+                        },
+                        {
+                            "locale": "da_DK",
+                            "language": "Denemarken - Deens"
+                        },
+                        {
+                            "locale": "en_DK",
+                            "language": "Denemarken - Engels"
+                        },
+                        {
+                            "locale": "en_DJ",
+                            "language": "Djibouti - Engels"
+                        },
+                        {
+                            "locale": "en_DM",
+                            "language": "Dominica - Engels"
+                        },
+                        {
+                            "locale": "en_DO",
+                            "language": "Dominicaanse Republiek - Engels"
+                        },
+                        {
+                            "locale": "es_DO",
+                            "language": "Dominicaanse Republiek - Spaans"
+                        },
+                        {
+                            "locale": "de_DE",
+                            "language": "Duitsland - Duits"
+                        },
+                        {
+                            "locale": "en_DE",
+                            "language": "Duitsland - Engels"
+                        },
+                        {
+                            "locale": "en_EC",
+                            "language": "Ecuador - Engels"
+                        },
+                        {
+                            "locale": "es_EC",
+                            "language": "Ecuador - Spaans"
+                        },
+                        {
+                            "locale": "en_EG",
+                            "language": "Egypte - Engels"
+                        },
+                        {
+                            "locale": "en_SV",
+                            "language": "El Salvador - Engels"
+                        },
+                        {
+                            "locale": "es_SV",
+                            "language": "El Salvador - Spaans"
+                        },
+                        {
+                            "locale": "en_EE",
+                            "language": "Estland - Engels"
+                        },
+                        {
+                            "locale": "et_EE",
+                            "language": "Estland - Ests"
+                        },
+                        {
+                            "locale": "en_ET",
+                            "language": "Ethiopi&#235; - Engels"
+                        },
+                        {
+                            "locale": "en_PH",
+                            "language": "Filippijnen - Engels"
+                        },
+                        {
+                            "locale": "en_FI",
+                            "language": "Finland - Engels"
+                        },
+                        {
+                            "locale": "fi_FI",
+                            "language": "Finland - Fins"
+                        },
+                        {
+                            "locale": "en_FR",
+                            "language": "Frankrijk - Engels"
+                        },
+                        {
+                            "locale": "fr_FR",
+                            "language": "Frankrijk - Frans"
+                        },
+                        {
+                            "locale": "en_GH",
+                            "language": "Ghana - Engels"
+                        },
+                        {
+                            "locale": "en_GI",
+                            "language": "Gibraltar - Engels"
+                        },
+                        {
+                            "locale": "en_GD",
+                            "language": "Grenada - Engels"
+                        },
+                        {
+                            "locale": "en_GR",
+                            "language": "Griekenland - Engels"
+                        },
+                        {
+                            "locale": "el_GR",
+                            "language": "Griekenland - Grieks"
+                        },
+                        {
+                            "locale": "en_GP",
+                            "language": "Guadeloupe - Engels"
+                        },
+                        {
+                            "locale": "en_GT",
+                            "language": "Guatemala - Engels"
+                        },
+                        {
+                            "locale": "es_GT",
+                            "language": "Guatemala - Spaans"
+                        },
+                        {
+                            "locale": "en_GY",
+                            "language": "Guyana - Engels"
+                        },
+                        {
+                            "locale": "en_HT",
+                            "language": "Ha&#239;ti - Engels"
+                        },
+                        {
+                            "locale": "en_HN",
+                            "language": "Honduras - Engels"
+                        },
+                        {
+                            "locale": "es_HN",
+                            "language": "Honduras - Spaans"
+                        },
+                        {
+                            "locale": "en_HU",
+                            "language": "Hongarije - Engels"
+                        },
+                        {
+                            "locale": "hu_HU",
+                            "language": "Hongarije - Hongaars"
+                        },
+                        {
+                            "locale": "en_IE",
+                            "language": "Ierland (Republiek) - Engels"
+                        },
+                        {
+                            "locale": "en_IN",
+                            "language": "India - Engels"
+                        },
+                        {
+                            "locale": "en_ID",
+                            "language": "Indonesi&#235; - Engels"
+                        },
+                        {
+                            "locale": "en_IL",
+                            "language": "Isra&#235;l - Engels"
+                        },
+                        {
+                            "locale": "he_IL",
+                            "language": "Isra&#235;l - Hebreeuws"
+                        },
+                        {
+                            "locale": "en_IT",
+                            "language": "Itali&#235; - Engels"
+                        },
+                        {
+                            "locale": "it_IT",
+                            "language": "Itali&#235; - Italiaans"
+                        },
+                        {
+                            "locale": "en_CI",
+                            "language": "Ivoorkust - Engels"
+                        },
+                        {
+                            "locale": "en_JM",
+                            "language": "Jamaica - Engels"
+                        },
+                        {
+                            "locale": "en_JP",
+                            "language": "Japan - Engels"
+                        },
+                        {
+                            "locale": "ja_JP",
+                            "language": "Japan - Japans"
+                        },
+                        {
+                            "locale": "en_JO",
+                            "language": "Jordani&#235; - Engels"
+                        },
+                        {
+                            "locale": "en_KY",
+                            "language": "Kaaimaneilanden - Engels"
+                        },
+                        {
+                            "locale": "en_CM",
+                            "language": "Kameroen - Engels"
+                        },
+                        {
+                            "locale": "en_KZ",
+                            "language": "Kazachstan - Engels"
+                        },
+                        {
+                            "locale": "en_KE",
+                            "language": "Kenia - Engels"
+                        },
+                        {
+                            "locale": "en_KW",
+                            "language": "Koeweit - Engels"
+                        },
+                        {
+                            "locale": "en_HR",
+                            "language": "Kroati&#235; - Engels"
+                        },
+                        {
+                            "locale": "en_LV",
+                            "language": "Letland - Engels"
+                        },
+                        {
+                            "locale": "lv_LV",
+                            "language": "Letland - Lets"
+                        },
+                        {
+                            "locale": "en_LB",
+                            "language": "Libanon - Engels"
+                        },
+                        {
+                            "locale": "en_LT",
+                            "language": "Litouwen - Engels"
+                        },
+                        {
+                            "locale": "lt_LT",
+                            "language": "Litouwen - Litouws"
+                        },
+                        {
+                            "locale": "en_LU",
+                            "language": "Luxemburg - Engels"
+                        },
+                        {
+                            "locale": "fr_LU",
+                            "language": "Luxemburg - Frans"
+                        },
+                        {
+                            "locale": "en_MW",
+                            "language": "Malawi - Engels"
+                        },
+                        {
+                            "locale": "en_MY",
+                            "language": "Maleisi&#235; - Engels"
+                        },
+                        {
+                            "locale": "en_MT",
+                            "language": "Malta - Engels"
+                        },
+                        {
+                            "locale": "en_MA",
+                            "language": "Marokko - Engels"
+                        },
+                        {
+                            "locale": "fr_MA",
+                            "language": "Marokko - Frans"
+                        },
+                        {
+                            "locale": "en_MU",
+                            "language": "Mauritius - Engels"
+                        },
+                        {
+                            "locale": "en_MX",
+                            "language": "Mexico - Engels"
+                        },
+                        {
+                            "locale": "es_MX",
+                            "language": "Mexico - Spaans"
+                        },
+                        {
+                            "locale": "en_MD",
+                            "language": "Moldavi&#235; - Engels"
+                        },
+                        {
+                            "locale": "en_MS",
+                            "language": "Montserrat - Engels"
+                        },
+                        {
+                            "locale": "en_MZ",
+                            "language": "Mozambique - Engels"
+                        },
+                        {
+                            "locale": "en_NL",
+                            "language": "Nederland - Engels"
+                        },
+                        {
+                            "locale": "en_AN",
+                            "language": "Nederlandse Antillen - Engels"
+                        },
+                        {
+                            "locale": "en_NI",
+                            "language": "Nicaragua - Engels"
+                        },
+                        {
+                            "locale": "es_NI",
+                            "language": "Nicaragua - Spaans"
+                        },
+                        {
+                            "locale": "en_NZ",
+                            "language": "Nieuw-Zeeland - Engels"
+                        },
+                        {
+                            "locale": "en_NG",
+                            "language": "Nigeria - Engels"
+                        },
+                        {
+                            "locale": "en_NO",
+                            "language": "Noorwegen - Engels"
+                        },
+                        {
+                            "locale": "no_NO",
+                            "language": "Noorwegen - Noors"
+                        },
+                        {
+                            "locale": "en_UG",
+                            "language": "Oeganda - Engels"
+                        },
+                        {
+                            "locale": "en_UA",
+                            "language": "Oekra&#239;ne - Engels"
+                        },
+                        {
+                            "locale": "ru_UA",
+                            "language": "Oekra&#239;ne - Russisch"
+                        },
+                        {
+                            "locale": "uk_UA",
+                            "language": "Oekra&#239;ne - Oekra&#239;ens"
+                        },
+                        {
+                            "locale": "en_OM",
+                            "language": "Oman - Engels"
+                        },
+                        {
+                            "locale": "de_AT",
+                            "language": "Oostenrijk - Duits"
+                        },
+                        {
+                            "locale": "en_AT",
+                            "language": "Oostenrijk - Engels"
+                        },
+                        {
+                            "locale": "en_PK",
+                            "language": "Pakistan - Engels"
+                        },
+                        {
+                            "locale": "en_PA",
+                            "language": "Panama - Engels"
+                        },
+                        {
+                            "locale": "es_PA",
+                            "language": "Panama - Spaans"
+                        },
+                        {
+                            "locale": "en_PY",
+                            "language": "Paraguay - Engels"
+                        },
+                        {
+                            "locale": "es_PY",
+                            "language": "Paraguay - Spaans"
+                        },
+                        {
+                            "locale": "en_PE",
+                            "language": "Peru - Engels"
+                        },
+                        {
+                            "locale": "es_PE",
+                            "language": "Peru - Spaans"
+                        },
+                        {
+                            "locale": "en_PL",
+                            "language": "Polen - Engels"
+                        },
+                        {
+                            "locale": "pl_PL",
+                            "language": "Polen - Pools"
+                        },
+                        {
+                            "locale": "en_PT",
+                            "language": "Portugal - Engels"
+                        },
+                        {
+                            "locale": "pt_PT",
+                            "language": "Portugal - Portugees"
+                        },
+                        {
+                            "locale": "en_PR",
+                            "language": "Puerto Rico - Engels"
+                        },
+                        {
+                            "locale": "es_PR",
+                            "language": "Puerto Rico - Spaans"
+                        },
+                        {
+                            "locale": "en_QA",
+                            "language": "Qatar - Engels"
+                        },
+                        {
+                            "locale": "en_RE",
+                            "language": "R&#233;union - Engels"
+                        },
+                        {
+                            "locale": "en_RO",
+                            "language": "Roemeni&#235; - Engels"
+                        },
+                        {
+                            "locale": "ro_RO",
+                            "language": "Roemeni&#235; - Roemeens"
+                        },
+                        {
+                            "locale": "en_RU",
+                            "language": "Rusland - Engels"
+                        },
+                        {
+                            "locale": "ru_RU",
+                            "language": "Rusland - Russisch"
+                        },
+                        {
+                            "locale": "en_RW",
+                            "language": "Rwanda - Engels"
+                        },
+                        {
+                            "locale": "en_KN",
+                            "language": "Saint Kitts en Nevis - Engels"
+                        },
+                        {
+                            "locale": "en_LC",
+                            "language": "Saint Lucia - Engels"
+                        },
+                        {
+                            "locale": "en_VC",
+                            "language": "Saint Vincent en de Grenadines - Engels"
+                        },
+                        {
+                            "locale": "en_SA",
+                            "language": "Saoedi-Arabi&#235; - Engels"
+                        },
+                        {
+                            "locale": "ar_SA",
+                            "language": "Saudi-Arabi&#235; - Arabisch"
+                        },
+                        {
+                            "locale": "en_RS",
+                            "language": "Servi&#235; - Engels"
+                        },
+                        {
+                            "locale": "en_SG",
+                            "language": "Singapore - Engels"
+                        },
+                        {
+                            "locale": "en_EU",
+                            "language": "Sint Eustatius - Engels"
+                        },
+                        {
+                            "locale": "en_SI",
+                            "language": "Sloveni&#235; - Engels"
+                        },
+                        {
+                            "locale": "sl_SI",
+                            "language": "Sloveni&#235; - Sloveens"
+                        },
+                        {
+                            "locale": "en_SK",
+                            "language": "Slowakije - Engels"
+                        },
+                        {
+                            "locale": "sk_SK",
+                            "language": "Slowakije - Slowaaks"
+                        },
+                        {
+                            "locale": "en_ES",
+                            "language": "Spanje - Engels"
+                        },
+                        {
+                            "locale": "es_ES",
+                            "language": "Spanje - Spaans"
+                        },
+                        {
+                            "locale": "en_LK",
+                            "language": "Sri Lanka - Engels"
+                        },
+                        {
+                            "locale": "en_SR",
+                            "language": "Suriname - Engels"
+                        },
+                        {
+                            "locale": "en_TZ",
+                            "language": "Tanzania - Engels"
+                        },
+                        {
+                            "locale": "en_TH",
+                            "language": "Thailand - Engels"
+                        },
+                        {
+                            "locale": "th_TH",
+                            "language": "Thailand - Tha"
+                        },
+                        {
+                            "locale": "en_TT",
+                            "language": "Trinidad en Tobago - Engels"
+                        },
+                        {
+                            "locale": "en_CZ",
+                            "language": "Tsjechi&#235; - Engels"
+                        },
+                        {
+                            "locale": "cs_CZ",
+                            "language": "Tsjechi&#235; - Tsjechisch"
+                        },
+                        {
+                            "locale": "en_TN",
+                            "language": "Tunesi&#235; - Engels"
+                        },
+                        {
+                            "locale": "fr_TN",
+                            "language": "Tunesi&#235; - Frans"
+                        },
+                        {
+                            "locale": "en_TR",
+                            "language": "Turkije - Engels"
+                        },
+                        {
+                            "locale": "tr_TR",
+                            "language": "Turkije - Turks"
+                        },
+                        {
+                            "locale": "en_UY",
+                            "language": "Uruguay - Engels"
+                        },
+                        {
+                            "locale": "es_UY",
+                            "language": "Uruguay - Spaans"
+                        },
+                        {
+                            "locale": "en_VE",
+                            "language": "Venezuela - Engels"
+                        },
+                        {
+                            "locale": "es_VE",
+                            "language": "Venezuela - Spaans"
+                        },
+                        {
+                            "locale": "en_GB",
+                            "language": "Verenigd Koninkrijk - Engels"
+                        },
+                        {
+                            "locale": "en_AE",
+                            "language": "Verenigde Arabische Emiraten - Engels"
+                        },
+                        {
+                            "locale": "en_US",
+                            "language": "Verenigde Staten - Engels"
+                        },
+                        {
+                            "locale": "es_US",
+                            "language": "Verenigde Staten - Spaans"
+                        },
+                        {
+                            "locale": "en_VN",
+                            "language": "Vietnam - Engels"
+                        },
+                        {
+                            "locale": "vi_VN",
+                            "language": "Vietnam - Vietnamees"
+                        },
+                        {
+                            "locale": "en_VG",
+                            "language": "Virgin Gorda - Engels"
+                        },
+                        {
+                            "locale": "en_BY",
+                            "language": "Wit-Rusland - Engels"
+                        },
+                        {
+                            "locale": "en_ZM",
+                            "language": "Zambia - Engels"
+                        },
+                        {
+                            "locale": "en_ZW",
+                            "language": "Zimbabwe - Engels"
+                        },
+                        {
+                            "locale": "en_ZA",
+                            "language": "Zuid-Afrika - Engels"
+                        },
+                        {
+                            "locale": "en_KR",
+                            "language": "Zuid-Korea - Engels"
+                        },
+                        {
+                            "locale": "ko_KR",
+                            "language": "Zuid-Korea - Koreaans"
+                        },
+                        {
+                            "locale": "en_SE",
+                            "language": "Zweden - Engels"
+                        },
+                        {
+                            "locale": "sv_SE",
+                            "language": "Zweden - Zweeds"
+                        },
+                        {
+                            "locale": "de_CH",
+                            "language": "Zwitserland - Duits"
+                        },
+                        {
+                            "locale": "en_CH",
+                            "language": "Zwitserland - Engels"
+                        },
+                        {
+                            "locale": "fr_CH",
+                            "language": "Zwitserland - Frans"
+                        }
+                    ],
+                    "defaultSelectedLanguage": "nl_NL",
+                    "email": null,
+                    "phoneNumber": null
+                },
+                "text": null,
+                "name": "cms.stapp.sendMeUpdates",
+                "url": null
+            },
+            "myChoiceUpSellLink": "/doapp/SignUpMyChoice?loc=nl_NL&amp;returnto=https%3A%2F%2Fwww.ups.com%2Ftrack%3Floc%3Dnl_NL%2Fredirect",
+            "bcdnNumber": null,
+            "promo": {
+                "isPackagePromotion": false,
+                "isShipperPromotion": false,
+                "productImage": null,
+                "title": null,
+                "description": null,
+                "shipperURL": null,
+                "shipperLogoURL": null
+            },
+            "whatsNextText": null,
+            "myChoiceToken": null,
+            "showMycTerms": false,
+            "enrollNum": "",
+            "showConfirmWindow": false,
+            "confirmWindowLbl": null,
+            "confirmWindowLink": null,
+            "followMyDelivery": null,
+            "fileClaim": null,
+            "viewClaim": null,
+            "flightInformation": null,
+            "voyageInformation": null,
+            "viewDeliveryReceipt": null,
+            "isInWatchList": false,
+            "isHistoryUpdateRequire": false,
+            "consumerHub": "",
+            "campusShip": null,
+            "asrInformation": {
+                "allowDriverRelease": null,
+                "processEDN": null
+            },
+            "isSuppressDetailTab": false,
+            "isUpsPremierPackage": false,
+            "isUPSDeliveryPartner": false,
+            "lastSensorLocation": null,
+            "lastSensorEnvInfo": null,
+            "isPremierStyleEligible": false,
+            "deliveryAttemptMsgDate": "",
+            "isInFlight": false,
+            "shipmentUpsellEligible": true,
+            "ippaMessageInfo": null,
+            "uploadDocumentsURL": "",
+            "isDelivered": false,
+            "isDeliveredToUAP": false,
+            "deliveredDayCMSKey": "",
+            "deliveredDateDetail": null,
+            "scheduledDeliveryDayCMSKey": "cms.stapp.fri",
+            "scheduledDeliveryDateDetail": {
+                "monthCMSKey": "cms.stapp.nov",
+                "dayNum": "29"
+            },
+            "packageStatusTime": "8:30 - 9:30",
+            "packageStatusTimeLbl": "cms.stapp.estimatedTime",
+            "isEDW": true,
+            "disableSDDSection": false,
+            "unauthDrugCmsKey": null,
+            "hasBrokerageEvent": false,
+            "isMyChoiceCountry": true,
+            "isMyChoicePkg": false,
+            "showText4ManifestSDD": false,
+            "stSDDSuppressionReason": "",
+            "showSignatureDeliveryOptionsMsg": false,
+            "showChangeDeliveryInfoMsg": false,
+            "isBasicOrSurepost": false,
+            "isUpgradedSurepost": false,
+            "isSmartPackage": false,
+            "hasShipToEmail": true,
+            "hasMC4HToken": false,
+            "ucixURL": ""
+        }
+    ]
+}
