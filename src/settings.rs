@@ -4,6 +4,7 @@ use crate::{
     Result,
 };
 use std::{
+    collections::HashMap,
     env, fs,
     path::{Path, PathBuf},
 };
@@ -14,8 +15,13 @@ use serde_json::{Map, Value};
 
 #[derive(Serialize, Deserialize)]
 pub struct Settings {
-    pub urls_file: PathBuf, // owned equivalent to Path
-    pub postcode:  Option<String>,
+    pub urls_file:         PathBuf, // owned equivalent to Path
+    pub postcode:          Option<String>,
+    pub use_cache:         bool,
+    /// Maximum age (in seconds) for cache entries to be reused.
+    pub cache_seconds:     u64,
+    /// Maximum number of entries to cache (per URL)
+    pub cache_max_entries: usize,
 }
 impl Default for Settings {
     fn default() -> Self {
@@ -24,13 +30,18 @@ impl Default for Settings {
         Self {
             urls_file,
             postcode: None,
+            use_cache: true,
+            cache_seconds: 30,
+            cache_max_entries: 10,
         }
     }
 }
+
 pub fn reset() -> Result<()> {
     let settings = Settings::default();
     save(&settings)
 }
+/// Update a key/value pair in the settings, and save them to file.
 pub fn update(key: String, value: String) -> Result<()> {
     // Serde doesn't support partial deserialization, so to get around this, we
     // insert the user's key/value pair into a mutable settings dict, and
@@ -57,7 +68,20 @@ pub fn print() -> Result<()> {
     Ok(())
 }
 pub fn load() -> Result<Settings> {
-    load_json(&get_settings_path()?)
+    // Load settings from file (these may be incomplete, so we don't cast them
+    // to Settings just yet)
+    let from_file: HashMap<String, Value> = load_json(&get_settings_path()?)?;
+    // Use defaults to supply any missing values
+    let mut defaults = serde_json::to_value(Settings::default())?
+        .as_object()
+        .ok_or("Couldn't cast default Settings to HashMap?!")?
+        .clone();
+    // Merge the two, with the values from file taking priority. Now we should
+    // have a complete settings dict.
+    defaults.extend(from_file);
+    // deserialize to Settings
+    let sets: Settings = serde_json::from_value(Value::Object(defaults))?;
+    Ok(sets)
 }
 pub fn save(settings: &Settings) -> Result<()> {
     save_json(&get_settings_path()?, settings)
