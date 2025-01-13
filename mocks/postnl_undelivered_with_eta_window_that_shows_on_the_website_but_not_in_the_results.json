@@ -1,0 +1,280 @@
+{
+    "colli": {
+        "3SJMEB500377367": {
+            "barcode": "3SJMEB500377367",
+            "partnerBarcode": null,
+            "identification": "3SJMEB500377367-NL-3525EC",
+            "deliveryShipmentIdentification": null,
+            "effectiveDate": "2025-01-11T00:00:00+01:00",
+            "context": {
+                "countryIsoNumber": 31,
+                "shipmentType": "LetterboxParcel"
+            },
+            "description": null,
+            "emailHash": "9F4E30432B5218805E5B4D2CCC0328D8C9A53CE14DD6B243686C5F153DBC86C8",
+            "phoneHash": null,
+            "deliveryAddressType": "Recipient",
+            "recipient": {
+                "names": {
+                    "companyName": null,
+                    "personName": "Robin Neville"
+                },
+                "address": {
+                    "street": "Wulverhorstlaan",
+                    "houseNumber": "20",
+                    "houseNumberSuffix": null,
+                    "postalCode": "3525EC",
+                    "town": "Utrecht",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "sender": {
+                "names": {
+                    "companyName": "Fotoservice",
+                    "personName": ""
+                },
+                "address": {
+                    "street": "Industrieweg",
+                    "houseNumber": "73",
+                    "houseNumberSuffix": null,
+                    "postalCode": "8071CS",
+                    "town": "Nunspeet",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "accountId": "82d9d62f-6a59-4bb3-903a-f82ec04752b9",
+            "isValidated": null,
+            "isMatched": null,
+            "deliveryAddress": {
+                "names": {
+                    "companyName": null,
+                    "personName": "Robin Neville"
+                },
+                "address": {
+                    "street": "Wulverhorstlaan",
+                    "houseNumber": "20",
+                    "houseNumberSuffix": null,
+                    "postalCode": "3525EC",
+                    "town": "Utrecht",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "retailDeliveryLocation": null,
+            "eta": {
+                "type": "Specific",
+                "start": "2025-01-14T08:00:00+01:00",
+                "end": "2025-01-14T18:00:00+01:00",
+                "minutesOverdue": null
+            },
+            "isDelivered": false,
+            "isAtRetailLocation": false,
+            "isPickedUpAtRetailLocation": false,
+            "isAbroadRetailLocation": false,
+            "beforeFirstDeliveryAttempt": true,
+            "expectedReturnDate": null,
+            "deliveryDate": null,
+            "isDeliveryDateChanged": false,
+            "routeInformation": null,
+            "isReturnShipment": false,
+            "hasProofOfDelivery": false,
+            "details": {
+                "cashOnDelivery": null,
+                "productCode": "2928",
+                "isBelgianProduct": false,
+                "productOptionNotifications": [],
+                "businessPartnerCode": "JMEB",
+                "businessPartnerNumber": "1141277",
+                "dimensions": null,
+                "deliveryPreferences": {
+                    "hasStandardDeliveryPlace": false,
+                    "hasNotAtHomeDeliveryPlace": false,
+                    "hasRetailDeliveryPlace": false,
+                    "isTooBigForRetail": false,
+                    "hasPbaDeliveryPlace": false,
+                    "hasStandardHomeAddressDeliveryPreference": false,
+                    "hasStandardRetailDeliveryPreference": false,
+                    "hasStandardPbaDeliveryPreference": false,
+                    "hasStandardParcelLockerAtHomeDeliveryPreference": false,
+                    "hasStandardSafePlaceDeliveryPreference": false,
+                    "hasNotAtHomeNeighborsDeliveryPreference": false,
+                    "hasNotAtHomeRetailDeliveryPreference": false,
+                    "hasNotAtHomeSafePlaceDeliveryPreference": false
+                },
+                "productOptions": [
+                    {
+                        "optionCode": "027",
+                        "characteristicCode": "122"
+                    }
+                ]
+            },
+            "statusPhase": {
+                "index": 1,
+                "message": "Pakket is ontvangen door PostNL",
+                "route": null
+            },
+            "lastObservation": "2025-01-13T21:54:11+01:00",
+            "extraInformation": [
+                {
+                    "type": "Unknown",
+                    "text": "Je pakje past door de brievenbus.",
+                    "linkUrl": null,
+                    "linkText": null
+                }
+            ],
+            "observations": [
+                {
+                    "observationDate": "2025-01-11T12:27:18.711+01:00",
+                    "observationCode": "A01",
+                    "description": "Pakket is nog niet door PostNL ontvangen of verwerkt"
+                }
+            ],
+            "previouslyRerouted": false,
+            "inReroutableState": false,
+            "rerouteOptions": {
+                "otherTimeFrame": null,
+                "otherTimeFrameAvailable": false,
+                "postOfficeDelivery": false,
+                "packstationDelivery": false,
+                "reroutingUnauthorized": false,
+                "safePlaceDelivery": false,
+                "pbaDelivery": false,
+                "postOfficeDeliveryIdinFlow": false,
+                "safePlaceDeliveryIdinFlow": false,
+                "pbaDeliveryIdinFlow": false,
+                "postOfficeDeliverySustainableOption": false,
+                "pbaSustainableOption": false,
+                "isOriginalRerouteOwner": false,
+                "unavailableReasons": [
+                    15
+                ]
+            },
+            "relatedCollos": [],
+            "analyticsInfo": {
+                "features": {
+                    "none": "None"
+                },
+                "allObservations": [
+                    {
+                        "observationDate": "2025-01-11T12:27:18.711+01:00",
+                        "observationCode": "A01",
+                        "description": "Pakket is nog niet door PostNL ontvangen of verwerkt"
+                    },
+                    {
+                        "observationDate": "2025-01-11T12:27:19+01:00",
+                        "observationCode": "A98",
+                        "description": "Voorgemelde zending verrijkt door PostNL regie."
+                    },
+                    {
+                        "observationDate": "2025-01-11T12:27:19.372+01:00",
+                        "observationCode": "A95",
+                        "description": "Bezorging wijzigen niet mogelijk"
+                    },
+                    {
+                        "observationDate": "2025-01-13T17:17:07+01:00",
+                        "observationCode": "B01",
+                        "description": "Pakket is ontvangen door PostNL"
+                    },
+                    {
+                        "observationDate": "2025-01-13T21:54:11+01:00",
+                        "observationCode": "B01",
+                        "description": "Pakket is ontvangen door PostNL"
+                    }
+                ],
+                "productOptions": [
+                    {
+                        "optionCode": "027",
+                        "characteristicCode": "122"
+                    }
+                ],
+                "shipmentStage": "InTransit",
+                "inAdvancePeriod": null,
+                "reroutableType": null,
+                "validationStatusInfo": {
+                    "isValidated": false
+                }
+            },
+            "phaseBlock": {
+                "phaseContent": null,
+                "phaseAction": null,
+                "relatedFaqs": [
+                    {
+                        "Title": {
+                            "TranslationKey": "TrackAndTrace.Faq.LetterBoxParcel.Size.Title"
+                        },
+                        "SubText": {
+                            "TranslationKey": "TrackAndTrace.Faq.LetterBoxParcel.Size.SubText"
+                        },
+                        "Link": {
+                            "TranslationKey": "TrackAndTrace.Faq.LetterBoxParcel.Size.Link",
+                            "Url": "https://www.postnl.nl/versturen/brief-of-kaart-versturen/verzendopties/brievenbuspakje"
+                        }
+                    }
+                ]
+            },
+            "showRetailMap": false,
+            "linkToNetworkPartner": null,
+            "networkPartnerName": null,
+            "networkPartnerCountry": null,
+            "customsFees": null,
+            "customerFeedbackInfo": {
+                "showFeedbackOptions": false,
+                "feedbackGiven": false
+            },
+            "isInternational": false,
+            "internationalStatus": {
+                "isForeignShipment": false,
+                "phase": "ReceivedByPostNl",
+                "delay": null
+            },
+            "showOriginalDeliveryAddress": false,
+            "alerts": [],
+            "firstMile": null,
+            "willBeReturnedAtRetail": false,
+            "retailPickupBarcode": "O3SJMEB500377367",
+            "returnPickupCancelled": false,
+            "uncertainRetailLocation": false,
+            "isSustainableDelivery": true,
+            "isSustainableOption": false,
+            "safePlaceFailure": null,
+            "hasOkActiveCampaign": false,
+            "okActiveCampaignInfo": null,
+            "isDeliveredAtPba": false,
+            "isPickedUpAtPba": false,
+            "isPincodeAtDoorShipment": false,
+            "isInPreAnnouncedStatus": false,
+            "pincodeStatus": null,
+            "floatingChatBot": null,
+            "shipmentAdvertisement": null,
+            "thirdPartyAdvertisements": null,
+            "extraAtHome": null
+        }
+    },
+    "processed": "2025-01-13T22:41:57.968402+01:00"
+}
