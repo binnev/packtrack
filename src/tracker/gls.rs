@@ -156,7 +156,7 @@ struct Party {
 }
 fn parse_package(data: Value) -> Result<Package> {
     let package: GlsPackage = serde_json::from_value(data.clone())?;
-    log::info!("Successfully parsed package");
+    log::debug!("Successfully parsed package");
     package.to_package()
 }
 fn get_barcode_postcode(
@@ -164,14 +164,14 @@ fn get_barcode_postcode(
     default_postcode: Option<&str>,
 ) -> Result<(String, String)> {
     // https://www.gls-info.nl/tracking?parcelNo=123412341234&zipcode=1234AB
-    log::info!("Parsing GLS url {url}");
+    log::debug!("Parsing GLS url {url}");
     let barcode = Regex::new(r".*parcelNo=([A-Z0-9]+).*")?
         .captures(url)
         .and_then(|caps| caps.get(1))
         .map(|m| m.as_str())
         .ok_or(format!("Couldn't get barcode from url {url}"))?
         .to_owned();
-    log::info!("Parsed barcode {barcode}");
+    log::debug!("Parsed barcode {barcode}");
 
     let postcode = Regex::new(r".*zipcode=([A-Z0-9]+).*")?
         .captures(url)
@@ -182,7 +182,7 @@ fn get_barcode_postcode(
             "Couldn't get postcode from url {url}, and no default postcode!"
         ))?
         .to_owned();
-    log::info!("Parsed postcode {postcode}");
+    log::debug!("Parsed postcode {postcode}");
     Ok((barcode, postcode))
 }
 

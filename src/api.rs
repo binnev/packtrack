@@ -1,10 +1,10 @@
 use crate::cache::{Cache, JsonCache};
 use crate::cached_tracker::CachedTracker;
 use crate::error::{Error, Result};
-use crate::tracker;
 use crate::tracker::get_handler;
 use crate::tracker::{Package, PackageStatus};
 use crate::urls;
+use crate::{settings, tracker};
 use chrono::{DateTime, Local, TimeZone};
 use enum_iterator::all;
 use log;
@@ -16,16 +16,27 @@ use std::time::Instant;
 use std::{env, fs};
 use tokio::sync::Mutex;
 
+/// Container for settings and runtime flags
+pub struct Context {
+    // ----- cache -----
+    /// Max age for cache entries to be reused
+    pub cache_seconds:  usize,
+    // ----- display -----
+    /// e.g. None for CLI printing. "json" for JSON output (that can be piped
+    /// to a file or other programs)
+    pub display_format: Option<String>,
+}
+
 // -- Public API
-pub async fn track_all() -> Result<()> {
+pub async fn track_all(ctx: &Context) -> Result<()> {
     let start = Instant::now();
     let urls = urls::load()?;
-    track_urls(urls).await?;
-    log::info!("Operation took {:?}", start.elapsed());
+    track_urls(urls, ctx).await?;
+    log::info!("track_all took {:?}", start.elapsed());
     Ok(())
 }
 
-pub async fn track(input: &str) -> Result<()> {
+pub async fn track(input: &str, ctx: &Context) -> Result<()> {
     // Look for the input in the urls file. If we find a match, use that URL
     // (this allows the user to input a barcode and we find the url for them).
     // If no match, assume the input is a new url.
@@ -33,8 +44,9 @@ pub async fn track(input: &str) -> Result<()> {
         Some(url) => url,
         None => input.to_owned(),
     };
-    let cache = Mutex::new(JsonCache::new()?);
-    let package = track_url(&url, &cache).await?;
+    let settings = settings::load()?;
+    let cache = Mutex::new(JsonCache::from_settings(settings)?);
+    let package = track_url(&url, &cache, ctx).await?;
     {
         let cache = cache.lock().await;
         if cache.modified {
@@ -66,22 +78,28 @@ pub async fn track(input: &str) -> Result<()> {
 // -- Internals
 
 /// Get the Tracker implementation for the given URL, and track the package.
-async fn track_url(url: &str, cache: &Mutex<dyn Cache>) -> Result<Package> {
+async fn track_url(
+    url: &str,
+    cache: &Mutex<dyn Cache>,
+    ctx: &Context,
+) -> Result<Package> {
     let tracker = get_handler(url)?;
     let mut tracker = CachedTracker {
         tracker: tracker,
         cache:   cache,
     };
-    tracker.track(url).await
+    tracker
+        .track(url, ctx.cache_seconds)
+        .await
 }
 
 /// Track all the URLs in the URLs file.
-async fn track_urls(urls: Vec<String>) -> Result<()> {
+async fn track_urls(urls: Vec<String>, ctx: &Context) -> Result<()> {
     // fire off all the tasks in parallel
     let cache = Mutex::new(JsonCache::new()?);
     let tasks: Vec<_> = urls
         .iter()
-        .map(|url| track_url(url, &cache))
+        .map(|url| track_url(url, &cache, ctx))
         .collect();
     let results = futures::future::join_all(tasks).await;
     {

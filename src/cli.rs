@@ -1,4 +1,5 @@
 use crate::api;
+use crate::api::Context;
 use crate::settings;
 use crate::urls;
 use crate::{Error, Result};
@@ -9,9 +10,8 @@ use log::{self, LevelFilter};
 pub async fn main() -> Result<()> {
     let cli = Cli::parse();
 
-    // TODO: pass this to the logger configuration.
-    let log_level = match cli.globals.verbosity {
-        0_ => LevelFilter::Off,
+    let verbosity = match cli.globals.verbosity {
+        0 => LevelFilter::Off,
         1 => LevelFilter::Error,
         2 => LevelFilter::Warn,
         3 => LevelFilter::Info,
@@ -19,16 +19,26 @@ pub async fn main() -> Result<()> {
         _ => LevelFilter::Trace,
     };
     env_logger::Builder::new()
-        .filter(None, log_level)
+        .filter(None, verbosity)
         .init();
+    log::debug!("Verbosity {verbosity}");
+
+    let ctx = Context {
+        cache_seconds:  cli
+            .globals
+            .cache_seconds
+            .unwrap_or(settings::load()?.cache_seconds),
+        display_format: None,
+    };
+    log::debug!("Cache seconds: {}", ctx.cache_seconds);
 
     // Handle subcommands
     match cli.command {
-        None => api::track_all().await?,
+        None => api::track_all(&ctx).await?,
         Some(Command::Url { command }) => handle_url_command(command).await?,
         Some(Command::Config { command }) => handle_config_command(command)?,
         Some(Command::Track { input }) => {
-            let result = api::track(&input).await;
+            let result = api::track(&input, &ctx).await;
             match result {
                 Ok(()) => {}
                 Err(Error::Url(err)) => println!("Error: {err}"),
@@ -86,6 +96,10 @@ struct GlobalArgs {
     /// Set verbosity. `-v` = 1, `-vvv` = 3
     #[arg(short, long, action = clap::ArgAction::Count, global=true)]
     verbosity: u8,
+
+    /// Max age for cache entries to be reused
+    #[arg(short, long, global = true)]
+    cache_seconds: Option<usize>,
 }
 
 #[derive(Subcommand)]

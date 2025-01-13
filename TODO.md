@@ -11,7 +11,11 @@
     - global --cache options
         - number of responses to store per url 
         - how recent should an entry be to be reused
-        - force no cache
+        - force no cache `-n` `--no-cache`
+        - set cache max age in seconds `-c` `--cache-age`
+    - settings for 
+        - cache max hit age 
+        - cache max entries per url
     - [x] also reuse recently fetched responses
     - [x] composed Tracker struct with child 
         - Tracker

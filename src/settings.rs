@@ -19,9 +19,26 @@ pub struct Settings {
     pub postcode:          Option<String>,
     pub use_cache:         bool,
     /// Maximum age (in seconds) for cache entries to be reused.
-    pub cache_seconds:     u64,
+    pub cache_seconds:     usize,
     /// Maximum number of entries to cache (per URL)
     pub cache_max_entries: usize,
+}
+impl Settings {
+    fn update(self, key: &str, value: impl Serialize) -> Result<Self> {
+        let value = serde_json::to_value(value)?;
+        let mut serialized = serde_json::to_value(self)?
+            .as_object()
+            .expect("Couldn't cast Settings to HashMap?!")
+            .clone();
+        // `insert` returns None if the key was not already in the hashmap. In
+        // this case that means the user submitted a key that is not a valid
+        // setting. So if `insert` returns None we must return an error.
+        serialized
+            .insert(key.to_owned(), value)
+            .ok_or(format!("Invalid setting key: {key}"))?;
+        let sets: Settings = serde_json::from_value(Value::Object(serialized))?;
+        Ok(sets)
+    }
 }
 impl Default for Settings {
     fn default() -> Self {
@@ -36,7 +53,6 @@ impl Default for Settings {
         }
     }
 }
-
 pub fn reset() -> Result<()> {
     let settings = Settings::default();
     save(&settings)
@@ -49,7 +65,7 @@ pub fn update(key: String, value: String) -> Result<()> {
     // validating the new key/value.
     let mut serialized = get_settings_as_dict()?;
     let value = serde_json::to_value(value)?;
-    serialized.insert(key, value);
+    let x = serialized.insert(key, value);
 
     // Deserialize to Settings for validation
     let serialized = serde_json::to_value(serialized)?;
@@ -102,4 +118,43 @@ fn get_settings_as_dict() -> Result<Map<String, Value>> {
         .as_object()
         .ok_or("Couldn't cast settings to dict!")?;
     Ok(dict.clone())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_settings_update_invalid_key() {
+        let result = Settings::default().update("Foo", "Bar");
+        assert_eq!(result.err().unwrap(), "Invalid setting key: Foo".into());
+    }
+
+    #[test]
+    fn test_settings_update_string() -> Result<()> {
+        let settings = Settings::default().update("postcode", "1234AB")?;
+        assert_eq!(settings.postcode.unwrap(), "1234AB");
+
+        let result = Settings::default().update("postcode", 420);
+        assert!(result
+            .err()
+            .unwrap()
+            .to_string()
+            .contains("invalid type"));
+        Ok(())
+    }
+
+    #[test]
+    fn test_settings_update_non_string() -> Result<()> {
+        let settings = Settings::default().update("cache_seconds", 30)?;
+        assert_eq!(settings.cache_seconds, 30);
+
+        let result = Settings::default().update("cache_seconds", "thirty");
+        assert!(result
+            .err()
+            .unwrap()
+            .to_string()
+            .contains("invalid type"));
+        Ok(())
+    }
 }
