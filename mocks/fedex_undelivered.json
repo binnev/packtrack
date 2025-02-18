@@ -1,0 +1,737 @@
+{
+    "transactionId": "a04210a0-d895-4f3b-ace7-0f6162d8b9c4",
+    "output": {
+        "packages": [
+            {
+                "returnToShipper": false,
+                "toContact": {
+                    "name": "",
+                    "companyName": "",
+                    "phoneNumber": ""
+                },
+                "additionalInformation": {},
+                "delayDetail": {
+                    "type": "",
+                    "subType": "",
+                    "status": ""
+                },
+                "ppodImageAvailable": false,
+                "ppodImage": null,
+                "trackingNbr": "772124253626",
+                "trackingQualifier": "2460724000~772124253626~FX",
+                "trackingCarrierCd": "FDXE",
+                "trackingCarrierDesc": "FedEx Express",
+                "displayTrackingNbr": "772124253626",
+                "shipperCmpnyName": "",
+                "shipperName": "",
+                "shipperAddress": {
+                    "streetLines": [],
+                    "city": "QUITO",
+                    "stateOrProvinceCode": "",
+                    "postalCode": "",
+                    "countryCode": "EC",
+                    "residential": false,
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Ecuador"
+                },
+                "shipperPhoneNbr": "",
+                "shippedBy": "",
+                "recipientCmpnyName": "",
+                "recipientName": "",
+                "recipientAddress": {
+                    "streetLines": [],
+                    "city": "UTRECHT",
+                    "stateOrProvinceCode": "UT",
+                    "postalCode": "",
+                    "countryCode": "NL",
+                    "residential": false,
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Netherlands (Holland)"
+                },
+                "recipientPhoneNbr": "",
+                "recipientFDMICountrySupported": true,
+                "recipientPreferredEnglish": "UK",
+                "guestAuthEnabled": false,
+                "driverName": "",
+                "driverImage": {},
+                "availableMaps": [],
+                "shippedTo": "",
+                "keyStatus": "On the way",
+                "keyStatusCD": "IT",
+                "lastScanStatus": "On the way",
+                "lastScanDateTime": "2025-02-18T08:26:00-05:00",
+                "receivedByNm": "",
+                "subStatus": "QUITO, EC",
+                "mainStatus": "",
+                "statusBarCD": "OW",
+                "shortStatus": "",
+                "shortStatusCD": "",
+                "statusLocationAddress": {
+                    "streetLines": [],
+                    "city": "QUITO",
+                    "stateOrProvinceCode": "",
+                    "postalCode": "",
+                    "countryCode": "EC",
+                    "residential": false,
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Ecuador"
+                },
+                "statusWithDetails": "On the way; QUITO, EC",
+                "halType": "",
+                "halCmpnyName": "",
+                "shipDt": "2025-02-17T00:00:00+00:00",
+                "displayShipDt": "2/17/2025",
+                "displayShipTm": "",
+                "displayShipDateTime": "2/17/2025",
+                "pickupDt": "2025-02-17T13:20:00-05:00",
+                "displayPickupDt": "2/17/2025",
+                "displayPickupTm": "1:20 pm",
+                "displayPickupDateTime": "2/17/2025 1:20 pm",
+                "estDeliveryDt": "2025-02-21T18:00:00+01:00",
+                "estDeliveryTm": "180000",
+                "displayEstDeliveryDt": "2/21/2025",
+                "displayEstDeliveryTm": "6:00 pm",
+                "displayEstDeliveryDateTime": "2/21/2025 6:00 pm",
+                "actDeliveryDt": "",
+                "displayActDeliveryDt": "",
+                "displayActDeliveryTm": "",
+                "displayActDeliveryDateTime": "",
+                "tenderedDt": "2025-02-17T13:20:00-05:00",
+                "displayTenderedDt": "2/17/2025",
+                "displayTenderedTm": "1:20 pm",
+                "displayTenderedDateTime": "2/17/2025 1:20 pm",
+                "apptDeliveryDt": "",
+                "displayApptDeliveryDt": "",
+                "displayApptDeliveryTm": "",
+                "displayApptDeliveryDateTime": "",
+                "nickName": "",
+                "note": "",
+                "attemptedDelivery": "",
+                "availableAtStation": "",
+                "codDetail": {
+                    "codAmount": {
+                        "amount": 0.0
+                    }
+                },
+                "matchedAccountList": [
+                    ""
+                ],
+                "fxfAdvanceETA": "",
+                "fxfAdvanceReason": "",
+                "fxfAdvanceStatusCode": "",
+                "fxfAdvanceStatusDesc": "",
+                "destLink": "",
+                "originLink": "",
+                "hasBillOfLadingImage": false,
+                "hasBillPresentment": false,
+                "signatureRequired": 0,
+                "totalKgsWgt": "1.3",
+                "displayTotalKgsWgt": "1.3 kgs",
+                "totalLbsWgt": "2.87",
+                "displayTotalLbsWgt": "2.87 lbs",
+                "displayTotalWgt": "2.87 lbs / 1.3 kgs",
+                "pkgKgsWgt": "1.3",
+                "displayPkgKgsWgt": "1.3 kgs",
+                "pkgLbsWgt": "2.87",
+                "displayPkgLbsWgt": "2.87 lbs",
+                "displayPkgWgt": "2.87 lbs / 1.3 kgs",
+                "totalDIMLbsWgt": "",
+                "displayTotalDIMLbsWgt": "",
+                "totalDIMKgsWgt": "",
+                "displayTotalDIMKgsWgt": "",
+                "displayTotalDIMWgt": "",
+                "dimensions": "",
+                "masterTrackingNbr": "",
+                "masterQualifier": "",
+                "masterCarrierCD": "",
+                "originalOutboundTrackingNbr": "",
+                "originalOutboundQualifier": "",
+                "originalOutboundCarrierCD": "",
+                "invoiceNbrList": [
+                    ""
+                ],
+                "referenceList": [
+                    ""
+                ],
+                "doorTagNbrList": [
+                    ""
+                ],
+                "referenceDescList": [
+                    ""
+                ],
+                "purchaseOrderNbrList": [
+                    ""
+                ],
+                "billofLadingNbrList": [
+                    ""
+                ],
+                "shipperRefList": [
+                    ""
+                ],
+                "rmaList": [
+                    ""
+                ],
+                "deptNbrList": [
+                    ""
+                ],
+                "shipmentIdList": [
+                    ""
+                ],
+                "tcnList": [
+                    ""
+                ],
+                "partnerCarrierNbrList": [
+                    ""
+                ],
+                "hasAssociatedShipments": false,
+                "hasAssociatedReturnShipments": false,
+                "isDistributedService": false,
+                "assocShpGrp": 0,
+                "drTgGrp": [
+                    "0"
+                ],
+                "associationInfoList": [
+                    {
+                        "trackingNumberInfo": {
+                            "trackingNumber": "",
+                            "trackingQualifier": "",
+                            "trackingCarrier": "",
+                            "processingParameters": {
+                                "returnDetailedErrors": false,
+                                "anonymousTransaction": false,
+                                "returnLocalizedDateTime": false,
+                                "debug": false
+                            }
+                        },
+                        "associatedType": ""
+                    }
+                ],
+                "returnReason": "",
+                "returnRelationship": "",
+                "skuItemUpcCdList": [
+                    ""
+                ],
+                "receiveQtyList": [
+                    ""
+                ],
+                "itemDescList": [
+                    ""
+                ],
+                "partNbrList": [
+                    ""
+                ],
+                "serviceCD": "FEDEX_INTERNATIONAL_PRIORITY",
+                "serviceDesc": "FedEx International Priority",
+                "serviceShortDesc": "IPED",
+                "packageType": "FEDEX_BOX",
+                "packaging": "FedEx Box",
+                "clearanceDetailLink": "",
+                "showClearanceDetailLink": false,
+                "manufactureCountryCDList": [
+                    ""
+                ],
+                "commodityCDList": [
+                    ""
+                ],
+                "commodityDescList": [
+                    ""
+                ],
+                "cerNbrList": [
+                    ""
+                ],
+                "cerComplaintCDList": [
+                    ""
+                ],
+                "cerComplaintDescList": [
+                    ""
+                ],
+                "cerEventDateList": [
+                    ""
+                ],
+                "displayCerEventDateList": [
+                    ""
+                ],
+                "totalPieces": "1",
+                "specialHandlingServicesList": [
+                    "Deliver Weekday"
+                ],
+                "shipmentType": "",
+                "pkgContentDesc1": "",
+                "pkgContentDesc2": "",
+                "docAWBNbr": "",
+                "originalCharges": "",
+                "transportationCD": "",
+                "transportationDesc": "",
+                "dutiesAndTaxesCD": "",
+                "dutiesAndTaxesDesc": "",
+                "origPieceCount": "",
+                "destPieceCount": "",
+                "billNoteMsg": "",
+                "goodsClassificationCD": "",
+                "receipientAddrQty": "0",
+                "deliveryAttempt": "0",
+                "codReturnTrackNbr": "",
+                "returnMovementStatus": "",
+                "scanEventList": [
+                    {
+                        "date": "2025-02-18",
+                        "time": "08:26:00",
+                        "gmtOffset": "-05:00",
+                        "status": "On the way",
+                        "statusCD": "IT",
+                        "scanLocation": "QUITO EC",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-18",
+                        "time": "05:39:00",
+                        "gmtOffset": "-05:00",
+                        "status": "On the way",
+                        "statusCD": "IT",
+                        "scanLocation": "QUITO EC",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-18",
+                        "time": "05:37:00",
+                        "gmtOffset": "-05:00",
+                        "status": "International shipment release - Export",
+                        "statusCD": "CC",
+                        "scanLocation": "QUITO EC",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-17",
+                        "time": "19:43:00",
+                        "gmtOffset": "-05:00",
+                        "status": "Left FedEx origin facility",
+                        "statusCD": "DP",
+                        "scanLocation": "QUITO EC",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-17",
+                        "time": "13:20:00",
+                        "gmtOffset": "-05:00",
+                        "status": "Picked up",
+                        "statusCD": "PU",
+                        "scanLocation": "QUITO EC",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-17",
+                        "time": "09:05:06",
+                        "gmtOffset": "-06:00",
+                        "status": "Shipment information sent to FedEx",
+                        "statusCD": "OC",
+                        "scanLocation": "",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    }
+                ],
+                "originAddress": {
+                    "streetLines": [],
+                    "city": "QUITO",
+                    "stateOrProvinceCode": "",
+                    "postalCode": "",
+                    "countryCode": "EC",
+                    "residential": false,
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Ecuador"
+                },
+                "originLocationID": "UIOA",
+                "originTermCity": "QUITO",
+                "originTermStateCD": "",
+                "destLocationAddress": {
+                    "streetLines": [
+                        "NAUTILUSWEG 18"
+                    ],
+                    "city": "UTRECHT",
+                    "stateOrProvinceCode": "UT",
+                    "postalCode": "3542",
+                    "countryCode": "NL",
+                    "residential": false,
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Netherlands (Holland)"
+                },
+                "destLocationID": "QYMA",
+                "destLocationTermCity": "UTRECHT",
+                "destLocationTermStateCD": "UT",
+                "destAddress": {
+                    "streetLines": [],
+                    "city": "UTRECHT",
+                    "stateOrProvinceCode": "UT",
+                    "postalCode": "",
+                    "countryCode": "NL",
+                    "residential": false,
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Netherlands (Holland)"
+                },
+                "halAddress": {
+                    "streetLines": [
+                        ""
+                    ],
+                    "city": "",
+                    "stateOrProvinceCode": "",
+                    "postalCode": "",
+                    "countryCode": "",
+                    "residential": false,
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": ""
+                },
+                "actualDelAddrCity": "",
+                "actualDelAddrStateCD": "",
+                "actualDelAddrZipCD": "",
+                "actualDelAddrCntryCD": "",
+                "totalTransitMiles": "",
+                "excepReasonList": [
+                    ""
+                ],
+                "excepReasonCodeList": [
+                    ""
+                ],
+                "excepActionList": [
+                    ""
+                ],
+                "exceptionReason": "",
+                "exceptionAction": "",
+                "statusDetailsList": [
+                    ""
+                ],
+                "trackErrCD": "",
+                "destTZ": "+01:00",
+                "originTZ": "-05:00",
+                "isMultiStat": "0",
+                "multiStatList": [
+                    {
+                        "multiPiec": "",
+                        "multiTm": "",
+                        "multiDispTm": "",
+                        "multiSta": ""
+                    }
+                ],
+                "maskMessage": "",
+                "deliveryService": "",
+                "milestoDestination": "",
+                "terms": "Shipper",
+                "payorAcctNbr": "",
+                "meterNumber": "",
+                "originUbanizationCode": "",
+                "originCountryName": "",
+                "halUrbanizationCD": "",
+                "actualDelAddrUrbanizationCD": "",
+                "actualDelAddrCountryName": "",
+                "destUrbanizationCD": "",
+                "destCountryName": "",
+                "delToDesc": "",
+                "recpShareID": "",
+                "shprShareID": "",
+                "requestedAppointmentInfoList": [
+                    {
+                        "spclInstructDesc": "",
+                        "delivOptn": "",
+                        "delivOptnStatus": "",
+                        "reqApptWdw": "",
+                        "reqApptDesc": "",
+                        "rerouteTRKNbr": "",
+                        "beginTm": "",
+                        "endTm": ""
+                    }
+                ],
+                "defaultCDOType": "CDO",
+                "returnAuthorizationName": "",
+                "totalCustomsValueAmount": "",
+                "totalCustomsValueCurrency": "",
+                "packageInsuredValueAmount": "",
+                "packageInsuredValueCurrency": "",
+                "estDelTimeWindow": {
+                    "estDelTmWindowStart": "",
+                    "estDelTmWindowEnd": "",
+                    "displayEstDelTmWindowTmStart": "",
+                    "displayEstDelTmWindowTmEnd": "",
+                    "preDeliveryConfirmationAvailable": false
+                },
+                "standardTransitTimeWindow": {
+                    "stdTransitTimeStart": "",
+                    "displayStdTransitTimeStart": "",
+                    "stdTransitTimeEnd": "2025-02-21T18:00:00+01:00",
+                    "displayStdTransitTimeEnd": "6:00 pm"
+                },
+                "standardTransitDate": {
+                    "stdTransitDate": "2025-02-21T18:00:00+01:00",
+                    "displayStdTransitDate": "2/21/2025"
+                },
+                "pkgDimIn": "",
+                "pkgDimCm": "",
+                "returnedToShipperTrackNbr": "",
+                "commodityInfoList": [
+                    {
+                        "countryOfManufacture": "",
+                        "harmonizedCode": "",
+                        "description": ""
+                    }
+                ],
+                "statusActionDesc": "",
+                "destinationGeoCoordinate": {
+                    "latitude": 0.0,
+                    "longitude": 0.0,
+                    "altitude": 0.0,
+                    "accuracy": 0.0,
+                    "altitudeAccuracy": 0.0,
+                    "heading": 0.0,
+                    "speed": 0.0
+                },
+                "serviceCommitMessage": "",
+                "serviceCommitMessageType": "",
+                "lastUpdateDestinationAddress": {
+                    "streetLines": [],
+                    "city": "UTRECHT",
+                    "stateOrProvinceCode": "UT",
+                    "postalCode": "",
+                    "countryCode": "NL",
+                    "residential": false,
+                    "addressVerificationId": "3efxe5aty0ch3f0ht6s0ldp1a",
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Netherlands (Holland)",
+                    "shareId": "3efxe5aty0ch3f0ht6s0ldp1a"
+                },
+                "toDestinationAddress": {
+                    "streetLines": [],
+                    "city": "UTRECHT",
+                    "stateOrProvinceCode": "UT",
+                    "postalCode": "",
+                    "countryCode": "NL",
+                    "residential": false,
+                    "addressVerificationId": "3efxe5aty0ch3f0ht6s0ldp1a",
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Netherlands (Holland)",
+                    "shareId": "3efxe5aty0ch3f0ht6s0ldp1a"
+                },
+                "halAddressLocationId": "",
+                "streetGeoCoordinate": {
+                    "mapId": "",
+                    "localTimeStamp": "",
+                    "gmtTimeStamp": ""
+                },
+                "piecesPerShipment": "0",
+                "totalPiecesPerMPSShipment": "0",
+                "shipperAccountNumber": "",
+                "coBrandedLogoLocation": "",
+                "coBrandedLogoUrl": "",
+                "coBrandedCouponLocation": "",
+                "coBrandedCouponUrl": "",
+                "coBrandedLogoAltTxt": "",
+                "coBrandedCouponAltTxt": "",
+                "brokerName": "",
+                "brokerCompanyName": "",
+                "buyerSoldToPartyName": "",
+                "buyerSoldToPartyCompanyName": "",
+                "importerOfRecordCompanyName": "",
+                "importerOfRecordName": "",
+                "consolidationDetails": [
+                    {
+                        "consolidationId": "",
+                        "count": 0.0
+                    }
+                ],
+                "exclusionReasonDetails": [
+                    {
+                        "exclusionReasonDescription": ""
+                    }
+                ],
+                "eligibleDeliveryOptions": [
+                    "REROUTE",
+                    "RETURN_TO_SHIPPER",
+                    "DISPUTE_DELIVERY"
+                ],
+                "matched": false,
+                "exception": false,
+                "expired": false,
+                "duplicate": false,
+                "consolidationDetail": false,
+                "exclusionReason": false,
+                "delayed": false,
+                "droppedOff": false,
+                "mps": false,
+                "fsm": false,
+                "haladdress": false,
+                "preDeliveryConfirmationEDTW": false,
+                "indirectSignatureReleaseEligible": false,
+                "rerouteEligible": true,
+                "rescheduleEligible": false,
+                "gmps": false,
+                "canceled": false,
+                "pending": false,
+                "expiring": false,
+                "prePickup": false,
+                "pickup": false,
+                "inTransit": true,
+                "inProgress": true,
+                "delException": false,
+                "clearanceDelay": false,
+                "delivered": false,
+                "hal": false,
+                "onSchedule": false,
+                "deliveryToday": false,
+                "shipmentException": false,
+                "inFedExPossession": false,
+                "documentAvailable": false,
+                "save": false,
+                "watch": false,
+                "historical": false,
+                "tenderedNotification": false,
+                "deliveredNotification": true,
+                "exceptionNotification": true,
+                "estimatedDeliveryDateChangeNotification": true,
+                "currentStatusNotification": false,
+                "anticipatedShipDtLabel": false,
+                "shipPickupDtLabel": true,
+                "actualPickupLabel": false,
+                "orderReceivedLabel": false,
+                "estimatedDeliveryDtLabel": true,
+                "deliveryDtLabel": false,
+                "actualDeliveryDtLabel": false,
+                "orderCompleteLabel": false,
+                "tenderedDtLabel": false,
+                "shipDtLabel": false,
+                "estDelTmWindowLabel": false,
+                "outboundDirection": false,
+                "inboundDirection": false,
+                "thirdpartyDirection": false,
+                "unknownDirection": false,
+                "fxfAdvanceNotice": true,
+                "spod": false,
+                "signatureAvailable": false,
+                "signatureThumbnailAvailable": false,
+                "originalOutBound": false,
+                "childPackage": false,
+                "parentPackage": false,
+                "reclassifiedAsSingleShipment": false,
+                "maskShipper": false,
+                "halEligible": false,
+                "beforePossessionStatus": false,
+                "fedexOfficeOnlineOrders": false,
+                "fedexOfficeInStoreOrders": false,
+                "multipleStop": false,
+                "customCritical": false,
+                "invalid": false,
+                "notFound": false,
+                "freight": false,
+                "successful": true,
+                "mpstype": "",
+                "residential": false,
+                "destResidential": true,
+                "originResidential": false,
+                "halresidential": false,
+                "actualDelAddrResidential": false,
+                "rthavailableCD": "",
+                "reqEstDelDt": false,
+                "cdoeligible": true,
+                "cdoexists": false,
+                "cdoinfoList": [
+                    {
+                        "spclInstructDesc": "",
+                        "delivOptn": "",
+                        "delivOptnStatus": "",
+                        "reqApptWdw": "",
+                        "reqApptDesc": "",
+                        "rerouteTRKNbr": "",
+                        "beginTm": "",
+                        "endTm": ""
+                    }
+                ],
+                "mtchdByRecShrID": false,
+                "mtchdByShiprShrID": false,
+                "historicalEDTW": false,
+                "nonHistoricalEDTW": false,
+                "targetedMsg": false,
+                "commodityInfoAvail": false,
+                "codrequired": false,
+                "isReturn": false,
+                "isStreetMapEligible": false
+            }
+        ],
+        "passedLoggedInCheck": false,
+        "passedGuestAuthCheck": false
+    }
+}

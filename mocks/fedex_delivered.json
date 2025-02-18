@@ -1,0 +1,1031 @@
+{
+    "transactionId": "e4fa1c5c-736b-4f60-8a1a-429eca87de60",
+    "output": {
+        "packages": [
+            {
+                "returnToShipper": false,
+                "toContact": {
+                    "name": "",
+                    "companyName": "",
+                    "phoneNumber": ""
+                },
+                "additionalInformation": {},
+                "delayDetail": {
+                    "type": "",
+                    "subType": "",
+                    "status": ""
+                },
+                "ppodImageAvailable": false,
+                "ppodImage": null,
+                "trackingNbr": "772124253626",
+                "trackingQualifier": "2460724000~772124253626~FX",
+                "trackingCarrierCd": "FDXE",
+                "trackingCarrierDesc": "FedEx Express",
+                "displayTrackingNbr": "772124253626",
+                "shipperCmpnyName": "",
+                "shipperName": "",
+                "shipperAddress": {
+                    "streetLines": [],
+                    "city": "QUITO",
+                    "stateOrProvinceCode": "",
+                    "postalCode": "",
+                    "countryCode": "EC",
+                    "residential": false,
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Ecuador"
+                },
+                "shipperPhoneNbr": "",
+                "shippedBy": "",
+                "recipientCmpnyName": "",
+                "recipientName": "",
+                "recipientAddress": {
+                    "streetLines": [],
+                    "city": "UTRECHT",
+                    "stateOrProvinceCode": "UT",
+                    "postalCode": "",
+                    "countryCode": "NL",
+                    "residential": false,
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Netherlands (Holland)"
+                },
+                "recipientPhoneNbr": "",
+                "recipientFDMICountrySupported": true,
+                "recipientPreferredEnglish": "UK",
+                "guestAuthEnabled": false,
+                "driverName": "",
+                "driverImage": {},
+                "availableMaps": [],
+                "shippedTo": "",
+                "keyStatus": "Delivered",
+                "keyStatusCD": "DL",
+                "lastScanStatus": "Delivered",
+                "lastScanDateTime": "2025-02-20T12:54:00+01:00",
+                "receivedByNm": "R.ROBIN",
+                "subStatus": "Signed for by: R.ROBIN",
+                "mainStatus": "",
+                "statusBarCD": "DL",
+                "shortStatus": "",
+                "shortStatusCD": "",
+                "statusLocationAddress": {
+                    "streetLines": [],
+                    "city": "UTRECHT",
+                    "stateOrProvinceCode": "UT",
+                    "postalCode": "",
+                    "countryCode": "NL",
+                    "residential": false,
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Netherlands (Holland)"
+                },
+                "statusWithDetails": "Delivered: 2/20/2025 12:54 pm Signed for by:R.ROBIN; UTRECHT, NL",
+                "halType": "",
+                "halCmpnyName": "",
+                "shipDt": "2025-02-17T00:00:00+00:00",
+                "displayShipDt": "2/17/2025",
+                "displayShipTm": "",
+                "displayShipDateTime": "2/17/2025",
+                "pickupDt": "2025-02-17T13:20:00-05:00",
+                "displayPickupDt": "2/17/2025",
+                "displayPickupTm": "1:20 pm",
+                "displayPickupDateTime": "2/17/2025 1:20 pm",
+                "estDeliveryDt": "",
+                "estDeliveryTm": "",
+                "displayEstDeliveryDt": "",
+                "displayEstDeliveryTm": "",
+                "displayEstDeliveryDateTime": "",
+                "actDeliveryDt": "2025-02-20T12:54:00+01:00",
+                "displayActDeliveryDt": "2/20/2025",
+                "displayActDeliveryTm": "12:54 pm",
+                "displayActDeliveryDateTime": "2/20/2025 12:54 pm",
+                "tenderedDt": "2025-02-17T13:20:00-05:00",
+                "displayTenderedDt": "2/17/2025",
+                "displayTenderedTm": "1:20 pm",
+                "displayTenderedDateTime": "2/17/2025 1:20 pm",
+                "apptDeliveryDt": "",
+                "displayApptDeliveryDt": "",
+                "displayApptDeliveryTm": "",
+                "displayApptDeliveryDateTime": "",
+                "nickName": "",
+                "note": "",
+                "attemptedDelivery": "",
+                "availableAtStation": "",
+                "codDetail": {
+                    "codAmount": {
+                        "amount": 0.0
+                    }
+                },
+                "matchedAccountList": [
+                    ""
+                ],
+                "fxfAdvanceETA": "",
+                "fxfAdvanceReason": "",
+                "fxfAdvanceStatusCode": "",
+                "fxfAdvanceStatusDesc": "",
+                "destLink": "",
+                "originLink": "",
+                "hasBillOfLadingImage": false,
+                "hasBillPresentment": false,
+                "signatureRequired": 0,
+                "totalKgsWgt": "1.6",
+                "displayTotalKgsWgt": "1.6 kgs",
+                "totalLbsWgt": "3.53",
+                "displayTotalLbsWgt": "3.53 lbs",
+                "displayTotalWgt": "3.53 lbs / 1.6 kgs",
+                "pkgKgsWgt": "1.6",
+                "displayPkgKgsWgt": "1.6 kgs",
+                "pkgLbsWgt": "3.53",
+                "displayPkgLbsWgt": "3.53 lbs",
+                "displayPkgWgt": "3.53 lbs / 1.6 kgs",
+                "totalDIMLbsWgt": "",
+                "displayTotalDIMLbsWgt": "",
+                "totalDIMKgsWgt": "",
+                "displayTotalDIMKgsWgt": "",
+                "displayTotalDIMWgt": "",
+                "dimensions": "46x33x9 cms",
+                "masterTrackingNbr": "",
+                "masterQualifier": "",
+                "masterCarrierCD": "",
+                "originalOutboundTrackingNbr": "",
+                "originalOutboundQualifier": "",
+                "originalOutboundCarrierCD": "",
+                "invoiceNbrList": [
+                    ""
+                ],
+                "referenceList": [
+                    ""
+                ],
+                "doorTagNbrList": [
+                    ""
+                ],
+                "referenceDescList": [
+                    ""
+                ],
+                "purchaseOrderNbrList": [
+                    ""
+                ],
+                "billofLadingNbrList": [
+                    ""
+                ],
+                "shipperRefList": [
+                    ""
+                ],
+                "rmaList": [
+                    ""
+                ],
+                "deptNbrList": [
+                    ""
+                ],
+                "shipmentIdList": [
+                    ""
+                ],
+                "tcnList": [
+                    ""
+                ],
+                "partnerCarrierNbrList": [
+                    ""
+                ],
+                "hasAssociatedShipments": false,
+                "hasAssociatedReturnShipments": false,
+                "isDistributedService": false,
+                "assocShpGrp": 0,
+                "drTgGrp": [
+                    "0"
+                ],
+                "associationInfoList": [
+                    {
+                        "trackingNumberInfo": {
+                            "trackingNumber": "",
+                            "trackingQualifier": "",
+                            "trackingCarrier": "",
+                            "processingParameters": {
+                                "returnDetailedErrors": false,
+                                "anonymousTransaction": false,
+                                "returnLocalizedDateTime": false,
+                                "debug": false
+                            }
+                        },
+                        "associatedType": ""
+                    }
+                ],
+                "returnReason": "",
+                "returnRelationship": "",
+                "skuItemUpcCdList": [
+                    ""
+                ],
+                "receiveQtyList": [
+                    ""
+                ],
+                "itemDescList": [
+                    ""
+                ],
+                "partNbrList": [
+                    ""
+                ],
+                "serviceCD": "FEDEX_INTERNATIONAL_PRIORITY",
+                "serviceDesc": "FedEx International Priority",
+                "serviceShortDesc": "IPED",
+                "packageType": "FEDEX_BOX",
+                "packaging": "FedEx Box",
+                "clearanceDetailLink": "",
+                "showClearanceDetailLink": false,
+                "manufactureCountryCDList": [
+                    ""
+                ],
+                "commodityCDList": [
+                    ""
+                ],
+                "commodityDescList": [
+                    ""
+                ],
+                "cerNbrList": [
+                    ""
+                ],
+                "cerComplaintCDList": [
+                    ""
+                ],
+                "cerComplaintDescList": [
+                    ""
+                ],
+                "cerEventDateList": [
+                    ""
+                ],
+                "displayCerEventDateList": [
+                    ""
+                ],
+                "totalPieces": "1",
+                "specialHandlingServicesList": [
+                    "Deliver Weekday",
+                    "Residential Delivery"
+                ],
+                "shipmentType": "",
+                "pkgContentDesc1": "",
+                "pkgContentDesc2": "",
+                "docAWBNbr": "",
+                "originalCharges": "",
+                "transportationCD": "",
+                "transportationDesc": "",
+                "dutiesAndTaxesCD": "",
+                "dutiesAndTaxesDesc": "",
+                "origPieceCount": "",
+                "destPieceCount": "",
+                "billNoteMsg": "",
+                "goodsClassificationCD": "",
+                "receipientAddrQty": "0",
+                "deliveryAttempt": "0",
+                "codReturnTrackNbr": "",
+                "returnMovementStatus": "",
+                "scanEventList": [
+                    {
+                        "date": "2025-02-20",
+                        "time": "12:54:00",
+                        "gmtOffset": "+01:00",
+                        "status": "Delivered",
+                        "statusCD": "DL",
+                        "scanLocation": "UTRECHT NL",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": true
+                    },
+                    {
+                        "date": "2025-02-20",
+                        "time": "09:41:00",
+                        "gmtOffset": "+01:00",
+                        "status": "On FedEx vehicle for delivery",
+                        "statusCD": "OD",
+                        "scanLocation": "UTRECHT NL",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-20",
+                        "time": "07:07:00",
+                        "gmtOffset": "+01:00",
+                        "status": "International shipment release - Import",
+                        "statusCD": "CC",
+                        "scanLocation": "UTRECHT NL",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-20",
+                        "time": "07:06:00",
+                        "gmtOffset": "+01:00",
+                        "status": "On the way",
+                        "statusCD": "IT",
+                        "scanLocation": "UTRECHT NL",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-20",
+                        "time": "07:06:00",
+                        "gmtOffset": "+01:00",
+                        "status": "At local FedEx facility",
+                        "statusCD": "AR",
+                        "scanLocation": "UTRECHT NL",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-19",
+                        "time": "23:34:00",
+                        "gmtOffset": "+01:00",
+                        "status": "Departed FedEx hub",
+                        "statusCD": "DP",
+                        "scanLocation": "ROISSY CHARLES DE GAULLE CEDEX FR",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-19",
+                        "time": "23:07:00",
+                        "gmtOffset": "+01:00",
+                        "status": "On the way",
+                        "statusCD": "IT",
+                        "scanLocation": "ROISSY CHARLES DE GAULLE CEDEX FR",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-19",
+                        "time": "21:55:00",
+                        "gmtOffset": "+01:00",
+                        "status": "On the way",
+                        "statusCD": "IT",
+                        "scanLocation": "ROISSY CHARLES DE GAULLE CEDEX FR",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-19",
+                        "time": "21:23:00",
+                        "gmtOffset": "+01:00",
+                        "status": "Arrived at FedEx hub",
+                        "statusCD": "AR",
+                        "scanLocation": "ROISSY CHARLES DE GAULLE CEDEX FR",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-19",
+                        "time": "06:35:00",
+                        "gmtOffset": "-06:00",
+                        "status": "Departed FedEx hub",
+                        "statusCD": "DP",
+                        "scanLocation": "MEMPHIS, TN",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-19",
+                        "time": "06:22:00",
+                        "gmtOffset": "-06:00",
+                        "status": "On the way",
+                        "statusCD": "IT",
+                        "scanLocation": "MEMPHIS, TN",
+                        "scanDetails": "Your package may be late- local delivery restrictions",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "84",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-19",
+                        "time": "03:40:00",
+                        "gmtOffset": "-06:00",
+                        "status": "On the way",
+                        "statusCD": "IT",
+                        "scanLocation": "MEMPHIS, TN",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-19",
+                        "time": "00:02:00",
+                        "gmtOffset": "-06:00",
+                        "status": "Arrived at FedEx hub",
+                        "statusCD": "AR",
+                        "scanLocation": "MEMPHIS, TN",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-18",
+                        "time": "22:39:00",
+                        "gmtOffset": "-05:00",
+                        "status": "On the way",
+                        "statusCD": "IT",
+                        "scanLocation": "MIAMI, FL",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-18",
+                        "time": "08:26:00",
+                        "gmtOffset": "-05:00",
+                        "status": "On the way",
+                        "statusCD": "IT",
+                        "scanLocation": "QUITO EC",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-18",
+                        "time": "05:39:00",
+                        "gmtOffset": "-05:00",
+                        "status": "On the way",
+                        "statusCD": "IT",
+                        "scanLocation": "QUITO EC",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-18",
+                        "time": "05:37:00",
+                        "gmtOffset": "-05:00",
+                        "status": "International shipment release - Export",
+                        "statusCD": "CC",
+                        "scanLocation": "QUITO EC",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-17",
+                        "time": "19:43:00",
+                        "gmtOffset": "-05:00",
+                        "status": "Left FedEx origin facility",
+                        "statusCD": "DP",
+                        "scanLocation": "QUITO EC",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-17",
+                        "time": "13:20:00",
+                        "gmtOffset": "-05:00",
+                        "status": "Picked up",
+                        "statusCD": "PU",
+                        "scanLocation": "QUITO EC",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    },
+                    {
+                        "date": "2025-02-17",
+                        "time": "09:05:06",
+                        "gmtOffset": "-06:00",
+                        "status": "Shipment information sent to FedEx",
+                        "statusCD": "OC",
+                        "scanLocation": "",
+                        "scanDetails": "",
+                        "scanDetailsHtml": "",
+                        "rtrnShprTrkNbr": "",
+                        "statusExceptionCode": "",
+                        "delayDetail": {
+                            "type": "",
+                            "subType": "",
+                            "status": ""
+                        },
+                        "exception": false,
+                        "delException": false,
+                        "clearanceDelay": false,
+                        "delivered": false
+                    }
+                ],
+                "originAddress": {
+                    "streetLines": [],
+                    "city": "QUITO",
+                    "stateOrProvinceCode": "",
+                    "postalCode": "",
+                    "countryCode": "EC",
+                    "residential": false,
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Ecuador"
+                },
+                "originLocationID": "UIOA",
+                "originTermCity": "QUITO",
+                "originTermStateCD": "",
+                "destLocationAddress": {
+                    "streetLines": [
+                        "NAUTILUSWEG 18"
+                    ],
+                    "city": "UTRECHT",
+                    "stateOrProvinceCode": "UT",
+                    "postalCode": "3542",
+                    "countryCode": "NL",
+                    "residential": false,
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Netherlands (Holland)"
+                },
+                "destLocationID": "QYMA",
+                "destLocationTermCity": "UTRECHT",
+                "destLocationTermStateCD": "UT",
+                "destAddress": {
+                    "streetLines": [],
+                    "city": "UTRECHT",
+                    "stateOrProvinceCode": "UT",
+                    "postalCode": "",
+                    "countryCode": "NL",
+                    "residential": false,
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Netherlands (Holland)"
+                },
+                "halAddress": {
+                    "streetLines": [
+                        ""
+                    ],
+                    "city": "",
+                    "stateOrProvinceCode": "",
+                    "postalCode": "",
+                    "countryCode": "",
+                    "residential": false,
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": ""
+                },
+                "actualDelAddrCity": "UTRECHT",
+                "actualDelAddrStateCD": "UT",
+                "actualDelAddrZipCD": "",
+                "actualDelAddrCntryCD": "NL",
+                "actualDelAddrStreetLines": [],
+                "totalTransitMiles": "",
+                "excepReasonList": [
+                    ""
+                ],
+                "excepReasonCodeList": [
+                    ""
+                ],
+                "excepActionList": [
+                    ""
+                ],
+                "exceptionReason": "",
+                "exceptionAction": "",
+                "statusDetailsList": [
+                    ""
+                ],
+                "trackErrCD": "",
+                "destTZ": "+01:00",
+                "originTZ": "-05:00",
+                "isMultiStat": "0",
+                "multiStatList": [
+                    {
+                        "multiPiec": "",
+                        "multiTm": "",
+                        "multiDispTm": "",
+                        "multiSta": ""
+                    }
+                ],
+                "maskMessage": "",
+                "deliveryService": "",
+                "milestoDestination": "",
+                "terms": "Shipper",
+                "payorAcctNbr": "",
+                "meterNumber": "",
+                "originUbanizationCode": "",
+                "originCountryName": "",
+                "halUrbanizationCD": "",
+                "actualDelAddrUrbanizationCD": "",
+                "actualDelAddrCountryName": "",
+                "destUrbanizationCD": "",
+                "destCountryName": "",
+                "delToDesc": "Residence",
+                "recpShareID": "",
+                "shprShareID": "",
+                "requestedAppointmentInfoList": [
+                    {
+                        "spclInstructDesc": "",
+                        "delivOptn": "",
+                        "delivOptnStatus": "",
+                        "reqApptWdw": "",
+                        "reqApptDesc": "",
+                        "rerouteTRKNbr": "",
+                        "beginTm": "",
+                        "endTm": ""
+                    }
+                ],
+                "defaultCDOType": "CDO",
+                "returnAuthorizationName": "",
+                "totalCustomsValueAmount": "",
+                "totalCustomsValueCurrency": "",
+                "packageInsuredValueAmount": "",
+                "packageInsuredValueCurrency": "",
+                "estDelTimeWindow": {
+                    "estDelTmWindowStart": "",
+                    "estDelTmWindowEnd": "",
+                    "displayEstDelTmWindowTmStart": "",
+                    "displayEstDelTmWindowTmEnd": "",
+                    "preDeliveryConfirmationAvailable": false
+                },
+                "standardTransitTimeWindow": {
+                    "stdTransitTimeStart": "",
+                    "displayStdTransitTimeStart": "",
+                    "stdTransitTimeEnd": "2025-02-21T18:00:00+01:00",
+                    "displayStdTransitTimeEnd": "6:00 pm"
+                },
+                "standardTransitDate": {
+                    "stdTransitDate": "2025-02-21T18:00:00+01:00",
+                    "displayStdTransitDate": "2/21/2025"
+                },
+                "pkgDimIn": "18.11x12.99x3.54 in.",
+                "pkgDimCm": "46x33x9 cms",
+                "returnedToShipperTrackNbr": "",
+                "commodityInfoList": [
+                    {
+                        "countryOfManufacture": "",
+                        "harmonizedCode": "",
+                        "description": ""
+                    }
+                ],
+                "statusActionDesc": "",
+                "destinationGeoCoordinate": {
+                    "latitude": 0.0,
+                    "longitude": 0.0,
+                    "altitude": 0.0,
+                    "accuracy": 0.0,
+                    "altitudeAccuracy": 0.0,
+                    "heading": 0.0,
+                    "speed": 0.0
+                },
+                "serviceCommitMessage": "",
+                "serviceCommitMessageType": "",
+                "lastUpdateDestinationAddress": {
+                    "streetLines": [],
+                    "city": "UTRECHT",
+                    "stateOrProvinceCode": "UT",
+                    "postalCode": "",
+                    "countryCode": "NL",
+                    "residential": false,
+                    "addressVerificationId": "3efxe5aty0ch3f0ht6s0ldp1a",
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Netherlands (Holland)",
+                    "shareId": "3efxe5aty0ch3f0ht6s0ldp1a"
+                },
+                "toDestinationAddress": {
+                    "streetLines": [],
+                    "city": "UTRECHT",
+                    "stateOrProvinceCode": "UT",
+                    "postalCode": "",
+                    "countryCode": "NL",
+                    "residential": false,
+                    "addressVerificationId": "",
+                    "classification": "",
+                    "urbanizationCode": "",
+                    "countryName": "Netherlands (Holland)",
+                    "shareId": ""
+                },
+                "halAddressLocationId": "",
+                "streetGeoCoordinate": {
+                    "mapId": "",
+                    "localTimeStamp": "",
+                    "gmtTimeStamp": ""
+                },
+                "piecesPerShipment": "0",
+                "totalPiecesPerMPSShipment": "0",
+                "shipperAccountNumber": "",
+                "coBrandedLogoLocation": "",
+                "coBrandedLogoUrl": "",
+                "coBrandedCouponLocation": "",
+                "coBrandedCouponUrl": "",
+                "coBrandedLogoAltTxt": "",
+                "coBrandedCouponAltTxt": "",
+                "brokerName": "",
+                "brokerCompanyName": "",
+                "buyerSoldToPartyName": "",
+                "buyerSoldToPartyCompanyName": "",
+                "importerOfRecordCompanyName": "",
+                "importerOfRecordName": "",
+                "consolidationDetails": [
+                    {
+                        "consolidationId": "",
+                        "count": 0.0
+                    }
+                ],
+                "exclusionReasonDetails": [
+                    {
+                        "exclusionReasonDescription": ""
+                    }
+                ],
+                "eligibleDeliveryOptions": [
+                    "DISPUTE_DELIVERY"
+                ],
+                "matched": false,
+                "exception": false,
+                "expired": false,
+                "duplicate": false,
+                "mps": false,
+                "gmps": false,
+                "delayed": false,
+                "droppedOff": false,
+                "fedexOfficeInStoreOrders": false,
+                "multipleStop": false,
+                "customCritical": false,
+                "invalid": false,
+                "notFound": false,
+                "freight": false,
+                "mpstype": "",
+                "fsm": false,
+                "successful": true,
+                "consolidationDetail": false,
+                "exclusionReason": false,
+                "canceled": false,
+                "pending": false,
+                "expiring": false,
+                "prePickup": false,
+                "pickup": false,
+                "inTransit": false,
+                "inProgress": true,
+                "delException": false,
+                "clearanceDelay": false,
+                "delivered": true,
+                "hal": false,
+                "onSchedule": false,
+                "deliveryToday": false,
+                "shipmentException": false,
+                "inFedExPossession": false,
+                "documentAvailable": false,
+                "save": false,
+                "watch": false,
+                "historical": false,
+                "tenderedNotification": false,
+                "deliveredNotification": true,
+                "exceptionNotification": false,
+                "estimatedDeliveryDateChangeNotification": false,
+                "currentStatusNotification": false,
+                "anticipatedShipDtLabel": false,
+                "shipPickupDtLabel": true,
+                "actualPickupLabel": false,
+                "orderReceivedLabel": false,
+                "estimatedDeliveryDtLabel": false,
+                "deliveryDtLabel": false,
+                "actualDeliveryDtLabel": true,
+                "orderCompleteLabel": false,
+                "tenderedDtLabel": false,
+                "shipDtLabel": false,
+                "estDelTmWindowLabel": false,
+                "outboundDirection": false,
+                "inboundDirection": false,
+                "thirdpartyDirection": false,
+                "unknownDirection": false,
+                "fxfAdvanceNotice": true,
+                "spod": true,
+                "signatureAvailable": true,
+                "signatureThumbnailAvailable": false,
+                "originalOutBound": false,
+                "childPackage": false,
+                "parentPackage": false,
+                "reclassifiedAsSingleShipment": false,
+                "maskShipper": false,
+                "halEligible": false,
+                "beforePossessionStatus": false,
+                "fedexOfficeOnlineOrders": false,
+                "residential": false,
+                "destResidential": true,
+                "originResidential": false,
+                "halresidential": false,
+                "actualDelAddrResidential": false,
+                "rthavailableCD": "",
+                "reqEstDelDt": false,
+                "cdoeligible": false,
+                "cdoexists": false,
+                "cdoinfoList": [
+                    {
+                        "spclInstructDesc": "",
+                        "delivOptn": "",
+                        "delivOptnStatus": "",
+                        "reqApptWdw": "",
+                        "reqApptDesc": "",
+                        "rerouteTRKNbr": "",
+                        "beginTm": "",
+                        "endTm": ""
+                    }
+                ],
+                "mtchdByRecShrID": false,
+                "mtchdByShiprShrID": false,
+                "historicalEDTW": false,
+                "nonHistoricalEDTW": false,
+                "targetedMsg": false,
+                "commodityInfoAvail": false,
+                "codrequired": false,
+                "haladdress": false,
+                "preDeliveryConfirmationEDTW": false,
+                "indirectSignatureReleaseEligible": false,
+                "rerouteEligible": false,
+                "rescheduleEligible": false,
+                "isReturn": false,
+                "isStreetMapEligible": false
+            }
+        ],
+        "passedLoggedInCheck": false,
+        "passedGuestAuthCheck": false
+    }
+}

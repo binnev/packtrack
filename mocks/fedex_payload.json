@@ -1,0 +1,18 @@
+// POST: https://api.fedex.com/track/v2/shipments
+{
+    "appDeviceType": "WTRK",
+    "appType": "WTRK",
+    "supportHTML": true,
+    "supportCurrentLocation": true,
+    "trackingInfo": [
+        {
+            "trackNumberInfo": {
+                "trackingCarrier": "",
+                "trackingNumber": "772124253626",
+                "trackingQualifier": ""
+            }
+        }
+    ],
+    "uniqueKey": "",
+    "guestAuthenticationToken": ""
+}
