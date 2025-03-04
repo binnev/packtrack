@@ -4,16 +4,15 @@
     - more advanced url file where you can add annotations, for those urls that don't contain your postcode. YAML?
     - `raw` command that fetches raw data for a url/barcode
     - handle case where barcode in url != barcode from API
+    - `track` command fails for multiple matches. It should print all the matches.
+    - better error handling -- sometimes we show very low-level errors e.g. serde errors, which make no sense out of context. They should be caught in the relevant scope and made more readable. 
 - cache the responses for each package
-    - so you can show the changes over time.
+    - show the changes over time (new command `history` maybe)
         - show when a package has changed status
     - don't store a new entry if a dupe exists
-    - global --cache options
-        - number of responses to store per url 
-        - how recent should an entry be to be reused
-        - force no cache `-n` `--no-cache`
-        - set cache max age in seconds `-c` `--cache-age`
-    - settings for 
+    - [x] global --cache options
+        - set cache max age in seconds `-c` `--cache-seconds`
+    - [x] settings for 
         - cache max hit age 
         - cache max entries per url
     - [x] also reuse recently fetched responses
@@ -21,6 +20,7 @@
         - Tracker
         - Cache
 - display
+    - option for different types of output e.g. JSON (that can be piped to a file) or tui
     - tui spinners when waiting for tasks
     - flag to control package display detail level (brief / detailed)
     - show how long it took to gather each package
