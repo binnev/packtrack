@@ -157,4 +157,17 @@ mod tests {
             .contains("invalid type"));
         Ok(())
     }
+
+    /// When we update the settings via CLI, all the passed values will be
+    /// strings. We need to be able to handle that.
+    #[test]
+    fn test_settings_update_usize_from_string() -> Result<()> {
+        let settings = Settings::default();
+        assert_eq!(settings.cache_seconds, 30);
+
+        let settings = settings.update("cache_seconds", "3600")?;
+        assert_eq!(settings.cache_seconds, 3600);
+
+        Ok(())
+    }
 }
