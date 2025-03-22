@@ -1,0 +1,321 @@
+// This package is delivered, but when I track the URL with packtrack, I get
+// `Error: Custom("No packages in payload!")`. This JSON I grabbed from the
+// developer menu on the website. So perhaps the postnl API I use gives a
+// different response? Look into it.
+{
+    "colli": {
+        "3SMYPA531608897": {
+            "barcode": "3SMYPA531608897",
+            "partnerBarcode": null,
+            "identification": "3SMYPA531608897-NL-3525EC",
+            "deliveryShipmentIdentification": null,
+            "effectiveDate": "2025-03-19T00:00:00+01:00",
+            "context": {
+                "countryIsoNumber": 31,
+                "shipmentType": "Parcel"
+            },
+            "description": "#9750",
+            "emailHash": "286B8E80914853E747BDE62ACDE18EE2A7EAAD2B33C90EE38A10C1987CEEE8C5",
+            "phoneHash": null,
+            "deliveryAddressType": "Recipient",
+            "recipient": {
+                "names": {
+                    "companyName": null,
+                    "personName": "Robin Neville"
+                },
+                "address": {
+                    "street": "Wulverhorstlaan",
+                    "houseNumber": "20",
+                    "houseNumberSuffix": null,
+                    "postalCode": "3525EC",
+                    "town": "UTRECHT",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "sender": {
+                "names": {
+                    "companyName": null,
+                    "personName": "Daisy & Elisabeth"
+                },
+                "address": {
+                    "street": "Wilhelminastraat",
+                    "houseNumber": "38",
+                    "houseNumberSuffix": "1",
+                    "postalCode": "2011VN",
+                    "town": "HAARLEM",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "accountId": null,
+            "isValidated": null,
+            "isMatched": null,
+            "deliveryAddress": {
+                "names": {
+                    "companyName": null,
+                    "personName": "Robin Neville"
+                },
+                "address": {
+                    "street": "Wulverhorstlaan",
+                    "houseNumber": "20",
+                    "houseNumberSuffix": null,
+                    "postalCode": "3525EC",
+                    "town": "UTRECHT",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "retailDeliveryLocation": null,
+            "eta": {
+                "type": "Specific",
+                "start": "2025-03-21T11:35:00+01:00",
+                "end": "2025-03-21T13:35:00+01:00",
+                "minutesOverdue": null
+            },
+            "isDelivered": true,
+            "isAtRetailLocation": false,
+            "isPickedUpAtRetailLocation": false,
+            "isAbroadRetailLocation": false,
+            "beforeFirstDeliveryAttempt": true,
+            "expectedReturnDate": null,
+            "deliveryDate": "2025-03-21T11:44:41+01:00",
+            "isDeliveryDateChanged": false,
+            "routeInformation": null,
+            "isReturnShipment": false,
+            "hasProofOfDelivery": true,
+            "details": {
+                "cashOnDelivery": null,
+                "productCode": "3087",
+                "isBelgianProduct": false,
+                "productOptionNotifications": [],
+                "businessPartnerCode": "MYPA",
+                "businessPartnerNumber": "10167184",
+                "dimensions": {
+                    "height": 50.0,
+                    "width": 175.0,
+                    "depth": 230.0,
+                    "weight": 200.0
+                },
+                "deliveryPreferences": {
+                    "hasStandardDeliveryPlace": false,
+                    "hasNotAtHomeDeliveryPlace": false,
+                    "hasRetailDeliveryPlace": false,
+                    "isTooBigForRetail": false,
+                    "hasPbaDeliveryPlace": false,
+                    "hasStandardHomeAddressDeliveryPreference": false,
+                    "hasStandardRetailDeliveryPreference": false,
+                    "hasStandardPbaDeliveryPreference": false,
+                    "hasStandardParcelLockerAtHomeDeliveryPreference": false,
+                    "hasStandardSafePlaceDeliveryPreference": false,
+                    "hasNotAtHomeNeighborsDeliveryPreference": false,
+                    "hasNotAtHomeRetailDeliveryPreference": false,
+                    "hasNotAtHomeSafePlaceDeliveryPreference": false
+                },
+                "productOptions": [
+                    {
+                        "optionCode": "028",
+                        "characteristicCode": "122"
+                    },
+                    {
+                        "optionCode": "017",
+                        "characteristicCode": "122"
+                    }
+                ],
+                "isRegistered": false
+            },
+            "statusPhase": {
+                "index": 4,
+                "message": "Pakket is bezorgd",
+                "route": null
+            },
+            "lastObservation": "2025-03-21T11:44:41+01:00",
+            "extraInformation": [],
+            "observations": [
+                {
+                    "observationDate": "2025-03-21T08:31:52+01:00",
+                    "observationCode": "J05",
+                    "description": "Bezorger is onderweg"
+                },
+                {
+                    "observationDate": "2025-03-21T07:17:36+01:00",
+                    "observationCode": "J01",
+                    "description": "Zending is gesorteerd"
+                },
+                {
+                    "observationDate": "2025-03-21T00:46:18+01:00",
+                    "observationCode": "B01",
+                    "description": "Pakket is ontvangen door PostNL"
+                },
+                {
+                    "observationDate": "2025-03-19T14:39:58.008+01:00",
+                    "observationCode": "A01",
+                    "description": "Pakket is nog niet door PostNL ontvangen of verwerkt"
+                }
+            ],
+            "previouslyRerouted": false,
+            "inReroutableState": false,
+            "rerouteOptions": {
+                "otherTimeFrame": null,
+                "otherTimeFrameAvailable": false,
+                "postOfficeDelivery": false,
+                "packstationDelivery": false,
+                "reroutingUnauthorized": false,
+                "safePlaceDelivery": false,
+                "pbaDelivery": false,
+                "postOfficeDeliveryIdinFlow": false,
+                "safePlaceDeliveryIdinFlow": false,
+                "pbaDeliveryIdinFlow": false,
+                "postOfficeDeliverySustainableOption": false,
+                "pbaSustainableOption": false,
+                "isOriginalRerouteOwner": false,
+                "unavailableReasons": [
+                    2
+                ]
+            },
+            "relatedCollos": [],
+            "analyticsInfo": {
+                "features": {
+                    "none": "None"
+                },
+                "allObservations": [
+                    {
+                        "observationDate": "2025-03-19T14:39:58+01:00",
+                        "observationCode": "A98",
+                        "description": "Voorgemelde zending verrijkt door PostNL regie."
+                    },
+                    {
+                        "observationDate": "2025-03-19T14:39:58.008+01:00",
+                        "observationCode": "A01",
+                        "description": "Pakket is nog niet door PostNL ontvangen of verwerkt"
+                    },
+                    {
+                        "observationDate": "2025-03-19T14:39:58.995+01:00",
+                        "observationCode": "A95",
+                        "description": "Bezorging wijzigen niet mogelijk"
+                    },
+                    {
+                        "observationDate": "2025-03-20T04:15:00+01:00",
+                        "observationCode": "M02",
+                        "description": "Pakket is nog niet door PostNL ontvangen of verwerkt"
+                    },
+                    {
+                        "observationDate": "2025-03-21T00:46:18+01:00",
+                        "observationCode": "B01",
+                        "description": "Pakket is ontvangen door PostNL"
+                    },
+                    {
+                        "observationDate": "2025-03-21T00:47:53.101+01:00",
+                        "observationCode": "A96",
+                        "description": "Bezorging wijzigen mogelijk"
+                    },
+                    {
+                        "observationDate": "2025-03-21T07:17:36+01:00",
+                        "observationCode": "J01",
+                        "description": "Zending is gesorteerd"
+                    },
+                    {
+                        "observationDate": "2025-03-21T07:19:19+01:00",
+                        "observationCode": "J40",
+                        "description": "Voorgemeld en gesorteerd op rit"
+                    },
+                    {
+                        "observationDate": "2025-03-21T08:31:52+01:00",
+                        "observationCode": "J05",
+                        "description": "Bezorger is onderweg"
+                    },
+                    {
+                        "observationDate": "2025-03-21T08:31:52+01:00",
+                        "observationCode": "A19",
+                        "description": "ETA gewijzigd"
+                    },
+                    {
+                        "observationDate": "2025-03-21T11:44:41+01:00",
+                        "observationCode": "I01",
+                        "description": "Pakket is bezorgd"
+                    }
+                ],
+                "productOptions": [
+                    {
+                        "optionCode": "028",
+                        "characteristicCode": "122"
+                    },
+                    {
+                        "optionCode": "017",
+                        "characteristicCode": "122"
+                    }
+                ],
+                "shipmentStage": "Delivered",
+                "inAdvancePeriod": null,
+                "reroutableType": null,
+                "validationStatusInfo": {
+                    "isValidated": false
+                }
+            },
+            "phaseBlock": {
+                "phaseContent": null,
+                "phaseAction": null,
+                "relatedFaqs": []
+            },
+            "showRetailMap": false,
+            "linkToNetworkPartner": null,
+            "networkPartnerName": null,
+            "networkPartnerCountry": null,
+            "customsFees": null,
+            "customerFeedbackInfo": {
+                "showFeedbackOptions": false,
+                "feedbackGiven": false
+            },
+            "isInternational": false,
+            "internationalStatus": {
+                "isForeignShipment": false,
+                "phase": "ReceivedByPostNl",
+                "delay": null
+            },
+            "showOriginalDeliveryAddress": false,
+            "alerts": [],
+            "firstMile": null,
+            "willBeReturnedAtRetail": false,
+            "retailPickupBarcode": "O3SMYPA531608897",
+            "returnPickupCancelled": false,
+            "uncertainRetailLocation": false,
+            "isSustainableDelivery": false,
+            "isSustainableOption": false,
+            "safePlaceFailure": null,
+            "isDeliveredAtPba": false,
+            "isPickedUpAtPba": false,
+            "isPincodeAtDoorShipment": false,
+            "isInPreAnnouncedStatus": false,
+            "pincodeStatus": null,
+            "floatingChatBot": null,
+            "shipmentAdvertisement": null,
+            "thirdPartyAdvertisements": null,
+            "extraAtHome": null
+        }
+    },
+    "processed": "2025-03-22T17:52:32.2945305+01:00"
+}
