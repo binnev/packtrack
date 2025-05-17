@@ -4,12 +4,15 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+reqwest = { version = "0.12.9", features = [
+    "json",
+    "rustls-tls", # because it can't find openssl on nixos...
+], default-features = false } # disable other default features that rely on openssl
 async-trait = "0.1.83"
 chrono = { version = "0.4.38", features = ["serde"] }
 futures = "0.3.31"
 lazy_static = "1.5.0"
 regex = "1.11.1"
-reqwest = { version = "0.12.9", features = ["json"] }
 serde = { version = "1.0.215", features = ["derive"] }
 serde_json = "1.0.132"
 tokio = { version = "1.41.1", features = ["full"] }
