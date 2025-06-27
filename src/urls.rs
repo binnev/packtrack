@@ -75,6 +75,17 @@ pub async fn list(query: Option<String>) -> Result<()> {
     Ok(())
 }
 
+pub fn filter(query: Option<&str>) -> Result<Vec<String>> {
+    let mut urls = load()?;
+    Ok(match query {
+        Some(q) => urls
+            .into_iter()
+            .filter(|url| url.contains(&q))
+            .collect(),
+        None => urls,
+    })
+}
+
 pub fn find_one(query: &str) -> Result<Option<String>> {
     let urls = load()?;
     let url = _find_one(urls, query)?;

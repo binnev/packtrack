@@ -25,56 +25,26 @@ pub struct Context {
     /// e.g. None for CLI printing. "json" for JSON output (that can be piped
     /// to a file or other programs)
     pub display_format: Option<String>,
+    pub filters:        Filters,
+}
+pub struct Filters {
+    /// Either a new URL, or a fragment of an existing URL
+    pub url:       Option<String>,
+    pub sender:    Option<String>,
+    /// postal carrier e.g. DHL
+    pub carrier:   Option<String>,
+    pub recipient: Option<String>,
 }
 
 // -- Public API
-pub async fn track_all(ctx: &Context) -> Result<()> {
+pub async fn track(ctx: &Context) -> Result<()> {
     let start = Instant::now();
-    let urls = urls::load()?;
+    let urls = urls::filter(ctx.filters.url.as_deref())?;
     track_urls(urls, ctx).await?;
     log::info!("track_all took {:?}", start.elapsed());
     Ok(())
 }
 
-pub async fn track(input: &str, ctx: &Context) -> Result<()> {
-    // Look for the input in the urls file. If we find a match, use that URL
-    // (this allows the user to input a barcode and we find the url for them).
-    // If no match, assume the input is a new url.
-    let url = match urls::find_one(input)? {
-        Some(url) => url,
-        None => input.to_owned(),
-    };
-    let settings = settings::load()?;
-    let cache = Mutex::new(JsonCache::from_settings(settings)?);
-    let package = track_url(&url, &cache, ctx).await?;
-    {
-        let cache = cache.lock().await;
-        if cache.modified {
-            cache.save().await?;
-        }
-    }
-    println!("{} Package {}", package.channel, package.barcode);
-    if let Some(sender) = package.sender.as_ref() {
-        println!("\tfrom {sender}");
-    }
-    if let Some(recipient) = package.recipient.as_ref() {
-        println!("\tto {recipient}");
-    }
-    if let Some(eta) = package.eta {
-        println!("\texpected delivery: {}", display_time(eta));
-    }
-    if let Some(window) = package.eta_window.as_ref() {
-        println!("\tdelivery window: {window}");
-    }
-    if let Some(time) = package.delivered {
-        println!("\tdelivered at {time}");
-    }
-    println!("\tevents:");
-    for event in package.events.iter() {
-        print!("\t\t{event}");
-    }
-    Ok(())
-}
 // -- Internals
 
 /// Get the Tracker implementation for the given URL, and track the package.
@@ -101,12 +71,53 @@ async fn track_urls(urls: Vec<String>, ctx: &Context) -> Result<()> {
         .iter()
         .map(|url| track_url(url, &cache, ctx))
         .collect();
-    let results = futures::future::join_all(tasks).await;
+    let mut results = futures::future::join_all(tasks).await;
     {
         let cache = cache.lock().await;
         if cache.modified {
             cache.save().await?;
         }
+    }
+
+    if let Some(query) = &ctx.filters.recipient {
+        results = results
+            .into_iter()
+            .filter(|r| match r {
+                Ok(package) => match package.recipient.as_ref() {
+                    Some(recipient) => recipient
+                        .to_lowercase()
+                        .contains(&query.to_lowercase()),
+                    None => false,
+                },
+                Err(err) => true, // don't remove errors
+            })
+            .collect();
+    }
+    if let Some(query) = &ctx.filters.sender {
+        results = results
+            .into_iter()
+            .filter(|r| match r {
+                Ok(package) => match package.sender.as_ref() {
+                    Some(sender) => sender
+                        .to_lowercase()
+                        .contains(&query.to_lowercase()),
+                    None => false,
+                },
+                Err(err) => true, // don't remove errors
+            })
+            .collect();
+    }
+    if let Some(query) = &ctx.filters.carrier {
+        results = results
+            .into_iter()
+            .filter(|r| match r {
+                Ok(package) => package
+                    .channel
+                    .to_lowercase()
+                    .contains(&query.to_lowercase()),
+                Err(err) => true, // don't remove errors
+            })
+            .collect();
     }
 
     // sort the results by status / error

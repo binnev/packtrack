@@ -1,5 +1,6 @@
 use crate::api;
 use crate::api::Context;
+use crate::api::Filters;
 use crate::settings;
 use crate::urls;
 use crate::{Error, Result};
@@ -29,22 +30,20 @@ pub async fn main() -> Result<()> {
             .cache_seconds
             .unwrap_or(settings::load()?.cache_seconds),
         display_format: None,
+        filters:        Filters {
+            url:       cli.filter_opts.url,
+            sender:    cli.filter_opts.sender,
+            recipient: cli.filter_opts.recipient,
+            carrier:   cli.filter_opts.carrier,
+        },
     };
     log::debug!("Cache seconds: {}", ctx.cache_seconds);
 
     // Handle subcommands
     match cli.command {
-        None => api::track_all(&ctx).await?,
+        None => api::track(&ctx).await?,
         Some(Command::Url { command }) => handle_url_command(command).await?,
         Some(Command::Config { command }) => handle_config_command(command)?,
-        Some(Command::Track { input }) => {
-            let result = api::track(&input, &ctx).await;
-            match result {
-                Ok(()) => {}
-                Err(Error::Url(err)) => println!("Error: {err}"),
-                Err(err) => return Err(err),
-            }
-        }
     }
     Ok(())
 }
@@ -89,6 +88,9 @@ struct Cli {
 
     #[clap(flatten)]
     globals: GlobalArgs,
+
+    #[clap(flatten)]
+    filter_opts: FilterOpts,
 }
 
 #[derive(Args)]
@@ -102,6 +104,24 @@ struct GlobalArgs {
     cache_seconds: Option<usize>,
 }
 
+#[derive(Args)]
+struct FilterOpts {
+    /// Either a new URL, or a fragment of an existing URL
+    url: Option<String>,
+
+    /// Filter by sender
+    #[arg(long)]
+    sender: Option<String>,
+
+    /// Filter by postal carrier
+    #[arg(long)]
+    carrier: Option<String>,
+
+    /// Filter by recipient
+    #[arg(long)]
+    recipient: Option<String>,
+}
+
 #[derive(Subcommand)]
 enum Command {
     /// URL management
@@ -113,11 +133,6 @@ enum Command {
     Config {
         #[command(subcommand)]
         command: ConfigCommand,
-    },
-    /// Track a single package.
-    Track {
-        /// Either a new URL, or a fragment of an existing URL
-        input: String,
     },
 }
 #[derive(Subcommand)]
