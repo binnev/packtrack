@@ -1,0 +1,79 @@
+site_name: Rust template
+repo_url: https://github.com/binnev/rust-template/
+repo_name: binnev/rust-template
+
+nav:
+  - Home: README.md
+  - Tutorials:
+      - tutorials/getting-started.md
+  - Explanation:
+      - Aim of the Project: explanation/aim.md
+  - How-To Guides:
+      - how-to/dependencies.md
+      - how-to/testing.md
+      - how-to/docs.md
+      - how-to/versioning.md
+      - how-to/run-cli.md
+  - Reference:
+      - Reference site: ref/index.md
+      - lib:
+          - add: ref/add.md
+          - subtract: ref/subtract.md
+          - multiply: ref/multiply.md
+
+watch:
+  - docs
+  - src # also hot reload when editing docstrings
+
+theme:
+  name: "material"
+  font:
+    code: Source Code Pro
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: orange
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue grey
+      toggle:
+        icon: material/brightness-7
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - search.suggest
+    - search.highlight
+    - content.code.copy # enables a copy button in code blocks
+    - content.code.select # allows user to link to line ranges
+    - content.code.annotate # allows placing annotations inside code blocks
+  icon:
+    logo: material/language-rust
+
+plugins:
+  - search
+  - mike
+  - mermaid2
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+
+# This enables the version drop-down in mkdocs material theme
+extra:
+  version:
+    provider: mike
