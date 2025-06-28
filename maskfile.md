@@ -13,7 +13,7 @@ See the [mask docs](https://github.com/jacobdeichert/mask) for more information.
 
 <!-- A code block defines the script to be executed -->
 ```sh
-pytest -n 6
+cargo test
 ```
 
 ## docs
@@ -45,23 +45,18 @@ git-cliff -o CHANGELOG.md --bump \
 ```
 
 ## release 
-> Release the current version to PyPI
+> Release the current version to crates.io
 
 ```sh 
 mask release cleanup
-python -m build \
-&& twine check dist/* \
-&& twine upload --repository testpypi dist/* --verbose \
-&& mask ask "Does the TestPyPI release look ok?" \
-&& twine upload --repository pypi dist/* --verbose
-mask release cleanup
+cargo publish
 ```
 
 ### cleanup 
 > Clean up build artifacts
 
 ```sh
-rm -rf dist/
+rm -rf target/
 ```
 
 ## ask (prompt)
