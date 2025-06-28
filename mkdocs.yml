@@ -9,17 +9,8 @@ nav:
   - Explanation:
       - Aim of the Project: explanation/aim.md
   - How-To Guides:
-      - how-to/dependencies.md
-      - how-to/testing.md
-      - how-to/docs.md
-      - how-to/versioning.md
-      - how-to/run-cli.md
-  - Reference:
-      - Reference site: ref/index.md
-      - lib:
-          - add: ref/add.md
-          - subtract: ref/subtract.md
-          - multiply: ref/multiply.md
+      - how-to/urls.md
+  - Reference: ref/index.md
 
 watch:
   - docs
