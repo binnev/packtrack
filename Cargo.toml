@@ -1,7 +1,11 @@
 [package]
 name = "packtrack"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+repository = "https://github.com/binnev/packtrack"
+readme = "README.md"
+license = "MIT"
+include = ["**/*.rs", "docs/*"]
 
 [dependencies]
 reqwest = { version = "0.12.9", features = [
