@@ -13,4 +13,4 @@ repos:
       - id: fmt
         # args: ['--verbose', '--edition', '2018', '--']
       - id: cargo-check
-        stages: [pre-commit, pre-push]
+        stages: [pre-commit]
