@@ -1,6 +1,6 @@
-site_name: Rust template
+site_name: Packtrack
 repo_url: https://github.com/binnev/rust-template/
-repo_name: binnev/rust-template
+repo_name: binnev/packtrack
 
 nav:
   - Home: README.md
