@@ -4,7 +4,7 @@ use crate::settings;
 use crate::urls;
 use crate::{Error, Result};
 use clap::Args;
-use clap::{command, Parser, Subcommand};
+use clap::{Parser, Subcommand, command};
 use log::{self, LevelFilter};
 
 pub async fn main() -> Result<()> {

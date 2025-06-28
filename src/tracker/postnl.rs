@@ -1,7 +1,7 @@
 use super::models::{Event, Package, TimeWindow};
 use super::tracker::Tracker;
-use crate::utils::UtcTime;
 use crate::Result;
+use crate::utils::UtcTime;
 use async_trait::async_trait;
 use regex::Regex;
 use serde::Deserialize;
@@ -183,7 +183,9 @@ mod tests {
         assert!(result.is_err());
         assert!(format!("{result:?}").contains("Couldn't get barcode from "));
 
-        let result = get_barcode("https://jouw.postnl.nl/track-and-trace/1ABCDE1234567-AA-1234AB?language=nl")?;
+        let result = get_barcode(
+            "https://jouw.postnl.nl/track-and-trace/1ABCDE1234567-AA-1234AB?language=nl",
+        )?;
         assert_eq!(result, "1ABCDE1234567-AA-1234AB");
         Ok(())
     }

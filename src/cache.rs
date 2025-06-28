@@ -4,7 +4,7 @@ use std::{collections::HashMap, fs, path::PathBuf};
 use crate::settings::Settings;
 use crate::tracker::TimeWindow;
 use crate::utils::UtcTime;
-use crate::{settings, utils, Result};
+use crate::{Result, settings, utils};
 use async_trait::async_trait;
 use chrono::{TimeDelta, Utc};
 use serde::{Deserialize, Serialize};
@@ -211,19 +211,23 @@ mod tests {
         assert!(cache.get("url").is_none());
 
         cache.insert("url".into(), "text".into());
-        assert!(cache
-            .get("url")
-            .unwrap()
-            .text
-            .eq("text"));
+        assert!(
+            cache
+                .get("url")
+                .unwrap()
+                .text
+                .eq("text")
+        );
 
         cache.insert("url".into(), "text2".into());
         cache.insert("url".into(), "text3".into());
-        assert!(cache
-            .get("url")
-            .unwrap()
-            .text
-            .eq("text3"));
+        assert!(
+            cache
+                .get("url")
+                .unwrap()
+                .text
+                .eq("text3")
+        );
     }
     #[test]
     fn test_get_younger_than() {
@@ -244,23 +248,29 @@ mod tests {
         };
 
         // we should get the youngest match
-        assert!(cache
-            .get_younger_than("url", Duration::from_secs(10))
-            .unwrap()
-            .text
-            .eq("5s ago"));
+        assert!(
+            cache
+                .get_younger_than("url", Duration::from_secs(10))
+                .unwrap()
+                .text
+                .eq("5s ago")
+        );
 
         // if no max age, we should get the same result
-        assert!(cache
-            .get("url")
-            .unwrap()
-            .text
-            .eq("5s ago"));
+        assert!(
+            cache
+                .get("url")
+                .unwrap()
+                .text
+                .eq("5s ago")
+        );
 
         // if no entries are young enough, we should get None
-        assert!(cache
-            .get_younger_than("url", Duration::from_secs(3))
-            .is_none());
+        assert!(
+            cache
+                .get_younger_than("url", Duration::from_secs(3))
+                .is_none()
+        );
     }
 
     #[test]

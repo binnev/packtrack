@@ -1,7 +1,6 @@
 use crate::{
-    settings,
+    Result, settings,
     utils::{get_home_dir, load_json, project_dirs, save_json},
-    Result,
 };
 use std::{
     collections::HashMap,
@@ -136,11 +135,13 @@ mod tests {
         assert_eq!(settings.postcode.unwrap(), "1234AB");
 
         let result = Settings::default().update("postcode", 420);
-        assert!(result
-            .err()
-            .unwrap()
-            .to_string()
-            .contains("invalid type"));
+        assert!(
+            result
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("invalid type")
+        );
         Ok(())
     }
 
@@ -150,11 +151,13 @@ mod tests {
         assert_eq!(settings.cache_seconds, 30);
 
         let result = Settings::default().update("cache_seconds", "thirty");
-        assert!(result
-            .err()
-            .unwrap()
-            .to_string()
-            .contains("invalid type"));
+        assert!(
+            result
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("invalid type")
+        );
         Ok(())
     }
 }

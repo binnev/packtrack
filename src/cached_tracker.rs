@@ -4,9 +4,9 @@ use tokio::sync::Mutex;
 
 use async_trait::async_trait;
 
+use crate::Result;
 use crate::cache::{Cache, JsonCache};
 use crate::tracker::{Package, PackageStatus, Tracker};
-use crate::Result;
 
 /// Composed type with pluggable tracker + cache handlers.
 pub struct CachedTracker<'a> {
@@ -31,7 +31,7 @@ impl CachedTracker<'_> {
             if package.status() == PackageStatus::Delivered {
                 log::info!(
                     "Reusing {age}s old cache entry for delivered {} {} from url {url}",
-                    package.channel, 
+                    package.channel,
                     package.barcode,
                 );
                 return Ok(package);
@@ -42,7 +42,7 @@ impl CachedTracker<'_> {
             if age <= cache_seconds {
                 log::info!(
                     "Reusing {age}s old cache entry for undelivered {} {} from url {url}",
-                    package.channel, 
+                    package.channel,
                     package.barcode,
                 );
                 return Ok(package);

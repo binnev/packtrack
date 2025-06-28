@@ -7,4 +7,4 @@ pub use dhl::DhlTracker;
 pub use gls::GlsTracker;
 pub use models::{Event, Package, PackageStatus, TimeWindow};
 pub use postnl::PostNLTracker;
-pub use tracker::{get_handler, register, Tracker};
+pub use tracker::{Tracker, get_handler, register};

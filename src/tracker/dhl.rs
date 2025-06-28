@@ -4,8 +4,8 @@ use regex::Regex;
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{tracker::Tracker, Event, Package, TimeWindow};
-use crate::{settings, Result};
+use super::{Event, Package, TimeWindow, tracker::Tracker};
+use crate::{Result, settings};
 
 pub struct DhlTracker;
 
@@ -99,7 +99,9 @@ fn get_first_package(data: Value) -> Result<Value> {
     Ok(x)
 }
 fn get_url(barcode: String) -> String {
-    format!("https://api-gw.dhlparcel.nl/track-trace?key={barcode}&role=consumer-receiver")
+    format!(
+        "https://api-gw.dhlparcel.nl/track-trace?key={barcode}&role=consumer-receiver"
+    )
 }
 
 #[derive(Deserialize)]
@@ -203,10 +205,9 @@ mod tests {
                 "3SQLW0022110709",
             ),
             (
-                "https://www.dhl.com/nl-en/home/tracking/tracking-parcel.html?locale=true&submit=1&tracking-id=JVGL0614394500301769", 
+                "https://www.dhl.com/nl-en/home/tracking/tracking-parcel.html?locale=true&submit=1&tracking-id=JVGL0614394500301769",
                 "JVGL0614394500301769",
             ),
-
         ] {
             let result = get_barcode(url)?;
             assert_eq!(result, barcode);

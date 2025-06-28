@@ -6,7 +6,7 @@ use std::{
 use crate::Result;
 use chrono::{DateTime, Utc};
 use directories::{ProjectDirs, UserDirs};
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use serde::{Deserialize, Serialize, de::DeserializeOwned};
 
 pub fn project_dirs() -> Result<ProjectDirs> {
     ProjectDirs::from("com", "packtrack", "packtrack")

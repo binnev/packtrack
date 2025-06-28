@@ -6,8 +6,8 @@ use regex::Regex;
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{tracker::Tracker, Event, Package, TimeWindow};
-use crate::{settings, Error, Result};
+use super::{Event, Package, TimeWindow, tracker::Tracker};
+use crate::{Error, Result, settings};
 pub struct GlsTracker;
 
 #[async_trait]
@@ -187,7 +187,9 @@ fn get_barcode_postcode(
 }
 
 fn get_url(barcode: &str, postcode: &str) -> String {
-    format!("https://apm.gls.nl/api/tracktrace/v1/{barcode}/postalcode/{postcode}/details/en-GB")
+    format!(
+        "https://apm.gls.nl/api/tracktrace/v1/{barcode}/postalcode/{postcode}/details/en-GB"
+    )
 }
 
 #[cfg(test)]
@@ -273,12 +275,14 @@ mod tests {
             "parcelNo": "1234",
             "scans": [{"dateTime": "foo"}]
         });
-        assert!(parse_package(data)
-            .err()
-            .unwrap()
-            .to_string()
-            .contains("input contains invalid characters")); // TODO: this is so
-                                                             // vague
+        assert!(
+            parse_package(data)
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("input contains invalid characters")
+        ); // TODO: this is so
+        // vague
     }
 
     #[test]
@@ -297,7 +301,10 @@ mod tests {
             .last()
             .unwrap();
         assert_eq!(event.timestamp, utc("2024-11-20T10:00:07.226Z"));
-        assert_eq!(event.text, "The parcel data was entered into the GLS IT system; the parcel was not yet handed over to GLS.");
+        assert_eq!(
+            event.text,
+            "The parcel data was entered into the GLS IT system; the parcel was not yet handed over to GLS."
+        );
         assert_eq!(package.delivered, None);
         Ok(())
     }
