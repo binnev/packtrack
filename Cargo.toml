@@ -1,5 +1,6 @@
 [package]
 name = "packtrack"
+description = "A simple CLI for tracking mail packages"
 version = "0.2.0"
 edition = "2024"
 repository = "https://github.com/binnev/packtrack"
