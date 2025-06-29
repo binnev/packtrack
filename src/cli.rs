@@ -80,8 +80,7 @@ fn handle_config_command(command: ConfigCommand) -> Result<()> {
 }
 
 #[derive(Parser)]
-#[command(name = "packtrack")]
-#[command(about = "A CLI for tracking packages")]
+#[command(version, about)]
 struct Cli {
     #[command(subcommand)]
     command: Option<Command>,
