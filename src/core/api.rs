@@ -36,6 +36,12 @@ pub struct Filters {
     pub recipient: Option<String>,
 }
 
+// TODO: This should probably be a custom error
+struct Job {
+    url:    String,
+    result: Result<Package>,
+}
+
 // -- Public API
 pub async fn track(ctx: &Context) -> Result<()> {
     let start = Instant::now();
@@ -48,19 +54,27 @@ pub async fn track(ctx: &Context) -> Result<()> {
 // -- Internals
 
 /// Get the Tracker implementation for the given URL, and track the package.
-async fn track_url(
-    url: &str,
-    cache: &Mutex<dyn Cache>,
-    ctx: &Context,
-) -> Result<Package> {
-    let tracker = get_handler(url)?;
+async fn track_url(url: &str, cache: &Mutex<dyn Cache>, ctx: &Context) -> Job {
+    let tracker = match get_handler(url) {
+        Ok(tracker) => tracker,
+        Err(err) => {
+            return Job {
+                url:    url.to_string(),
+                result: Err(err),
+            };
+        }
+    };
     let mut tracker = CachedTracker {
         tracker: tracker,
         cache:   cache,
     };
-    tracker
+    let result = tracker
         .track(url, ctx.cache_seconds)
-        .await
+        .await;
+    Job {
+        url: url.to_string(),
+        result,
+    }
 }
 
 /// Track all the URLs in the URLs file.
@@ -71,7 +85,7 @@ async fn track_urls(urls: Vec<String>, ctx: &Context) -> Result<()> {
         .iter()
         .map(|url| track_url(url, &cache, ctx))
         .collect();
-    let mut results = futures::future::join_all(tasks).await;
+    let mut jobs = futures::future::join_all(tasks).await;
     {
         let cache = cache.lock().await;
         if cache.modified {
@@ -80,9 +94,9 @@ async fn track_urls(urls: Vec<String>, ctx: &Context) -> Result<()> {
     }
 
     if let Some(query) = &ctx.filters.recipient {
-        results = results
+        jobs = jobs
             .into_iter()
-            .filter(|r| match r {
+            .filter(|job| match &job.result {
                 Ok(package) => match package.recipient.as_ref() {
                     Some(recipient) => recipient
                         .to_lowercase()
@@ -94,9 +108,9 @@ async fn track_urls(urls: Vec<String>, ctx: &Context) -> Result<()> {
             .collect();
     }
     if let Some(query) = &ctx.filters.sender {
-        results = results
+        jobs = jobs
             .into_iter()
-            .filter(|r| match r {
+            .filter(|job| match &job.result {
                 Ok(package) => match package.sender.as_ref() {
                     Some(sender) => sender
                         .to_lowercase()
@@ -108,9 +122,9 @@ async fn track_urls(urls: Vec<String>, ctx: &Context) -> Result<()> {
             .collect();
     }
     if let Some(query) = &ctx.filters.carrier {
-        results = results
+        jobs = jobs
             .into_iter()
-            .filter(|r| match r {
+            .filter(|job| match &job.result {
                 Ok(package) => package
                     .channel
                     .to_lowercase()
@@ -121,23 +135,23 @@ async fn track_urls(urls: Vec<String>, ctx: &Context) -> Result<()> {
     }
 
     // sort the results by status / error
-    let mut errors: Vec<Error> = vec![];
-    let mut packages_by_status: HashMap<PackageStatus, Vec<Package>> =
+    let mut errors: Vec<Job> = vec![];
+    let mut jobs_by_status: HashMap<PackageStatus, Vec<Package>> =
         HashMap::new();
-    for result in results {
-        match result {
+    for job in jobs {
+        match &job.result {
             Ok(package) => {
                 let status = package.status();
-                packages_by_status
+                jobs_by_status
                     .entry(status)
                     .and_modify(|e| e.push(package.clone()))
-                    .or_insert(vec![package]);
+                    .or_insert(vec![package.clone()]);
             }
-            Err(err) => errors.push(err),
+            Err(err) => errors.push(job),
         }
     }
     // sort by time
-    for (status, packages) in packages_by_status.iter_mut() {
+    for (status, packages) in jobs_by_status.iter_mut() {
         if status == &PackageStatus::Delivered {
             packages.sort_by(|a, b| a.delivered.cmp(&b.delivered));
         }
@@ -157,7 +171,7 @@ async fn track_urls(urls: Vec<String>, ctx: &Context) -> Result<()> {
 
     // display successful results
     for status in all::<PackageStatus>() {
-        let mut packages = packages_by_status
+        let mut packages = jobs_by_status
             .entry(status.clone())
             .or_insert(vec![]);
         let separator = match status {
@@ -180,7 +194,7 @@ async fn track_urls(urls: Vec<String>, ctx: &Context) -> Result<()> {
     let separator = format!("\n{}\n", "-".repeat(80));
     let s = errors
         .iter()
-        .map(|err| format!("{err:?}"))
+        .map(|job| format!("{}\n{:?}", job.url, job.result))
         .collect::<Vec<_>>()
         .join(&separator);
     println!("{s}");
