@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0] - 2025-07-11
+
+### 🚀 Features
+
+- Implemented filtering
+
+
+- Version option in cli
+
+
+- [**breaking**] Refactor to lib + bin
+
+
+- Errors are now printed with the corresponding URL
+
+
+### 📚 Documentation
+
+- Fix reference docs link
+
+
+### ⚙️ Miscellaneous Tasks
+
+- Remove TODO.md
+
+
 ## [0.2.2] - 2025-06-28
 
 ### 🐛 Bug Fixes
