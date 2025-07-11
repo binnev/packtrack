@@ -29,8 +29,19 @@ mkdocs serve
 > Create a new version of the docs
 
 ```sh 
+version=$(cz version --project)
+echo "Project version is $version"
+regex="^([0-9]+)\.([0-9]+)\.([0-9]+)$"
+if [[ $version =~ $regex ]]; then
+    major="${BASH_REMATCH[1]}"
+    minor="${BASH_REMATCH[2]}"
+    major_minor="$major.$minor"
+    echo "Truncated to docs version $major_minor"
+else
+    echo "Invalid version string format"
+fi
 mike set-default latest --allow-undefined
-mike deploy $(cz version --project) latest --update-aliases --push
+mike deploy $major_minor latest --update-aliases --push
 ```
 
 ## bump
