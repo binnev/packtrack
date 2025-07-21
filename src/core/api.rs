@@ -45,7 +45,10 @@ struct Job {
 // -- Public API
 pub async fn track(ctx: &Context) -> Result<()> {
     let start = Instant::now();
-    let urls = urls::filter(ctx.filters.url.as_deref())?;
+    let mut urls = urls::filter(ctx.filters.url.as_deref())?;
+    if urls.len() == 0 && ctx.filters.url.is_some() {
+        urls = vec![ctx.filters.url.clone().unwrap()]
+    }
     track_urls(urls, ctx).await?;
     log::info!("track_all took {:?}", start.elapsed());
     Ok(())
