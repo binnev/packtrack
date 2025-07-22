@@ -5,7 +5,7 @@ use serde::Deserialize;
 use serde_json::Value;
 
 use super::{Event, Package, TimeWindow, tracker::Tracker};
-use crate::{Result, settings};
+use crate::Result;
 
 pub struct DhlTracker;
 
@@ -14,8 +14,12 @@ impl Tracker for DhlTracker {
     fn can_handle(&self, url: &str) -> bool {
         url.contains("dhl")
     }
-    async fn get_raw(&self, url: &str) -> Result<String> {
-        let barcode = get_barcode(url)?;
+    async fn get_raw(
+        &self,
+        url: &str,
+        default_postcode: Option<&str>,
+    ) -> Result<String> {
+        let barcode = get_barcode(url, default_postcode)?;
         let url = get_url(barcode);
         let response = reqwest::get(url).await?;
         let body = response.text().await?;
@@ -39,12 +43,15 @@ impl Tracker for DhlTracker {
     }
 }
 
-fn get_barcode(url: &str) -> Result<String> {
-    get_dhl_barcode(url).or_else(|_| get_ecommerce_barcode(url))
+fn get_barcode(url: &str, default_postcode: Option<&str>) -> Result<String> {
+    get_dhl_barcode(url, default_postcode)
+        .or_else(|_| get_ecommerce_barcode(url, default_postcode))
 }
 
-fn get_dhl_barcode(url: &str) -> Result<String> {
-    // https://www.dhl.com/nl-en/home/tracking/tracking-parcel.html?locale=true&submit=1&tracking-id=JVGL0614394500301769
+fn get_dhl_barcode(
+    url: &str,
+    default_postcode: Option<&str>,
+) -> Result<String> {
     let rx = Regex::new(r".*dhl.com.*tracking-id=([A-Z0-9-].*)")?;
     let barcode = rx
         .captures(url)
@@ -52,8 +59,6 @@ fn get_dhl_barcode(url: &str) -> Result<String> {
         .ok_or(format!("Couldn't get barcode from {url}"))?
         .as_str()
         .to_owned();
-    let settings = settings::load()?;
-    let default_postcode = settings.postcode.as_deref();
     let out = if let Some(postcode) = default_postcode {
         format!("{barcode}%2B{postcode}")
     } else {
@@ -62,8 +67,10 @@ fn get_dhl_barcode(url: &str) -> Result<String> {
     Ok(out)
 }
 
-fn get_ecommerce_barcode(url: &str) -> Result<String> {
-    // https://my.dhlecommerce.nl/home/tracktrace/JJD149990200039892279
+fn get_ecommerce_barcode(
+    url: &str,
+    default_postcode: Option<&str>,
+) -> Result<String> {
     let rx = Regex::new(
         r".*dhlecommerce.*tracktrace/([A-Z0-9-]+)/?([A-Z0-9-]+)?\??.*",
     )?;
@@ -80,8 +87,6 @@ fn get_ecommerce_barcode(url: &str) -> Result<String> {
         .get(2)
         .map(|m| m.as_str())
         .to_owned();
-    let settings = settings::load()?;
-    let default_postcode = settings.postcode.as_deref();
     let out = if let Some(postcode) = postcode.or(default_postcode) {
         format!("{barcode}%2B{postcode}")
     } else {
@@ -209,7 +214,7 @@ mod tests {
                 "JVGL0614394500301769",
             ),
         ] {
-            let result = get_barcode(url)?;
+            let result = get_barcode(url, None)?;
             assert_eq!(result, barcode);
         }
 

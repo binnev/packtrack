@@ -7,7 +7,7 @@ use serde::Deserialize;
 use serde_json::Value;
 
 use super::{Event, Package, TimeWindow, tracker::Tracker};
-use crate::{Error, Result, settings};
+use crate::{Error, Result};
 pub struct GlsTracker;
 
 #[async_trait]
@@ -15,8 +15,11 @@ impl Tracker for GlsTracker {
     fn can_handle(&self, url: &str) -> bool {
         url.contains("www.gls")
     }
-    async fn get_raw(&self, url: &str) -> Result<String> {
-        let default_postcode = settings::load()?.postcode;
+    async fn get_raw(
+        &self,
+        url: &str,
+        default_postcode: Option<&str>,
+    ) -> Result<String> {
         let (barcode, postcode) =
             get_barcode_postcode(url, default_postcode.as_deref())?;
         let url = get_url(&barcode, &postcode);

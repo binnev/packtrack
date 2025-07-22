@@ -18,6 +18,7 @@ impl CachedTracker<'_> {
         &mut self,
         url: &str,
         cache_seconds: usize,
+        default_postcode: Option<&str>,
     ) -> Result<Package> {
         let cache = self.cache.lock().await;
         let cached = cache.get(url).cloned();
@@ -50,7 +51,10 @@ impl CachedTracker<'_> {
         }
 
         // Fallback: fetch a fresh one
-        let text = self.tracker.get_raw(url).await?;
+        let text = self
+            .tracker
+            .get_raw(url, default_postcode)
+            .await?;
         self.cache
             .lock()
             .await

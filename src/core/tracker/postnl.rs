@@ -13,7 +13,11 @@ impl Tracker for PostNLTracker {
     fn can_handle(&self, url: &str) -> bool {
         url.contains("postnl")
     }
-    async fn get_raw(&self, url: &str) -> Result<String> {
+    async fn get_raw(
+        &self,
+        url: &str,
+        default_postcode: Option<&str>,
+    ) -> Result<String> {
         let barcode = get_barcode(url)?;
         let url = get_url(barcode);
         let response = reqwest::get(url).await?;

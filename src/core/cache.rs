@@ -1,10 +1,9 @@
 use std::time::Duration;
 use std::{collections::HashMap, fs, path::PathBuf};
 
-use crate::settings::Settings;
 use crate::tracker::TimeWindow;
 use crate::utils::UtcTime;
-use crate::{Result, settings, utils};
+use crate::{Result, utils};
 use async_trait::async_trait;
 use chrono::{TimeDelta, Utc};
 use serde::{Deserialize, Serialize};
@@ -72,13 +71,6 @@ pub struct JsonCache {
     pub modified:    bool,
 }
 impl JsonCache {
-    pub fn from_settings(settings: Settings) -> Result<Self> {
-        Ok(Self {
-            contents: Self::load_contents()?,
-            max_entries: Some(settings.cache_max_entries),
-            ..Default::default()
-        })
-    }
     pub fn new() -> Result<Self> {
         Ok(Self {
             contents: Self::load_contents()?,

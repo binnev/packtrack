@@ -2,18 +2,11 @@ use std::sync::PoisonError;
 
 use derive_more::From;
 
-use crate::urls::UrlError;
-
 pub type Result<T> = core::result::Result<T, Error>;
 
 #[derive(Debug, From)]
 pub enum Error {
     // -- Internals
-
-    // URL management
-    #[from]
-    Url(UrlError),
-
     #[from]
     Custom(String),
 

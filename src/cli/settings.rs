@@ -1,14 +1,9 @@
-use crate::{
-    Result, settings,
+use packtrack::{
+    Result,
     utils::{get_home_dir, load_json, project_dirs, save_json},
 };
-use std::{
-    collections::HashMap,
-    env, fs,
-    path::{Path, PathBuf},
-};
+use std::{collections::HashMap, path::PathBuf};
 
-use directories::{ProjectDirs, UserDirs};
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 
@@ -64,7 +59,7 @@ pub fn update(key: String, value: String) -> Result<()> {
     // validating the new key/value.
     let mut serialized = get_settings_as_dict()?;
     let value = serde_json::to_value(value)?;
-    let x = serialized.insert(key, value);
+    serialized.insert(key, value);
 
     // Deserialize to Settings for validation
     let serialized = serde_json::to_value(serialized)?;
