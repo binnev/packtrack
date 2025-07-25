@@ -1,0 +1,313 @@
+{
+    "colli": {
+        "3SFJSY987090416": {
+            "barcode": "3SFJSY987090416",
+            "partnerBarcode": null,
+            "identification": "3SFJSY987090416-NL-1234AB",
+            "deliveryShipmentIdentification": null,
+            "effectiveDate": "2025-07-21T00:00:00+02:00",
+            "context": {
+                "countryIsoNumber": 31,
+                "shipmentType": "LetterboxParcel"
+            },
+            "description": "PenStore.nl - Order #357757 - Invoi",
+            "emailHash": "286B8E80914853E747BDE62ACDE18EE2A7EAAD2B33C90EE38A10C1987CEEE8C5",
+            "phoneHash": "",
+            "deliveryAddressType": "Recipient",
+            "recipient": {
+                "names": {
+                    "companyName": null,
+                    "personName": "Recipient name"
+                },
+                "address": {
+                    "street": "Recipient street",
+                    "houseNumber": "420",
+                    "houseNumberSuffix": null,
+                    "postalCode": "1234AB",
+                    "town": "Utrecht",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "sender": {
+                "names": {
+                    "companyName": "PostNL Tracked Delivery",
+                    "personName": "Retouradres:"
+                },
+                "address": {
+                    "street": "Sender street",
+                    "houseNumber": "2",
+                    "houseNumberSuffix": null,
+                    "postalCode": "9321DA",
+                    "town": "Peize",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "accountId": null,
+            "isValidated": null,
+            "isMatched": null,
+            "deliveryAddress": {
+                "names": {
+                    "companyName": null,
+                    "personName": "Recipient name"
+                },
+                "address": {
+                    "street": "Recipient street",
+                    "houseNumber": "420",
+                    "houseNumberSuffix": null,
+                    "postalCode": "1234AB",
+                    "town": "Utrecht",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "retailDeliveryLocation": null,
+            "eta": {
+                "type": "Specific",
+                "start": "2025-07-23T19:30:00+02:00",
+                "end": "2025-07-23T20:00:00+02:00",
+                "minutesOverdue": 2470
+            },
+            "isDelivered": false,
+            "isAtRetailLocation": false,
+            "isPickedUpAtRetailLocation": false,
+            "isAbroadRetailLocation": false,
+            "beforeFirstDeliveryAttempt": true,
+            "expectedReturnDate": null,
+            "deliveryDate": null,
+            "isDeliveryDateChanged": false,
+            "routeInformation": null,
+            "isReturnShipment": false,
+            "hasProofOfDelivery": false,
+            "details": {
+                "cashOnDelivery": null,
+                "productCode": "2929",
+                "isBelgianProduct": false,
+                "productOptionNotifications": [],
+                "businessPartnerCode": "FJSY",
+                "businessPartnerNumber": "10599085",
+                "dimensions": null,
+                "deliveryPreferences": {
+                    "hasStandardDeliveryPlace": false,
+                    "hasNotAtHomeDeliveryPlace": false,
+                    "hasRetailDeliveryPlace": false,
+                    "isTooBigForRetail": false,
+                    "hasPbaDeliveryPlace": false,
+                    "hasStandardHomeAddressDeliveryPreference": false,
+                    "hasStandardRetailDeliveryPreference": false,
+                    "hasStandardPbaDeliveryPreference": false,
+                    "hasStandardParcelLockerAtHomeDeliveryPreference": false,
+                    "hasStandardSafePlaceDeliveryPreference": false,
+                    "hasNotAtHomeNeighborsDeliveryPreference": false,
+                    "hasNotAtHomeRetailDeliveryPreference": false,
+                    "hasNotAtHomeSafePlaceDeliveryPreference": false
+                },
+                "productOptions": [],
+                "isRegistered": false,
+                "isInsured": false
+            },
+            "statusPhase": {
+                "index": 3,
+                "message": "Shipment in letterbox",
+                "route": null
+            },
+            "lastObservation": "2025-07-23T19:40:55+02:00",
+            "extraInformation": [
+                {
+                    "type": "Unknown",
+                    "text": "This package can be delivered through your letterbox.",
+                    "title": null,
+                    "linkUrl": null,
+                    "linkText": null
+                }
+            ],
+            "observations": [
+                {
+                    "observationDate": "2025-07-23T19:40:55+02:00",
+                    "observationCode": "J05",
+                    "description": "Driver is en route"
+                },
+                {
+                    "observationDate": "2025-07-23T03:46:30.951+02:00",
+                    "observationCode": "J01",
+                    "description": "Shipment has been sorted"
+                },
+                {
+                    "observationDate": "2025-07-22T21:43:45+02:00",
+                    "observationCode": "B01",
+                    "description": "Shipment received by PostNL"
+                },
+                {
+                    "observationDate": "2025-07-21T14:14:11.613+02:00",
+                    "observationCode": "A01",
+                    "description": "Shipment expected, but not yet arrived or processed at PostNL"
+                }
+            ],
+            "previouslyRerouted": false,
+            "inReroutableState": false,
+            "rerouteOptions": {
+                "otherTimeFrame": null,
+                "otherTimeFrameAvailable": false,
+                "postOfficeDelivery": false,
+                "packstationDelivery": false,
+                "reroutingUnauthorized": false,
+                "safePlaceDelivery": false,
+                "pbaDelivery": false,
+                "postOfficeDeliveryIdinFlow": false,
+                "safePlaceDeliveryIdinFlow": false,
+                "pbaDeliveryIdinFlow": false,
+                "postOfficeDeliverySustainableOption": false,
+                "pbaSustainableOption": false,
+                "isOriginalRerouteOwner": false,
+                "unavailableReasons": [
+                    8
+                ]
+            },
+            "relatedCollos": [],
+            "analyticsInfo": {
+                "features": {
+                    "none": "None"
+                },
+                "allObservations": [
+                    {
+                        "observationDate": "2025-07-21T14:14:11.613+02:00",
+                        "observationCode": "A01",
+                        "description": "Shipment expected, but not yet arrived or processed at PostNL"
+                    },
+                    {
+                        "observationDate": "2025-07-21T14:14:44+02:00",
+                        "observationCode": "A98",
+                        "description": "Pre-alerted shipment enriched by PostNL management."
+                    },
+                    {
+                        "observationDate": "2025-07-21T14:14:45.175+02:00",
+                        "observationCode": "A95",
+                        "description": "Delivery cannot be changed"
+                    },
+                    {
+                        "observationDate": "2025-07-22T21:43:45+02:00",
+                        "observationCode": "B01",
+                        "description": "Shipment received by PostNL"
+                    },
+                    {
+                        "observationDate": "2025-07-23T03:46:30.951+02:00",
+                        "observationCode": "J01",
+                        "description": "Shipment has been sorted"
+                    },
+                    {
+                        "observationDate": "2025-07-23T03:47:49+02:00",
+                        "observationCode": "A18",
+                        "description": "Initial calculation of ETA"
+                    },
+                    {
+                        "observationDate": "2025-07-23T19:40:55+02:00",
+                        "observationCode": "I11",
+                        "description": "Shipment in letterbox"
+                    },
+                    {
+                        "observationDate": "2025-07-23T19:40:55+02:00",
+                        "observationCode": "J05",
+                        "description": "Driver is en route"
+                    }
+                ],
+                "productOptions": [],
+                "shipmentStage": "InTransit",
+                "inAdvancePeriod": null,
+                "reroutableType": null,
+                "validationStatusInfo": {
+                    "isValidated": false
+                }
+            },
+            "phaseBlock": {
+                "phaseContent": null,
+                "phaseAction": null,
+                "relatedFaqs": [
+                    {
+                        "Title": {
+                            "TranslationKey": "TrackAndTrace.Faq.LetterBoxParcel.Size.Title"
+                        },
+                        "SubText": {
+                            "TranslationKey": "TrackAndTrace.Faq.LetterBoxParcel.Size.SubText"
+                        },
+                        "Link": {
+                            "TranslationKey": "TrackAndTrace.Faq.LetterBoxParcel.Size.Link",
+                            "Url": "https://www.postnl.nl/versturen/brief-of-kaart-versturen/verzendopties/brievenbuspakje"
+                        }
+                    }
+                ]
+            },
+            "showRetailMap": false,
+            "linkToNetworkPartner": null,
+            "networkPartnerName": null,
+            "networkPartnerCountry": null,
+            "customsFees": null,
+            "customerFeedbackInfo": {
+                "showFeedbackOptions": false,
+                "feedbackGiven": false
+            },
+            "isInternational": false,
+            "internationalStatus": {
+                "isForeignShipment": false,
+                "phase": "ReceivedByPostNl",
+                "delay": null
+            },
+            "showOriginalDeliveryAddress": false,
+            "alerts": [
+                {
+                    "type": 1,
+                    "message": "TrackAndTrace.TimeFrame.LongOverdue",
+                    "suffixMessage": null,
+                    "faq": null,
+                    "title": "TrackAndTrace.TimeFrame.Delayed.Title",
+                    "category": 1
+                }
+            ],
+            "firstMile": null,
+            "willBeReturnedAtRetail": false,
+            "retailPickupBarcode": "O3SFJSY987090416",
+            "returnPickupCancelled": false,
+            "uncertainRetailLocation": false,
+            "isSustainableDelivery": true,
+            "isSustainableOption": false,
+            "safePlaceFailure": null,
+            "isPba": false,
+            "isDeliveredAtPba": false,
+            "isPickedUpAtPba": false,
+            "isPincodeAtDoorShipment": false,
+            "isInPreAnnouncedStatus": false,
+            "pincodeStatus": null,
+            "floatingChatBot": null,
+            "shipmentAdvertisement": null,
+            "thirdPartyAdvertisements": null,
+            "extraAtHome": null,
+            "canBePickedUpWithPostNLId": false,
+            "isShipmentAddressChanged": false
+        }
+    },
+    "processed": "2025-07-25T13:10:06.8395273+02:00"
+}

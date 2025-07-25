@@ -6,6 +6,7 @@ use crate::Result;
 use crate::tracker::TrackerContext;
 use crate::utils::UtcTime;
 use async_trait::async_trait;
+use chrono::DateTime;
 use futures::future::AndThen;
 use regex::Regex;
 use serde::Deserialize;
@@ -43,7 +44,7 @@ impl Tracker for PostNLTracker {
             recipient:  package.recipient(),
             eta:        package.eta(),
             eta_window: package.eta_window(),
-            delivered:  package.delivery_date,
+            delivered:  package.delivery_datetime(),
             events:     package.events(),
         })
     }
@@ -109,6 +110,7 @@ struct PostNLPackage {
     route_information: Option<RouteInfo>,
     analytics_info:    AnalyticsInfo,
     eta:               Option<Eta>,
+    status_phase:      Option<StatusPhase>,
 }
 impl PostNLPackage {
     fn sender(&self) -> Option<String> {
@@ -154,8 +156,44 @@ impl PostNLPackage {
             .and_then(|eta| eta.start.zip(eta.end))
             .map(|(start, end)| TimeWindow { start, end })
     }
+    fn delivery_datetime(&self) -> Option<UtcTime> {
+        // If it exists, return the delivery date
+        if self.delivery_date.is_some() {
+            return self.delivery_date;
+        };
+
+        // If the package is delivered in the letterbox, Postnl doesn't set a
+        // delivery date. So instead we try to use the timestamp from the last
+        // event.
+        let msg = self
+            .status_phase
+            .as_ref()
+            .and_then(|s| s.message.as_ref())?;
+        if msg.contains("in letterbox") {
+            let dt = get_last_event_datetime(&self.events());
+            if dt.is_none() {
+                log::warn!(
+                    "PostNL {} was delivered in the letterbox, but there are no events we can use to determine the delivery time!",
+                    self.barcode
+                )
+            }
+            dt
+        } else {
+            None
+        }
+    }
+}
+fn get_last_event_datetime(events: &Vec<Event>) -> Option<UtcTime> {
+    events
+        .iter()
+        .max_by(|a, b| a.timestamp.cmp(&b.timestamp))
+        .map(|e| e.timestamp)
 }
 
+#[derive(Deserialize)]
+struct StatusPhase {
+    message: Option<String>,
+}
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct AnalyticsInfo {
@@ -292,6 +330,39 @@ mod tests {
         }
     }
 
+    #[test]
+    fn test_delivered_in_letterbox_gets_delivery_time() -> Result<()> {
+        let mock = mocks::load_text("postnl_delivered_in_letterbox.json")?;
+        let package = PostNLTracker.parse(mock)?;
+        let delivered = package.delivered.unwrap();
+        let expected = utc("2025-07-23T19:40:55+02:00");
+        assert_eq!(delivered, expected);
+        Ok(())
+    }
+    #[test]
+    fn test_alternate_eta_window() -> Result<()> {
+        let mock =
+            mocks::load_text("postnl_undelivered_but_eta_not_shown.json")?;
+        let package = PostNLTracker.parse(mock)?;
+        package.eta_window.unwrap();
+        Ok(())
+    }
+    #[test]
+    fn test_eta_with_nulls() -> Result<()> {
+        let mock = mocks::load_text("postnl_undelivered_eta_with_null.json")?;
+        let package = PostNLTracker.parse(mock)?;
+        assert!(package.eta_window.is_none());
+        Ok(())
+    }
+    #[test]
+    fn test_different_eta() -> Result<()> {
+        let mock = mocks::load_text("postnl_undelivered_different_eta.json")?;
+        let package = PostNLTracker.parse(mock)?;
+        let eta_window = package.eta_window.unwrap();
+        assert_eq!(eta_window.start, utc("2025-07-23T08:00:00+02:00"));
+        assert_eq!(eta_window.end, utc("2025-07-23T18:00:00+02:00"));
+        Ok(())
+    }
     #[test]
     fn test_deserialization_undelivered() -> Result<()> {
         let mock = mocks::load_json("postnl_undelivered")?;
