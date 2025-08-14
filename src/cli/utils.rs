@@ -65,12 +65,15 @@ fn display_in_transit_package(package: &Package) -> String {
         f.push_str(&format!(""));
     }
     if let Some(eta) = package.eta {
-        f.push_str(&format!("expected delivery: {}", display_time(eta)));
+        f.push_str(&format!("\nexpected delivery: {}", display_time(eta)));
     }
     if let Some(window) = package.eta_window.as_ref() {
-        f.push_str(&format!("delivery window: {}", display_timewindow(window)));
+        f.push_str(&format!(
+            "\ndelivery window: {}",
+            display_timewindow(window)
+        ));
     }
-    f.push_str(&format!("events:"));
+    f.push_str(&format!("\nevents:"));
     for event in package.events.iter() {
         f.push_str(&format!("\n    {}", display_event(event)));
     }
