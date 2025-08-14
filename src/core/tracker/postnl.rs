@@ -75,6 +75,7 @@ struct PostNLPackage {
     delivery_date:     Option<UtcTime>,
     route_information: Option<RouteInfo>,
     analytics_info:    AnalyticsInfo,
+    eta:               Option<Eta>,
 }
 impl PostNLPackage {
     fn sender(&self) -> Option<String> {
@@ -100,18 +101,25 @@ impl PostNLPackage {
             .and_then(|info| Some(info.expected_delivery_time.clone()))
     }
     fn eta_window(&self) -> Option<TimeWindow> {
-        self.route_information
-            .as_ref()
-            .and_then(|info| {
-                Some(TimeWindow {
-                    start: info
-                        .expected_delivery_time_window
-                        .start_date_time,
-                    end:   info
-                        .expected_delivery_time_window
-                        .end_date_time,
-                })
-            })
+        if let Some(info) = self.route_information.as_ref() {
+            return Some(TimeWindow {
+                start: info
+                    .expected_delivery_time_window
+                    .start_date_time,
+                end:   info
+                    .expected_delivery_time_window
+                    .end_date_time,
+            });
+        }
+
+        if let Some(eta) = self.eta.as_ref() {
+            return Some(TimeWindow {
+                start: eta.start,
+                end:   eta.end,
+            });
+        }
+
+        return None;
     }
 }
 
@@ -170,6 +178,13 @@ struct RouteInfo {
     expected_delivery_time_window: PostNLTimeWindow,
 }
 
+#[derive(Deserialize)]
+struct Eta {
+    r#type: String, // r# allows us to use a keyword as a field name
+    start:  UtcTime,
+    end:    UtcTime,
+}
+
 #[cfg(test)]
 mod tests {
     use chrono::{DateTime, Utc};
@@ -222,6 +237,38 @@ mod tests {
         Ok(())
     }
     #[test]
+    fn test_deserialization_undelivered_whole_day_eta() -> Result<()> {
+        let mock = mocks::load_json("postnl_undelivered_whole_day_eta")?;
+        let data = get_first_package(mock)?;
+        let package: PostNLPackage = serde_json::from_value(data)?;
+        assert_eq!(package.eta(), None);
+        assert_eq!(
+            package.eta_window().unwrap().start,
+            utc("2025-08-14T08:30:00+02:00")
+        );
+        assert_eq!(
+            package.eta_window().unwrap().end,
+            utc("2025-08-14T21:30:00+02:00")
+        );
+        Ok(())
+    }
+    #[test]
+    fn test_deserialization_undelivered_2() -> Result<()> {
+        let mock = mocks::load_json("postnl_undelivered_2")?;
+        let data = get_first_package(mock)?;
+        let package: PostNLPackage = serde_json::from_value(data)?;
+        assert_eq!(package.eta().unwrap(), utc("2025-08-14T11:37:00+02:00"));
+        assert_eq!(
+            package.eta_window().unwrap().start,
+            utc("2025-08-14T11:19:00+02:00")
+        );
+        assert_eq!(
+            package.eta_window().unwrap().end,
+            utc("2025-08-14T11:55:00+02:00")
+        );
+        Ok(())
+    }
+    #[test]
     fn test_deserialization_delivered() -> Result<()> {
         let mock = mocks::load_json("postnl_delivered")?;
         let data = get_first_package(mock)?;
@@ -230,7 +277,14 @@ mod tests {
         assert_eq!(package.recipient().unwrap(), "Recipient Name");
         assert_eq!(package.barcode, "3SIJVT005836083");
         assert_eq!(package.eta(), None);
-        assert!(package.eta_window().is_none());
+        assert_eq!(
+            package.eta_window().unwrap().start,
+            utc("2024-10-29T11:40:00+01:00")
+        );
+        assert_eq!(
+            package.eta_window().unwrap().end,
+            utc("2024-10-29T13:40:00+01:00")
+        );
         assert_eq!(
             package.delivery_date.unwrap(),
             utc("2024-10-29T11:43:02+01:00")
@@ -254,7 +308,14 @@ mod tests {
         assert_eq!(package.recipient().unwrap(), "RECIPIENT NAME");
         assert_eq!(package.barcode, "3SDOJB990704220");
         assert_eq!(package.eta(), None);
-        assert!(package.eta_window().is_none());
+        assert_eq!(
+            package.eta_window().unwrap().start,
+            utc("2024-11-16T10:25:00+01:00")
+        );
+        assert_eq!(
+            package.eta_window().unwrap().end,
+            utc("2024-11-16T12:25:00+01:00")
+        );
         assert_eq!(
             package.delivery_date.unwrap(),
             utc("2024-11-16T10:45:27+01:00")
