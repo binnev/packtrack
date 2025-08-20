@@ -45,7 +45,7 @@ pub trait Cache {
     /// `Result` so the implementation can do IO.
     async fn save(&self) -> Result<()>;
 }
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct CacheEntry {
     pub text:    String,
     pub created: UtcTime,
