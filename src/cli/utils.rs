@@ -64,6 +64,9 @@ fn display_in_transit_package(package: &Package) -> String {
     } else {
         f.push_str(&format!(""));
     }
+    if let Some(recipient) = package.recipient.as_ref() {
+        f.push_str(&format!(" to {recipient}"));
+    }
     if let Some(eta) = package.eta {
         f.push_str(&format!("\nexpected delivery: {}", display_time(eta)));
     }
