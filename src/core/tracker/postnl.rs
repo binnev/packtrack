@@ -1,8 +1,11 @@
+use std::default;
+
 use super::models::{Event, Package, TimeWindow};
 use super::tracker::Tracker;
 use crate::Result;
 use crate::utils::UtcTime;
 use async_trait::async_trait;
+use futures::future::AndThen;
 use regex::Regex;
 use serde::Deserialize;
 use serde_json::Value;
@@ -18,8 +21,12 @@ impl Tracker for PostNLTracker {
         url: &str,
         default_postcode: Option<&str>,
     ) -> Result<String> {
-        let barcode = get_barcode(url)?;
-        let url = get_url(barcode);
+        let (barcode, country, postcode) = get_barcode_and_postcode(url);
+        let url = build_url(
+            barcode.ok_or(format!("Couldn't get barcode from {url}"))?,
+            country,
+            postcode.or(default_postcode),
+        );
         let response = reqwest::get(url).await?;
         let text = response.text().await?;
         Ok(text)
@@ -50,20 +57,45 @@ fn get_first_package(data: Value) -> Result<Value> {
         .ok_or("No packages in payload!")?;
     Ok(value.clone())
 }
-fn get_barcode(url: &str) -> Result<String> {
-    let rx: Regex = Regex::new(r"https?.*/([A-Z0-9-]+)\??.*").unwrap();
-    let barcode = rx
-        .captures(url)
-        .and_then(|caps| caps.get(1))
-        .ok_or(format!("Couldn't get barcode from {url}"))?
-        .as_str()
-        .to_owned();
-    Ok(barcode)
+fn get_barcode_and_postcode(
+    url: &str,
+) -> (Option<&str>, Option<&str>, Option<&str>) {
+    let rx =   Regex::new(
+        r"track-and-trace/(?P<barcode>[0-9A-Z]+)(?:[-/](?P<country>[A-Z]{2})[-/](?P<postcode>\d{4}[A-Z]{2}))?"    ).unwrap();
+
+    let mut barcode = None;
+    let mut country = None;
+    let mut postcode = None;
+    if let Some(caps) = rx.captures(url) {
+        barcode = caps.name("barcode").map(|m| m.as_str());
+        country = caps.name("country").map(|m| m.as_str());
+        postcode = caps
+            .name("postcode")
+            .map(|m| m.as_str());
+    }
+    log::debug!(
+        "PostNL extracted barcode {barcode:?}, country {country:?}, postcode {postcode:?} from url {url}"
+    );
+    (barcode, country, postcode)
 }
-fn get_url(barcode: String) -> String {
-    format!(
+fn build_url(
+    barcode: &str,
+    country: Option<&str>,
+    postcode: Option<&str>,
+) -> String {
+    let mut barcode = barcode.to_string();
+
+    // Only append the country and postcode if both are present
+    if let Some((c, p)) = country.zip(postcode) {
+        barcode.push_str(&format!("-{c}-{p}"));
+    }
+    let url = format!(
         "https://jouw.postnl.nl/track-and-trace/api/trackAndTrace/{barcode}?language=en"
-    )
+    );
+    log::debug!(
+        "Built URL {url} using barcode {barcode:?}, country {country:?}, postcode {postcode:?}"
+    );
+    url
 }
 
 #[derive(Deserialize)]
@@ -101,25 +133,26 @@ impl PostNLPackage {
             .and_then(|info| Some(info.expected_delivery_time.clone()))
     }
     fn eta_window(&self) -> Option<TimeWindow> {
-        if let Some(info) = self.route_information.as_ref() {
-            return Some(TimeWindow {
+        self.eta_window_from_route_info()
+            .or(self.eta_window_from_eta())
+    }
+    fn eta_window_from_route_info(&self) -> Option<TimeWindow> {
+        self.route_information
+            .as_ref()
+            .map(|info| TimeWindow {
                 start: info
                     .expected_delivery_time_window
                     .start_date_time,
                 end:   info
                     .expected_delivery_time_window
                     .end_date_time,
-            });
-        }
-
-        if let Some(eta) = self.eta.as_ref() {
-            return Some(TimeWindow {
-                start: eta.start,
-                end:   eta.end,
-            });
-        }
-
-        return None;
+            })
+    }
+    fn eta_window_from_eta(&self) -> Option<TimeWindow> {
+        self.eta
+            .as_ref()
+            .and_then(|eta| eta.start.zip(eta.end))
+            .map(|(start, end)| TimeWindow { start, end })
     }
 }
 
@@ -181,8 +214,8 @@ struct RouteInfo {
 #[derive(Deserialize)]
 struct Eta {
     r#type: String, // r# allows us to use a keyword as a field name
-    start:  UtcTime,
-    end:    UtcTime,
+    start:  Option<UtcTime>,
+    end:    Option<UtcTime>,
 }
 
 #[cfg(test)]
@@ -197,16 +230,39 @@ mod tests {
     }
 
     #[test]
-    fn test_get_barcode() -> Result<()> {
-        let result = get_barcode("");
-        assert!(result.is_err());
-        assert!(format!("{result:?}").contains("Couldn't get barcode from "));
-
-        let result = get_barcode(
-            "https://jouw.postnl.nl/track-and-trace/1ABCDE1234567-AA-1234AB?language=nl",
-        )?;
-        assert_eq!(result, "1ABCDE1234567-AA-1234AB");
-        Ok(())
+    fn test_get_barcode_and_postcode() {
+        for (url, expected_barcode, expected_country, expected_postcode) in [
+            ("", None, None, None),
+            (
+                "https://jouw.postnl.nl/track-and-trace/1ABCDE1234567-AA-1234AB?language=nl",
+                Some("1ABCDE1234567"),
+                Some("AA"),
+                Some("1234AB"),
+            ),
+            (
+                "https://jouw.postnl.nl/track-and-trace/1ABCDE1234567/NL/1234AB",
+                Some("1ABCDE1234567"),
+                Some("NL"),
+                Some("1234AB"),
+            ),
+            (
+                "https://jouw.postnl.nl/track-and-trace/1ABCDE1234567",
+                Some("1ABCDE1234567"),
+                None,
+                None,
+            ),
+            (
+                "https://jouw.postnl.nl/track-and-trace/1ABCDE1234567/NL",
+                Some("1ABCDE1234567"),
+                None,
+                None,
+            ),
+        ] {
+            let (barcode, country, postcode) = get_barcode_and_postcode(url);
+            assert_eq!(barcode, expected_barcode);
+            assert_eq!(country, expected_country);
+            assert_eq!(postcode, expected_postcode);
+        }
     }
 
     #[test]
@@ -236,6 +292,19 @@ mod tests {
         );
         Ok(())
     }
+
+    #[test]
+    fn test_deserialization_undelivered_eta_with_null() -> Result<()> {
+        let mock = mocks::load_json("postnl_undelivered_eta_with_null")?;
+        let data = get_first_package(mock)?;
+        let package: PostNLPackage = serde_json::from_value(data)?;
+        assert_eq!(
+            package.recipient(),
+            Some("Birkenstock c/o arvato SE".to_string())
+        );
+        Ok(())
+    }
+
     #[test]
     fn test_deserialization_undelivered_whole_day_eta() -> Result<()> {
         let mock = mocks::load_json("postnl_undelivered_whole_day_eta")?;
@@ -332,8 +401,28 @@ mod tests {
     }
 
     #[test]
-    fn test_get_url() {
-        get_url("xxx".into());
+    fn test_build_url() {
+        // bare minimum
+        assert_eq!(
+            build_url("1ABCDE1234567", None, None),
+            "https://jouw.postnl.nl/track-and-trace/api/trackAndTrace/1ABCDE1234567?language=en"
+        );
+
+        // both the country and postcode should be present for them to be added.
+        assert_eq!(
+            build_url("1ABCDE1234567", None, Some("1234AB")),
+            "https://jouw.postnl.nl/track-and-trace/api/trackAndTrace/1ABCDE1234567?language=en"
+        );
+        assert_eq!(
+            build_url("1ABCDE1234567", Some("NL"), None),
+            "https://jouw.postnl.nl/track-and-trace/api/trackAndTrace/1ABCDE1234567?language=en"
+        );
+
+        // fully populated
+        assert_eq!(
+            build_url("1ABCDE1234567", Some("NL"), Some("1234AB")),
+            "https://jouw.postnl.nl/track-and-trace/api/trackAndTrace/1ABCDE1234567-NL-1234AB?language=en"
+        );
     }
 
     #[test]
