@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 2025-09-16
+
+### 🚀 Features
+
+- [**breaking**] Move settings and url management from core to cli
+
+
+### 🐛 Bug Fixes
+
+- *(postnl)* More robust ETA window handling for PostNL
+  - PostNL tracker now takes ETA window from multiple sources
+
+- *(cli)* Multiline formatting for delivered packages
+
+
+- *(postnl)* More robust barcode + postcode extraction from urls
+
+
+- *(cli)* Display recipient for in-transit packages
+
+
+- *(cache)* Bad cache entries no longer prevent us fetching a fresh value
+
+
+### 📚 Documentation
+
+- Guides for tracking and url management
+
+
+### 🧪 Testing
+
+- *(postnl)* More tests
+
+
 ## [1.0.2] - 2025-07-21
 
 ### 🐛 Bug Fixes
