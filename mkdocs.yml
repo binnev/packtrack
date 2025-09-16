@@ -5,10 +5,11 @@ repo_name: binnev/packtrack
 nav:
   - Home: README.md
   - Tutorials:
-      - tutorials/getting-started.md
+      - tutorials/installation.md
   - Explanation:
       - Aim of the Project: explanation/aim.md
   - How-To Guides:
+      - how-to/tracking.md
       - how-to/urls.md
   - Reference: ref/index.md
 
@@ -41,7 +42,8 @@ theme:
     - content.code.select # allows user to link to line ranges
     - content.code.annotate # allows placing annotations inside code blocks
   icon:
-    logo: material/language-rust
+    # find icons here: https://pictogrammers.com/library/mdi/
+    logo: material/package-variant-closed
 
 plugins:
   - search
