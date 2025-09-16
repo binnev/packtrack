@@ -338,6 +338,14 @@ mod tests {
         Ok(())
     }
     #[test]
+    fn test_deserialization_undelivered_3() -> Result<()> {
+        let mock = mocks::load_json("postnl_undelivered_3")?;
+        let data = get_first_package(mock)?;
+        let package: PostNLPackage = serde_json::from_value(data)?;
+        assert_eq!(package.recipient().unwrap(), "Recipient Name");
+        Ok(())
+    }
+    #[test]
     fn test_deserialization_delivered() -> Result<()> {
         let mock = mocks::load_json("postnl_delivered")?;
         let data = get_first_package(mock)?;
