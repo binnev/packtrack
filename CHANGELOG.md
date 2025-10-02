@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2025-10-02
+
+### 🚀 Features
+
+- *(cli)* Shorter arg aliases
+
+
 ## [2.0.0] - 2025-09-16
 
 ### 🚀 Features
