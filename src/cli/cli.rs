@@ -105,7 +105,7 @@ struct GlobalArgs {
     verbosity: u8,
 
     /// Max age for cache entries to be reused
-    #[arg(short, long, global = true)]
+    #[arg(short = 'C', long, global = true)]
     cache_seconds: Option<usize>,
 }
 
@@ -115,15 +115,15 @@ struct FilterOpts {
     url: Option<String>,
 
     /// Filter by sender
-    #[arg(long)]
+    #[arg(short, long)]
     sender: Option<String>,
 
     /// Filter by postal carrier
-    #[arg(long)]
+    #[arg(short, long)]
     carrier: Option<String>,
 
     /// Filter by recipient
-    #[arg(long)]
+    #[arg(short, long)]
     recipient: Option<String>,
 }
 
