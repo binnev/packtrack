@@ -11,7 +11,6 @@ use serde_json::{Map, Value};
 pub struct Settings {
     pub urls_file:         PathBuf, // owned equivalent to Path
     pub postcode:          Option<String>,
-    pub use_cache:         bool,
     /// Maximum age (in seconds) for cache entries to be reused.
     pub cache_seconds:     usize,
     /// Maximum number of entries to cache (per URL)
@@ -41,7 +40,6 @@ impl Default for Settings {
         Self {
             urls_file,
             postcode: None,
-            use_cache: true,
             cache_seconds: 30,
             cache_max_entries: 10,
         }

@@ -68,10 +68,3 @@ impl<'a> CachedTracker<'a> {
         Ok(package)
     }
 }
-
-pub struct CacheContext {
-    /// TODO: setting this to 0 supersedes use_cache below.
-    max_age_s: usize,
-    /// Can be deactivated with the `--no-cache` flag
-    use_cache: bool,
-}
