@@ -3,11 +3,10 @@ use std::collections::HashMap;
 use std::time::Instant;
 
 use crate::cli::settings;
-use crate::cli::settings::Settings;
 use crate::cli::urls;
 use crate::cli::utils::{display_package, heading};
 use clap::Args;
-use clap::{Parser, Subcommand, command};
+use clap::{Parser, Subcommand};
 use log::{self, LevelFilter};
 use packtrack::Result;
 use packtrack::api::Filters;
@@ -55,7 +54,7 @@ pub async fn main() -> Result<()> {
 
     // Handle subcommands
     match cli.command {
-        None => track(&ctx).await?,
+        None => track(&ctx, cli.globals.delivered).await?,
         Some(Command::Url { command }) => handle_url_command(command).await?,
         Some(Command::Config { command }) => handle_config_command(command)?,
     }
@@ -114,9 +113,14 @@ struct GlobalArgs {
     #[arg(short = 'C', long, global = true)]
     cache_seconds: Option<usize>,
 
-    /// Don't use the cache, even for delivered packages
+    /// Don't use the cache (even for delivered packages)
     #[arg(short, long, global = true)]
     no_cache: bool,
+
+    // FIXME: This is only relevant for CLI printout (not JSON)
+    /// Display detailed info on delivered packages
+    #[arg(short, long, global = true)]
+    delivered: bool,
 
     /// Preferred language (passed to the carrier)
     #[arg(short, long, global = true)]
@@ -177,7 +181,7 @@ enum ConfigCommand {
     Reset,
 }
 
-fn display_jobs(jobs: Vec<Job>) {
+fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
     // sort the results by status / error
     let mut errors: Vec<Job> = vec![];
     let mut jobs_by_status: HashMap<PackageStatus, Vec<Package>> =
@@ -214,20 +218,25 @@ fn display_jobs(jobs: Vec<Job>) {
     }
 
     // display successful results
+    let line = format!("\n{}\n", "-".repeat(80));
     for status in all::<PackageStatus>() {
         let packages = jobs_by_status
             .entry(status.clone())
             .or_insert(vec![]);
         let separator = match status {
-            PackageStatus::Delivered => "\n".to_owned(),
-            PackageStatus::InTransit => {
-                format!("\n{}\n", "-".repeat(80))
+            PackageStatus::Delivered => {
+                if delivered_detail {
+                    line.clone()
+                } else {
+                    "\n".to_owned()
+                }
             }
+            PackageStatus::InTransit => line.clone(),
         };
         heading(&status);
         let s = packages
             .iter()
-            .map(|package| display_package(package))
+            .map(|package| display_package(package, delivered_detail))
             .collect::<Vec<_>>()
             .join(&separator);
         println!("{s}");
@@ -244,14 +253,14 @@ fn display_jobs(jobs: Vec<Job>) {
     println!("{s}");
 }
 
-async fn track(ctx: &Context) -> Result<()> {
+async fn track(ctx: &Context, delivered_detail: bool) -> Result<()> {
     let start = Instant::now();
     let mut urls = urls::filter(ctx.filters.url.as_deref())?;
     if urls.len() == 0 && ctx.filters.url.is_some() {
         urls = vec![ctx.filters.url.clone().unwrap()]
     }
     let jobs = track_urls(urls, ctx).await?;
-    display_jobs(jobs);
+    display_jobs(jobs, delivered_detail);
     log::info!("track_all took {:?}", start.elapsed());
     Ok(())
 }

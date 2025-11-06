@@ -65,20 +65,20 @@ impl<'a> CachedTracker<'a> {
 
         // Fallback: fetch a fresh one
         let text = self.tracker.get_raw(url, ctx).await?;
-        // TODO: currently we're always saving to cache, even if `use_cache` is
-        // false. But is this what we want? If `use_cache` is false, should we
-        // _not_ store the result in the cache? Do we need separate flags for
-        // "read from cache" and "write to cache"? If we want to make this
-        // program totally stateless, then no reading OR writing to a cache
-        // should be the default. In which case, maybe the decision should be
-        // made higher up to use a bare Tracker, not a CachedTracker. That also
-        // means we can remove the quite silly `use_cache` arg from
-        // CachedTracker. Why is it called CachedTracker if we don't want to use
-        // the cache?
-        self.cache
-            .lock()
-            .await
-            .insert(url.to_owned(), text.clone());
+        // TODO: Is this what we want? If `use_cache` is false, should we _not_
+        // store the result in the cache? Do we need separate flags for "read
+        // from cache" and "write to cache"? If we want to make this program
+        // totally stateless, then no reading OR writing to a cache should be
+        // the default. In which case, maybe the decision should be made higher
+        // up to use a bare Tracker, not a CachedTracker. That also means we can
+        // remove the quite silly `use_cache` arg from CachedTracker. Why is it
+        // called CachedTracker if we don't want to use the cache?
+        if use_cache {
+            self.cache
+                .lock()
+                .await
+                .insert(url.to_owned(), text.clone());
+        }
         let package = self.tracker.parse(text)?;
         Ok(package)
     }

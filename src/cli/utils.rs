@@ -38,7 +38,7 @@ pub fn display_time<T: TimeZone>(dt: DateTime<T>) -> String {
     format!("{} {}", display_date(dt), local.format("%H:%M"))
 }
 
-fn display_delivered_package(package: &Package) -> String {
+fn display_package_oneliner(package: &Package) -> String {
     let time = package
         .delivered
         .map(|dt| display_time(dt))
@@ -56,7 +56,7 @@ fn display_delivered_package(package: &Package) -> String {
     }
     f
 }
-fn display_in_transit_package(package: &Package) -> String {
+fn display_package_full(package: &Package) -> String {
     let mut f = String::new();
     f.push_str(&format!("{} Package {}", package.channel, package.barcode));
     if let Some(sender) = package.sender.as_ref() {
@@ -82,10 +82,16 @@ fn display_in_transit_package(package: &Package) -> String {
     }
     f
 }
-pub fn display_package(package: &Package) -> String {
+pub fn display_package(
+    package: &Package,
+    // if true, display delivered packages in full detail
+    delivered_detail: bool,
+) -> String {
     match package.status() {
-        PackageStatus::Delivered => display_delivered_package(package),
-        PackageStatus::InTransit => display_in_transit_package(package),
+        PackageStatus::Delivered if !delivered_detail => {
+            display_package_oneliner(package)
+        }
+        _ => display_package_full(package),
     }
 }
 pub fn display_timewindow(tw: &TimeWindow) -> String {
