@@ -23,6 +23,7 @@ impl Tracker for PostNLTracker {
             barcode.ok_or(format!("Couldn't get barcode from {url}"))?,
             country,
             url_postcode.or(ctx.recipient_postcode),
+            ctx.language,
         );
         let response = reqwest::get(url).await?;
         let text = response.text().await?;
@@ -79,6 +80,7 @@ fn build_url(
     barcode: &str,
     country: Option<&str>,
     postcode: Option<&str>,
+    language: &str,
 ) -> String {
     let mut barcode = barcode.to_string();
 
@@ -87,7 +89,7 @@ fn build_url(
         barcode.push_str(&format!("-{c}-{p}"));
     }
     let url = format!(
-        "https://jouw.postnl.nl/track-and-trace/api/trackAndTrace/{barcode}?language=en"
+        "https://jouw.postnl.nl/track-and-trace/api/trackAndTrace/{barcode}?language={language}"
     );
     log::debug!(
         "Built URL {url} using barcode {barcode:?}, country {country:?}, postcode {postcode:?}"
@@ -409,24 +411,24 @@ mod tests {
     fn test_build_url() {
         // bare minimum
         assert_eq!(
-            build_url("1ABCDE1234567", None, None),
+            build_url("1ABCDE1234567", None, None, "en"),
             "https://jouw.postnl.nl/track-and-trace/api/trackAndTrace/1ABCDE1234567?language=en"
         );
 
         // both the country and postcode should be present for them to be added.
         assert_eq!(
-            build_url("1ABCDE1234567", None, Some("1234AB")),
+            build_url("1ABCDE1234567", None, Some("1234AB"), "en"),
             "https://jouw.postnl.nl/track-and-trace/api/trackAndTrace/1ABCDE1234567?language=en"
         );
         assert_eq!(
-            build_url("1ABCDE1234567", Some("NL"), None),
+            build_url("1ABCDE1234567", Some("NL"), None, "en"),
             "https://jouw.postnl.nl/track-and-trace/api/trackAndTrace/1ABCDE1234567?language=en"
         );
 
         // fully populated
         assert_eq!(
-            build_url("1ABCDE1234567", Some("NL"), Some("1234AB")),
-            "https://jouw.postnl.nl/track-and-trace/api/trackAndTrace/1ABCDE1234567-NL-1234AB?language=en"
+            build_url("1ABCDE1234567", Some("NL"), Some("1234AB"), "nl"),
+            "https://jouw.postnl.nl/track-and-trace/api/trackAndTrace/1ABCDE1234567-NL-1234AB?language=nl"
         );
     }
 
