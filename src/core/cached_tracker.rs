@@ -18,41 +18,46 @@ impl<'a> CachedTracker<'a> {
         &mut self,
         url: &str,
         cache_seconds: usize,
+        use_cache: bool,
         ctx: &'a TrackerContext<'_>,
     ) -> Result<Package> {
-        let cache = self.cache.lock().await;
-        let cached = cache.get(url).cloned();
-        drop(cache); // allows other async threads to continue
+        if use_cache {
+            let cache = self.cache.lock().await;
+            let cached = cache.get(url).cloned();
+            drop(cache); // allows other async threads to continue
 
-        if let Some(entry) = cached {
-            match self.tracker.parse(entry.text.clone()) {
-                Err(err) => {
-                    log::warn!(
-                        "Couldn't parse cache entry to package! url: {url}, cache entry: {entry:?}, error: {err:?}"
-                    )
-                }
-                Ok(package) => {
-                    let age = entry.age().num_seconds().unsigned_abs() as usize;
-
-                    // Always cache delivered packages
-                    if package.status() == PackageStatus::Delivered {
-                        log::info!(
-                            "Reusing {age}s old cache entry for delivered {} {} from url {url}",
-                            package.channel,
-                            package.barcode,
-                        );
-                        return Ok(package);
+            if let Some(entry) = cached {
+                match self.tracker.parse(entry.text.clone()) {
+                    Err(err) => {
+                        log::warn!(
+                            "Couldn't parse cache entry to package! url: {url}, cache entry: {entry:?}, error: {err:?}"
+                        )
                     }
+                    Ok(package) => {
+                        let age =
+                            entry.age().num_seconds().unsigned_abs() as usize;
 
-                    // Cache undelivered packages if the entry is young enough,
-                    // and the cache is enabled
-                    if age <= cache_seconds {
-                        log::info!(
-                            "Reusing {age}s old cache entry for undelivered {} {} from url {url}",
-                            package.channel,
-                            package.barcode,
-                        );
-                        return Ok(package);
+                        // Always cache delivered packages
+                        if package.status() == PackageStatus::Delivered {
+                            log::info!(
+                                "Reusing {age}s old cache entry for delivered {} {} from url {url}",
+                                package.channel,
+                                package.barcode,
+                            );
+                            return Ok(package);
+                        }
+
+                        // Cache undelivered packages if the entry is young
+                        // enough, and the cache is
+                        // enabled
+                        if age <= cache_seconds {
+                            log::info!(
+                                "Reusing {age}s old cache entry for undelivered {} {} from url {url}",
+                                package.channel,
+                                package.barcode,
+                            );
+                            return Ok(package);
+                        }
                     }
                 }
             }
@@ -60,6 +65,16 @@ impl<'a> CachedTracker<'a> {
 
         // Fallback: fetch a fresh one
         let text = self.tracker.get_raw(url, ctx).await?;
+        // TODO: currently we're always saving to cache, even if `use_cache` is
+        // false. But is this what we want? If `use_cache` is false, should we
+        // _not_ store the result in the cache? Do we need separate flags for
+        // "read from cache" and "write to cache"? If we want to make this
+        // program totally stateless, then no reading OR writing to a cache
+        // should be the default. In which case, maybe the decision should be
+        // made higher up to use a bare Tracker, not a CachedTracker. That also
+        // means we can remove the quite silly `use_cache` arg from
+        // CachedTracker. Why is it called CachedTracker if we don't want to use
+        // the cache?
         self.cache
             .lock()
             .await

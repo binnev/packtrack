@@ -37,6 +37,7 @@ pub async fn main() -> Result<()> {
             .globals
             .cache_seconds
             .unwrap_or(settings::load()?.cache_seconds),
+        use_cache:          !cli.globals.no_cache,
         filters:            Filters {
             url:       cli.filter_opts.url,
             sender:    cli.filter_opts.sender,
@@ -112,6 +113,10 @@ struct GlobalArgs {
     /// Max age for cache entries to be reused
     #[arg(short = 'C', long, global = true)]
     cache_seconds: Option<usize>,
+
+    /// Don't use the cache, even for delivered packages
+    #[arg(short, long, global = true)]
+    no_cache: bool,
 
     /// Preferred language (passed to the carrier)
     #[arg(short, long, global = true)]

@@ -16,6 +16,8 @@ use tokio::sync::Mutex;
 pub struct Context {
     /// Max age for cache entries to be reused
     pub cache_seconds:      usize,
+    /// If false, don't use the cache at all, even for delivered packages
+    pub use_cache:          bool,
     pub filters:            Filters,
     // ----- user preferences -----
     pub default_postcode:   Option<String>,
@@ -28,6 +30,7 @@ impl Default for Context {
             // default = "en"
             preferred_language: "en".to_string(),
             cache_seconds:      0,
+            use_cache:          true,
             filters:            Filters::default(),
             default_postcode:   None,
         }
@@ -74,7 +77,7 @@ pub async fn track_url(
         language:           &ctx.preferred_language,
     };
     let result = tracker
-        .track(url, ctx.cache_seconds, &tracker_context)
+        .track(url, ctx.cache_seconds, ctx.use_cache, &tracker_context)
         .await;
     Job {
         url: url.to_string(),
