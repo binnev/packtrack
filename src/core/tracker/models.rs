@@ -48,3 +48,12 @@ impl Display for PackageStatus {
         write!(f, "{self:?}")
     }
 }
+
+/// Contains the configurable stuff for Tracker
+pub struct TrackerContext<'a> {
+    /// Postcode of the recipient (sometimes necessary to get full data from
+    /// the API)
+    pub recipient_postcode: Option<&'a str>,
+    /// Preferred language (usually passed as a query param to the API)
+    pub language:           &'a str,
+}

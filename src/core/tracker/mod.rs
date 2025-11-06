@@ -5,6 +5,6 @@ mod postnl;
 mod tracker;
 pub use dhl::DhlTracker;
 pub use gls::GlsTracker;
-pub use models::{Event, Package, PackageStatus, TimeWindow};
+pub use models::{Event, Package, PackageStatus, TimeWindow, TrackerContext};
 pub use postnl::PostNLTracker;
 pub use tracker::{Tracker, get_handler, register};

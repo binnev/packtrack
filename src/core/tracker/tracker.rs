@@ -2,7 +2,7 @@ use async_trait::async_trait;
 
 use crate::{
     error::Result,
-    tracker::{DhlTracker, GlsTracker, PostNLTracker},
+    tracker::{DhlTracker, GlsTracker, PostNLTracker, models::TrackerContext},
 };
 use std::sync::Mutex;
 
@@ -30,11 +30,7 @@ pub trait Tracker: Send + Sync {
     /// Using String as the data type because we can't guarantee the format of
     /// the reponse (HTML / JSON etc).
     /// `Result` because the request may not succeed
-    async fn get_raw(
-        &self,
-        url: &str,
-        default_postcode: Option<&str>,
-    ) -> Result<String>;
+    async fn get_raw(&self, url: &str, ctx: &TrackerContext) -> Result<String>;
 
     /// Parse the result of `get_raw` into a Package.
     /// `Result` because we may get parse errors.

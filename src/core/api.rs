@@ -1,8 +1,8 @@
 use crate::cache::{Cache, JsonCache};
 use crate::cached_tracker::CachedTracker;
 use crate::error::{Error, Result};
-use crate::tracker;
 use crate::tracker::get_handler;
+use crate::tracker::{self, TrackerContext};
 use crate::tracker::{Package, PackageStatus};
 use log;
 use std::collections::HashMap;
@@ -14,16 +14,29 @@ use tokio::sync::Mutex;
 
 /// Container for settings and runtime flags
 pub struct Context {
-    // ----- cache -----
     /// Max age for cache entries to be reused
-    pub cache_seconds:    usize,
-    // ----- display -----
-    /// e.g. None for CLI printing. "json" for JSON output (that can be piped
-    /// to a file or other programs)
-    pub display_format:   Option<String>,
-    pub filters:          Filters,
-    pub default_postcode: Option<String>,
+    pub cache_seconds:      usize,
+    pub display_format:     Option<String>, // TODO: remove
+    pub filters:            Filters,
+    // ----- user preferences -----
+    pub default_postcode:   Option<String>,
+    pub preferred_language: String,
 }
+impl Default for Context {
+    fn default() -> Self {
+        Self {
+            // TODO: Maybe make a separate Language enum which implements
+            // default = "en"
+            preferred_language: "en".to_string(),
+            cache_seconds:      0,
+            display_format:     None,
+            filters:            Filters::default(),
+            default_postcode:   None,
+        }
+    }
+}
+
+#[derive(Default)]
 pub struct Filters {
     /// Either a new URL, or a fragment of an existing URL
     pub url:       Option<String>,
@@ -58,8 +71,12 @@ pub async fn track_url(
         tracker: tracker,
         cache:   cache,
     };
+    let tracker_context = TrackerContext {
+        recipient_postcode: ctx.default_postcode.as_deref(),
+        language:           &ctx.preferred_language,
+    };
     let result = tracker
-        .track(url, ctx.cache_seconds, ctx.default_postcode.as_deref())
+        .track(url, ctx.cache_seconds, &tracker_context)
         .await;
     Job {
         url: url.to_string(),

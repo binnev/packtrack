@@ -32,18 +32,19 @@ pub async fn main() -> Result<()> {
 
     let sets = settings::load()?;
     let ctx = Context {
-        cache_seconds:    cli
+        cache_seconds: cli
             .globals
             .cache_seconds
             .unwrap_or(settings::load()?.cache_seconds),
-        display_format:   None,
-        filters:          Filters {
+        display_format: None,
+        filters: Filters {
             url:       cli.filter_opts.url,
             sender:    cli.filter_opts.sender,
             recipient: cli.filter_opts.recipient,
             carrier:   cli.filter_opts.carrier,
         },
         default_postcode: sets.postcode,
+        ..Default::default() // TODO: get language from settings or CLI flags
     };
     log::debug!("Cache seconds: {}", ctx.cache_seconds);
 

@@ -1,4 +1,4 @@
-use crate::utils::UtcTime;
+use crate::{tracker::TrackerContext, utils::UtcTime};
 use async_trait::async_trait;
 use chrono::{NaiveDateTime, TimeZone, Utc};
 use log;
@@ -15,13 +15,9 @@ impl Tracker for GlsTracker {
     fn can_handle(&self, url: &str) -> bool {
         url.contains("www.gls")
     }
-    async fn get_raw(
-        &self,
-        url: &str,
-        default_postcode: Option<&str>,
-    ) -> Result<String> {
+    async fn get_raw(&self, url: &str, ctx: &TrackerContext) -> Result<String> {
         let (barcode, postcode) =
-            get_barcode_postcode(url, default_postcode.as_deref())?;
+            get_barcode_postcode(url, ctx.recipient_postcode.as_deref())?;
         let url = get_url(&barcode, &postcode);
         let response = reqwest::get(&url).await?;
         let text = response.text().await?;

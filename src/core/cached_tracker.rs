@@ -6,19 +6,19 @@ use async_trait::async_trait;
 
 use crate::Result;
 use crate::cache::{Cache, JsonCache};
-use crate::tracker::{Package, PackageStatus, Tracker};
+use crate::tracker::{Package, PackageStatus, Tracker, TrackerContext};
 
 /// Composed type with pluggable tracker + cache handlers.
 pub struct CachedTracker<'a> {
     pub tracker: Box<dyn Tracker>,
     pub cache:   &'a Mutex<dyn Cache>,
 }
-impl CachedTracker<'_> {
+impl<'a> CachedTracker<'a> {
     pub async fn track(
         &mut self,
         url: &str,
         cache_seconds: usize,
-        default_postcode: Option<&str>,
+        ctx: &'a TrackerContext<'_>,
     ) -> Result<Package> {
         let cache = self.cache.lock().await;
         let cached = cache.get(url).cloned();
@@ -59,10 +59,7 @@ impl CachedTracker<'_> {
         }
 
         // Fallback: fetch a fresh one
-        let text = self
-            .tracker
-            .get_raw(url, default_postcode)
-            .await?;
+        let text = self.tracker.get_raw(url, ctx).await?;
         self.cache
             .lock()
             .await

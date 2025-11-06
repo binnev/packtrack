@@ -1,4 +1,4 @@
-use crate::utils::UtcTime;
+use crate::{tracker::TrackerContext, utils::UtcTime};
 use async_trait::async_trait;
 use regex::Regex;
 use serde::Deserialize;
@@ -14,12 +14,8 @@ impl Tracker for DhlTracker {
     fn can_handle(&self, url: &str) -> bool {
         url.contains("dhl")
     }
-    async fn get_raw(
-        &self,
-        url: &str,
-        default_postcode: Option<&str>,
-    ) -> Result<String> {
-        let barcode = get_barcode(url, default_postcode)?;
+    async fn get_raw(&self, url: &str, ctx: &TrackerContext) -> Result<String> {
+        let barcode = get_barcode(url, ctx.recipient_postcode)?;
         let url = get_url(barcode);
         let response = reqwest::get(url).await?;
         let body = response.text().await?;

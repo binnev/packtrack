@@ -3,6 +3,7 @@ use std::default;
 use super::models::{Event, Package, TimeWindow};
 use super::tracker::Tracker;
 use crate::Result;
+use crate::tracker::TrackerContext;
 use crate::utils::UtcTime;
 use async_trait::async_trait;
 use futures::future::AndThen;
@@ -16,16 +17,12 @@ impl Tracker for PostNLTracker {
     fn can_handle(&self, url: &str) -> bool {
         url.contains("postnl")
     }
-    async fn get_raw(
-        &self,
-        url: &str,
-        default_postcode: Option<&str>,
-    ) -> Result<String> {
-        let (barcode, country, postcode) = get_barcode_and_postcode(url);
+    async fn get_raw(&self, url: &str, ctx: &TrackerContext) -> Result<String> {
+        let (barcode, country, url_postcode) = get_barcode_and_postcode(url);
         let url = build_url(
             barcode.ok_or(format!("Couldn't get barcode from {url}"))?,
             country,
-            postcode.or(default_postcode),
+            url_postcode.or(ctx.recipient_postcode),
         );
         let response = reqwest::get(url).await?;
         let text = response.text().await?;
