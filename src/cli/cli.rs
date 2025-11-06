@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use std::time::Instant;
 
 use crate::cli::settings;
+use crate::cli::settings::Settings;
 use crate::cli::urls;
 use crate::cli::utils::{display_package, heading};
 use clap::Args;
@@ -32,18 +33,22 @@ pub async fn main() -> Result<()> {
 
     let sets = settings::load()?;
     let ctx = Context {
-        cache_seconds: cli
+        cache_seconds:      cli
             .globals
             .cache_seconds
             .unwrap_or(settings::load()?.cache_seconds),
-        filters: Filters {
+        filters:            Filters {
             url:       cli.filter_opts.url,
             sender:    cli.filter_opts.sender,
             recipient: cli.filter_opts.recipient,
             carrier:   cli.filter_opts.carrier,
         },
-        default_postcode: sets.postcode,
-        ..Default::default() // TODO: get language from settings or CLI flags
+        default_postcode:   cli.globals.postcode.or(sets.postcode),
+        preferred_language: cli
+            .globals
+            .language
+            .or(sets.language)
+            .unwrap_or(Context::default().preferred_language),
     };
     log::debug!("Cache seconds: {}", ctx.cache_seconds);
 
@@ -107,6 +112,14 @@ struct GlobalArgs {
     /// Max age for cache entries to be reused
     #[arg(short = 'C', long, global = true)]
     cache_seconds: Option<usize>,
+
+    /// Preferred language (passed to the carrier)
+    #[arg(short, long, global = true)]
+    language: Option<String>,
+
+    /// Recipient postcode (sometimes required to get full info)
+    #[arg(short, long, global = true)]
+    postcode: Option<String>,
 }
 
 #[derive(Args)]
