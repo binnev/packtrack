@@ -16,7 +16,6 @@ use tokio::sync::Mutex;
 pub struct Context {
     /// Max age for cache entries to be reused
     pub cache_seconds:      usize,
-    pub display_format:     Option<String>, // TODO: remove
     pub filters:            Filters,
     // ----- user preferences -----
     pub default_postcode:   Option<String>,
@@ -29,7 +28,6 @@ impl Default for Context {
             // default = "en"
             preferred_language: "en".to_string(),
             cache_seconds:      0,
-            display_format:     None,
             filters:            Filters::default(),
             default_postcode:   None,
         }
