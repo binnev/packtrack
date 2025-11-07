@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.0] - 2025-11-07
+
+### 🚀 Features
+
+- Added preferred_language option to tracker trait
+
+
+- Added language and postcode CLI options
+
+
+- *(postnl)* Added language support
+
+
+- Added no_cache CLI option
+
+
+- Added CLI option to show delivered packages in detail
+
+
+### 🐛 Bug Fixes
+
+- Removed unused display_format option
+  - This should be a cli-specific setting anyway
+
+- Removed unused use_cache setting
+
+
+### 📚 Documentation
+
+- Added docs for new CLI options
+
+
 ## [2.1.0] - 2025-10-02
 
 ### 🚀 Features
