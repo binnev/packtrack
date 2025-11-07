@@ -62,6 +62,9 @@ You can also pass a whole new URL. If packtrack can't find the string in your UR
 
 By default, delivered packages are shown as a one-liner. In-transit packages are shown in more detail, with events and ETA from the carrier. 
 
+!!! note
+    You can use the `-d` / `--delivered` flag to print delivered packages in more detail
+
 ## Filter by carrier 
 Filter for packages carried by PostNL: 
 ```
@@ -146,3 +149,15 @@ packtrack -c 0
 ```
 
 Delivered packages are _always_ loaded from the cache, because they are unlikely to change. 
+
+!!! note 
+    To disable the cache (even for delivered packages), use the `-n`/`--no-cache` option.
+
+## Language 
+The `-l`/`--language` option can be used to specify a preferred language. Pass an [ISO 639](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code e.g. "en": 
+
+```
+packtrack -l en 
+```
+
+Packtrack will pass this to the carrier API, if it supports it.
