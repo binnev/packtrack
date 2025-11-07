@@ -84,7 +84,7 @@ async fn handle_url_command(command: UrlCommand) -> Result<()> {
 fn handle_config_command(command: ConfigCommand) -> Result<()> {
     match command {
         ConfigCommand::List => settings::print()?,
-        ConfigCommand::Set { key, value } => settings::update(key, value)?,
+        ConfigCommand::Set { key, value } => settings::update(&key, value)?,
         ConfigCommand::Reset => settings::reset()?,
     }
     Ok(())

@@ -1,4 +1,4 @@
-use std::sync::PoisonError;
+use std::{num::ParseIntError, sync::PoisonError};
 
 use derive_more::From;
 
@@ -25,6 +25,9 @@ pub enum Error {
 
     #[from]
     Io(std::io::Error),
+
+    #[from]
+    Parse(ParseIntError),
 }
 
 impl PartialEq for Error {

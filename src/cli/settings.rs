@@ -18,20 +18,20 @@ pub struct Settings {
     pub cache_max_entries: usize,
 }
 impl Settings {
-    fn update(self, key: &str, value: impl Serialize) -> Result<Self> {
-        let value = serde_json::to_value(value)?;
-        let mut serialized = serde_json::to_value(self)?
-            .as_object()
-            .expect("Couldn't cast Settings to HashMap?!")
-            .clone();
-        // `insert` returns None if the key was not already in the hashmap. In
-        // this case that means the user submitted a key that is not a valid
-        // setting. So if `insert` returns None we must return an error.
-        serialized
-            .insert(key.to_owned(), value)
-            .ok_or(format!("Invalid setting key: {key}"))?;
-        let sets: Settings = serde_json::from_value(Value::Object(serialized))?;
-        Ok(sets)
+    /// Handle updating arbitrary key/value pairs. These could come from the CLI
+    /// or API query parameters, for example.
+    fn update(mut self, key: &str, value: impl Into<String>) -> Result<Self> {
+        let value: String = value.into();
+        match key {
+            // TODO: should check that this is a valid path
+            "urls_file" => self.urls_file = value.into(),
+            "postcode" => self.postcode = Some(value),
+            "language" => self.language = Some(value),
+            "cache_seconds" => self.cache_seconds = value.parse()?,
+            "cache_max_entries" => self.cache_max_entries = value.parse()?,
+            _ => return Err(format!("Invalid setting key: {key}").into()),
+        }
+        Ok(self)
     }
 }
 impl Default for Settings {
@@ -52,20 +52,9 @@ pub fn reset() -> Result<()> {
     save(&settings)
 }
 /// Update a key/value pair in the settings, and save them to file.
-pub fn update(key: String, value: String) -> Result<()> {
-    // Serde doesn't support partial deserialization, so to get around this, we
-    // insert the user's key/value pair into a mutable settings dict, and
-    // deserialize that. This allows us to do a partial update while also
-    // validating the new key/value.
-    let mut serialized = get_settings_as_dict()?;
-    let value = serde_json::to_value(value)?;
-    serialized.insert(key, value);
-
-    // Deserialize to Settings for validation
-    let serialized = serde_json::to_value(serialized)?;
-    let sets: Settings = serde_json::from_value(serialized)?;
-
-    // save Settings
+pub fn update(key: &str, value: String) -> Result<()> {
+    let mut sets = load()?;
+    sets = sets.update(key, value)?;
     save(&sets)?;
     Ok(())
 }
@@ -128,21 +117,12 @@ mod tests {
     fn test_settings_update_string() -> Result<()> {
         let settings = Settings::default().update("postcode", "1234AB")?;
         assert_eq!(settings.postcode.unwrap(), "1234AB");
-
-        let result = Settings::default().update("postcode", 420);
-        assert!(
-            result
-                .err()
-                .unwrap()
-                .to_string()
-                .contains("invalid type")
-        );
         Ok(())
     }
 
     #[test]
-    fn test_settings_update_non_string() -> Result<()> {
-        let settings = Settings::default().update("cache_seconds", 30)?;
+    fn test_settings_update_int() -> Result<()> {
+        let settings = Settings::default().update("cache_seconds", "30")?;
         assert_eq!(settings.cache_seconds, 30);
 
         let result = Settings::default().update("cache_seconds", "thirty");
@@ -151,7 +131,7 @@ mod tests {
                 .err()
                 .unwrap()
                 .to_string()
-                .contains("invalid type")
+                .contains("ParseIntError")
         );
         Ok(())
     }
