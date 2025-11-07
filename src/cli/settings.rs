@@ -23,8 +23,15 @@ impl Settings {
     fn update(mut self, key: &str, value: impl Into<String>) -> Result<Self> {
         let value: String = value.into();
         match key {
-            // TODO: should check that this is a valid path
-            "urls_file" => self.urls_file = value.into(),
+            "urls_file" => {
+                let path: PathBuf = value.into();
+                if !path.try_exists()? {
+                    return Err(
+                        format!("urls_file doesn't exist: {path:?}").into()
+                    );
+                }
+                self.urls_file = path;
+            }
             "postcode" => self.postcode = Some(value),
             "language" => self.language = Some(value),
             "cache_seconds" => self.cache_seconds = value.parse()?,
@@ -133,6 +140,18 @@ mod tests {
                 .to_string()
                 .contains("ParseIntError")
         );
+        Ok(())
+    }
+
+    #[test]
+    fn test_settings_update_path() -> Result<()> {
+        let settings = Settings::default().update("urls_file", ".")?;
+        assert_eq!(format!("{:?}", settings.urls_file), "\".\"");
+
+        let result = Settings::default().update("urls_file", "xxxxx");
+        let err = result.err().unwrap().to_string();
+        assert!(err.contains("urls_file doesn't exist:"));
+        assert!(err.contains("xxxxx"));
         Ok(())
     }
 }
