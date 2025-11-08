@@ -35,7 +35,7 @@ pub async fn main() -> Result<()> {
         cache_seconds:      cli
             .globals
             .cache_seconds
-            .unwrap_or(settings::load()?.cache_seconds),
+            .unwrap_or(sets.cache_seconds),
         use_cache:          !cli.globals.no_cache,
         filters:            Filters {
             url:       cli.filter_opts.url,

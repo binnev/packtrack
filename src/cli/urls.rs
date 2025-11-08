@@ -90,7 +90,7 @@ pub fn filter(query: Option<&str>) -> Result<Vec<String>> {
 
 /// Load all URLs from the URLs file.
 pub fn load() -> Result<Vec<String>> {
-    let urls_file = settings::load()?.urls_file;
+    let urls_file = settings::load()?.urls_file; // TODO: take file as arg
     let urls = fs::read_to_string(urls_file)?
         .lines()
         .map(|s| s.to_owned())
@@ -99,7 +99,7 @@ pub fn load() -> Result<Vec<String>> {
 }
 
 pub fn save(urls: Vec<String>) -> Result<()> {
-    let file = settings::load()?.urls_file;
+    let file = settings::load()?.urls_file; // TODO: take file as arg
     fs::write(file, urls.join("\n"))?;
     Ok(())
 }
