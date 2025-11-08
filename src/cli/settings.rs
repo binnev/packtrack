@@ -20,7 +20,11 @@ pub struct Settings {
 impl Settings {
     /// Handle updating arbitrary key/value pairs. These could come from the CLI
     /// or API query parameters, for example.
-    fn update(mut self, key: &str, value: impl Into<String>) -> Result<Self> {
+    pub fn update(
+        mut self,
+        key: &str,
+        value: impl Into<String>,
+    ) -> Result<Self> {
         let value: String = value.into();
         match key {
             "urls_file" => {
@@ -54,11 +58,14 @@ impl Default for Settings {
         }
     }
 }
+
+/// Reset the settings file to the default values
 pub fn reset() -> Result<()> {
     let settings = Settings::default();
     save(&settings)
 }
-/// Update a key/value pair in the settings, and save them to file.
+
+/// Update a key/value pair in the settings file
 pub fn update(key: &str, value: String) -> Result<()> {
     let mut sets = load()?;
     sets = sets.update(key, value)?;
@@ -73,6 +80,8 @@ pub fn print() -> Result<()> {
     }
     Ok(())
 }
+
+/// Load settings from file
 pub fn load() -> Result<Settings> {
     // Load settings from file (these may be incomplete, so we don't cast them
     // to Settings just yet)
@@ -89,8 +98,12 @@ pub fn load() -> Result<Settings> {
     let sets: Settings = serde_json::from_value(Value::Object(defaults))?;
     Ok(sets)
 }
+
+/// Save settings to file
 pub fn save(settings: &Settings) -> Result<()> {
-    save_json(&get_settings_path()?, settings)
+    let path = get_settings_path()?;
+    log::info!("Saving settings to {path:?}");
+    save_json(&path, settings)
 }
 
 fn get_config_dir() -> Result<PathBuf> {

@@ -62,7 +62,9 @@ pub async fn main() -> Result<()> {
         Some(Command::Url { command }) => {
             handle_url_command(command, &sets).await?
         }
-        Some(Command::Config { command }) => handle_config_command(command)?,
+        Some(Command::Config { command }) => {
+            handle_config_command(command, sets)?
+        }
     }
     Ok(())
 }
@@ -97,10 +99,13 @@ async fn handle_url_command(
     Ok(())
 }
 
-fn handle_config_command(command: ConfigCommand) -> Result<()> {
+fn handle_config_command(command: ConfigCommand, sets: Settings) -> Result<()> {
     match command {
         ConfigCommand::List => settings::print()?,
-        ConfigCommand::Set { key, value } => settings::update(&key, value)?,
+        ConfigCommand::Set { key, value } => {
+            let sets = sets.update(&key, value)?;
+            settings::save(&sets)?;
+        }
         ConfigCommand::Reset => settings::reset()?,
     }
     Ok(())
