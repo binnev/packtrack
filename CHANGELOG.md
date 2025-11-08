@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.1] - 2025-11-08
+
+### 🐛 Bug Fixes
+
+- *(settings)* Fixed broken string parsing
+
+
+- *(settings)* We now check if urls_file is a valid path
+
+
+- *(cli)* Removed redundant settings load
+
+
+- *(urls)* Made urls module stateless
+  - Removed references to settings in the urls module
+
+- *(cli)* Config command doesn't load settings twice anymore
+
+
 ## [2.2.0] - 2025-11-07
 
 ### 🚀 Features
