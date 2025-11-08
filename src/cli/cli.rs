@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use std::time::Instant;
 
 use crate::cli::settings;
+use crate::cli::settings::Settings;
 use crate::cli::urls;
 use crate::cli::utils::{display_package, heading};
 use clap::Args;
@@ -35,7 +36,7 @@ pub async fn main() -> Result<()> {
         cache_seconds:      cli
             .globals
             .cache_seconds
-            .unwrap_or(sets.cache_seconds),
+            .unwrap_or(sets.cache_seconds.clone()),
         use_cache:          !cli.globals.no_cache,
         filters:            Filters {
             url:       cli.filter_opts.url,
@@ -43,31 +44,41 @@ pub async fn main() -> Result<()> {
             recipient: cli.filter_opts.recipient,
             carrier:   cli.filter_opts.carrier,
         },
-        default_postcode:   cli.globals.postcode.or(sets.postcode),
+        default_postcode:   cli
+            .globals
+            .postcode
+            .or(sets.postcode.clone()),
         preferred_language: cli
             .globals
             .language
-            .or(sets.language)
+            .or(sets.language.clone())
             .unwrap_or(Context::default().preferred_language),
     };
     log::debug!("Cache seconds: {}", ctx.cache_seconds);
 
     // Handle subcommands
     match cli.command {
-        None => track(&ctx, cli.globals.delivered).await?,
-        Some(Command::Url { command }) => handle_url_command(command).await?,
+        None => track(&sets, &ctx, cli.globals.delivered).await?,
+        Some(Command::Url { command }) => {
+            handle_url_command(command, &sets).await?
+        }
         Some(Command::Config { command }) => handle_config_command(command)?,
     }
     Ok(())
 }
 
-async fn handle_url_command(command: UrlCommand) -> Result<()> {
+/// URL file management
+async fn handle_url_command(
+    command: UrlCommand,
+    settings: &Settings,
+) -> Result<()> {
+    let file = &settings.urls_file;
     match command {
-        UrlCommand::Add { url } => match urls::add(&url).await {
+        UrlCommand::Add { url } => match urls::add(file, &url) {
             Ok(()) => println!("Added {url}"),
             Err(err) => return Err(err),
         },
-        UrlCommand::Remove { url } => match urls::remove(url).await {
+        UrlCommand::Remove { url } => match urls::remove(file, url) {
             Ok(removed) => {
                 println!("Removed urls:");
                 for url in removed {
@@ -76,7 +87,12 @@ async fn handle_url_command(command: UrlCommand) -> Result<()> {
             }
             Err(err) => return Err(err),
         },
-        UrlCommand::List { query } => urls::list(query).await?,
+        UrlCommand::List { query } => {
+            let urls = urls::filter(file, query.as_deref())?;
+            for url in urls {
+                println!("{url}");
+            }
+        }
     }
     Ok(())
 }
@@ -253,9 +269,21 @@ fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
     println!("{s}");
 }
 
-async fn track(ctx: &Context, delivered_detail: bool) -> Result<()> {
+async fn track(
+    settings: &Settings,
+    ctx: &Context,
+    delivered_detail: bool,
+) -> Result<()> {
     let start = Instant::now();
-    let mut urls = urls::filter(ctx.filters.url.as_deref())?;
+    // TODO: Move this somewhere else, and make it completely stateless, so that
+    // you can
+    // - Pass no -f arg (use URLs file defined in settings)
+    //     - allow filtering by query
+    // - Pass -f urls_file (use different URLs file)
+    //     - allow filtering by query
+    // - Pass one or more URLs as a "\n" separated string
+    let mut urls =
+        urls::filter(&settings.urls_file, ctx.filters.url.as_deref())?;
     if urls.len() == 0 && ctx.filters.url.is_some() {
         urls = vec![ctx.filters.url.clone().unwrap()]
     }
