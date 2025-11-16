@@ -1,5 +1,6 @@
 use std::time::Duration;
 
+use log::warn;
 use tokio::sync::Mutex;
 
 use async_trait::async_trait;
@@ -64,7 +65,20 @@ impl<'a> CachedTracker<'a> {
         }
 
         // Fallback: fetch a fresh one
-        let text = self.tracker.get_raw(url, ctx).await?;
+        let text = match self.tracker.get_raw(url, ctx).await {
+            Ok(text) => text,
+            Err(err) => {
+                // try again without default postcode
+                // TODO: match error type so that we only do this on 404s
+                log::warn!(
+                    "Bad response: {err}, trying again without default postcode..."
+                );
+
+                let mut ctx = ctx.clone();
+                ctx.recipient_postcode = None;
+                self.tracker.get_raw(url, &ctx).await?
+            }
+        };
         // TODO: Is this what we want? If `use_cache` is false, should we _not_
         // store the result in the cache? Do we need separate flags for "read
         // from cache" and "write to cache"? If we want to make this program

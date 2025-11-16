@@ -50,6 +50,7 @@ impl Display for PackageStatus {
 }
 
 /// Contains the configurable stuff for Tracker
+#[derive(Clone)]
 pub struct TrackerContext<'a> {
     /// Postcode of the recipient (sometimes necessary to get full data from
     /// the API)
