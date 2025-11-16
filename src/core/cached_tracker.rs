@@ -5,9 +5,9 @@ use tokio::sync::Mutex;
 
 use async_trait::async_trait;
 
-use crate::Result;
 use crate::cache::{Cache, JsonCache};
 use crate::tracker::{Package, PackageStatus, Tracker, TrackerContext};
+use crate::{Error, Result};
 
 /// Composed type with pluggable tracker + cache handlers.
 pub struct CachedTracker<'a> {
@@ -47,17 +47,25 @@ impl<'a> CachedTracker<'a> {
     ) -> Result<Package> {
         let text = match self.tracker.get_raw(url, ctx).await {
             Ok(text) => text,
-            Err(err) => {
-                // try again without default postcode
-                // TODO: match error type so that we only do this on 404s
+            // If we receive a client error (4xx) it is sometimes because we
+            // tried to use the user's home postcode on a package for which the
+            // user is not the recipient (for example, a return). This results
+            // in a 404 from the carrier API because the postcodes don't match.
+            // In this case, we want to retry _without_ the user's default
+            // postcode, because then we will at least get a response.
+            Err(Error::Reqwest(err))
+                if err
+                    .status()
+                    .is_some_and(|s| s.is_client_error()) =>
+            {
                 log::warn!(
                     "Bad response: {err}, trying again without default postcode..."
                 );
-
                 let mut ctx = ctx.clone();
                 ctx.recipient_postcode = None;
                 self.tracker.get_raw(url, &ctx).await?
             }
+            Err(err) => return Err(err),
         };
         // TODO: Is this what we want? If `use_cache` is false, should we _not_
         // store the result in the cache? Do we need separate flags for "read
