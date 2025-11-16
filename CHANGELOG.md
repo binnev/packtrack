@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.0] - 2025-11-16
+
+### 🚀 Features
+
+- *(tracker)* Raise error on bad status code
+
+
+- Retry without default postcode
+  - If we get an error from the carrier API, we now try again without the default postcode.
+
+### 🐛 Bug Fixes
+
+- Only retry without default postcode if it's a client error
+
+
+### 🚜 Refactor
+
+- Cached tracker logic
+
+
 ## [2.2.1] - 2025-11-08
 
 ### 🐛 Bug Fixes
