@@ -19,7 +19,9 @@ impl Tracker for GlsTracker {
         let (barcode, postcode) =
             get_barcode_postcode(url, ctx.recipient_postcode.as_deref())?;
         let url = get_url(&barcode, &postcode);
-        let response = reqwest::get(&url).await?;
+        let response = reqwest::get(&url)
+            .await?
+            .error_for_status()?;
         let text = response.text().await?;
         Ok(text)
     }

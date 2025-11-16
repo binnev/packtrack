@@ -25,7 +25,9 @@ impl Tracker for PostNLTracker {
             url_postcode.or(ctx.recipient_postcode),
             ctx.language,
         );
-        let response = reqwest::get(url).await?;
+        let response = reqwest::get(url)
+            .await?
+            .error_for_status()?;
         let text = response.text().await?;
         Ok(text)
     }

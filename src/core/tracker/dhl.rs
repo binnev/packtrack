@@ -17,7 +17,9 @@ impl Tracker for DhlTracker {
     async fn get_raw(&self, url: &str, ctx: &TrackerContext) -> Result<String> {
         let barcode = get_barcode(url, ctx.recipient_postcode)?;
         let url = get_url(barcode);
-        let response = reqwest::get(url).await?;
+        let response = reqwest::get(url)
+            .await?
+            .error_for_status()?;
         let body = response.text().await?;
         Ok(body)
     }
