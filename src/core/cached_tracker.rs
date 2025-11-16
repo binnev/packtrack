@@ -23,48 +23,28 @@ impl<'a> CachedTracker<'a> {
         ctx: &'a TrackerContext<'_>,
     ) -> Result<Package> {
         if use_cache {
-            let cache = self.cache.lock().await;
-            let cached = cache.get(url).cloned();
-            drop(cache); // allows other async threads to continue
-
-            if let Some(entry) = cached {
-                match self.tracker.parse(entry.text.clone()) {
-                    Err(err) => {
-                        log::warn!(
-                            "Couldn't parse cache entry to package! url: {url}, cache entry: {entry:?}, error: {err:?}"
-                        )
-                    }
-                    Ok(package) => {
-                        let age =
-                            entry.age().num_seconds().unsigned_abs() as usize;
-
-                        // Always cache delivered packages
-                        if package.status() == PackageStatus::Delivered {
-                            log::info!(
-                                "Reusing {age}s old cache entry for delivered {} {} from url {url}",
-                                package.channel,
-                                package.barcode,
-                            );
-                            return Ok(package);
-                        }
-
-                        // Cache undelivered packages if the entry is young
-                        // enough, and the cache is
-                        // enabled
-                        if age <= cache_seconds {
-                            log::info!(
-                                "Reusing {age}s old cache entry for undelivered {} {} from url {url}",
-                                package.channel,
-                                package.barcode,
-                            );
-                            return Ok(package);
-                        }
-                    }
-                }
+            match self
+                .get_cached(url, cache_seconds, use_cache, ctx)
+                .await
+            {
+                Ok(Some(package)) => return Ok(package),
+                Err(err) => log::warn!(
+                    "Error loading from cache: {err}. Getting a fresh value."
+                ),
+                Ok(None) => log::info!(
+                    "No cache entry found for {url}. Getting a fresh value."
+                ),
             }
         }
-
-        // Fallback: fetch a fresh one
+        self.get_fresh(url, use_cache, ctx)
+            .await
+    }
+    async fn get_fresh(
+        &mut self,
+        url: &str,
+        use_cache: bool,
+        ctx: &'a TrackerContext<'_>,
+    ) -> Result<Package> {
         let text = match self.tracker.get_raw(url, ctx).await {
             Ok(text) => text,
             Err(err) => {
@@ -95,5 +75,51 @@ impl<'a> CachedTracker<'a> {
         }
         let package = self.tracker.parse(text)?;
         Ok(package)
+    }
+    async fn get_cached(
+        &mut self,
+        url: &str,
+        cache_seconds: usize,
+        use_cache: bool,
+        ctx: &'a TrackerContext<'_>,
+    ) -> Result<Option<Package>> {
+        let cache = self.cache.lock().await;
+        let cached = cache.get(url).cloned();
+        drop(cache); // allows other async threads to continue
+
+        if let Some(entry) = cached {
+            match self.tracker.parse(entry.text.clone()) {
+                Err(err) => {
+                    return Err(
+                        format!(
+                        "Couldn't parse cache entry to package! url: {url}, cache entry: {entry:?}, error: {err:?}").into()
+                    );
+                }
+                Ok(package) => {
+                    let age = entry.age().num_seconds().unsigned_abs() as usize;
+
+                    // Always cache delivered packages
+                    if package.status() == PackageStatus::Delivered {
+                        log::info!(
+                            "Reusing {age}s old cache entry for delivered {} {} from url {url}",
+                            package.channel,
+                            package.barcode,
+                        );
+                        return Ok(Some(package));
+                    }
+
+                    // Cache undelivered packages if the entry is young enough
+                    if age <= cache_seconds {
+                        log::info!(
+                            "Reusing {age}s old cache entry for undelivered {} {} from url {url}",
+                            package.channel,
+                            package.barcode,
+                        );
+                        return Ok(Some(package));
+                    }
+                }
+            }
+        }
+        Ok(None)
     }
 }
