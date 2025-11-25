@@ -18,13 +18,14 @@ use packtrack::tracker::{Package, PackageStatus};
 pub async fn main() -> Result<()> {
     let args = Cli::parse();
 
-    let verbosity = match args.globals.verbosity {
-        0 => LevelFilter::Off,
-        1 => LevelFilter::Error,
-        2 => LevelFilter::Warn,
-        3 => LevelFilter::Info,
-        4 => LevelFilter::Debug,
-        _ => LevelFilter::Trace,
+    let verbosity = match args.globals.verbosity.as_str() {
+        "0" | "off" => LevelFilter::Off,
+        "1" | "error" => LevelFilter::Error,
+        "2" | "warn" => LevelFilter::Warn,
+        "3" | "info" => LevelFilter::Info,
+        "4" | "debug" => LevelFilter::Debug,
+        "5" | "trace" => LevelFilter::Trace,
+        other => return Err(format!("Invalid verbosity: {other}").into()),
     };
     env_logger::Builder::new()
         .filter(None, verbosity)
@@ -130,9 +131,15 @@ struct Cli {
 
 #[derive(Args)]
 struct GlobalArgs {
-    /// Set verbosity. `-v` = 1, `-vvv` = 3
-    #[arg(short, long, action = clap::ArgAction::Count, global=true)]
-    verbosity: u8,
+    /// Set verbosity
+    #[arg(
+        short,
+        long,
+        global = true,
+        required = false,
+        default_value = "error"
+    )]
+    verbosity: String,
 }
 
 #[derive(Args)]
