@@ -16,9 +16,9 @@ use packtrack::api::{Context, track_urls};
 use packtrack::tracker::{Package, PackageStatus};
 
 pub async fn main() -> Result<()> {
-    let cli = Cli::parse();
+    let args = Cli::parse();
 
-    let verbosity = match cli.globals.verbosity {
+    let verbosity = match args.globals.verbosity {
         0 => LevelFilter::Off,
         1 => LevelFilter::Error,
         2 => LevelFilter::Warn,
@@ -33,23 +33,23 @@ pub async fn main() -> Result<()> {
 
     let sets = settings::load()?;
     let ctx = Context {
-        cache_seconds:      cli
-            .globals
+        cache_seconds:      args
+            .tracking
             .cache_seconds
             .unwrap_or(sets.cache_seconds.clone()),
-        use_cache:          !cli.globals.no_cache,
+        use_cache:          !args.tracking.no_cache,
         filters:            Filters {
-            url:       cli.filter_opts.url,
-            sender:    cli.filter_opts.sender,
-            recipient: cli.filter_opts.recipient,
-            carrier:   cli.filter_opts.carrier,
+            url:       args.tracking.url,
+            sender:    args.tracking.sender,
+            recipient: args.tracking.recipient,
+            carrier:   args.tracking.carrier,
         },
-        default_postcode:   cli
-            .globals
+        default_postcode:   args
+            .tracking
             .postcode
             .or(sets.postcode.clone()),
-        preferred_language: cli
-            .globals
+        preferred_language: args
+            .tracking
             .language
             .or(sets.language.clone())
             .unwrap_or(Context::default().preferred_language),
@@ -57,8 +57,8 @@ pub async fn main() -> Result<()> {
     log::debug!("Cache seconds: {}", ctx.cache_seconds);
 
     // Handle subcommands
-    match cli.command {
-        None => track(&sets, &ctx, cli.globals.delivered).await?,
+    match args.subcommand {
+        None => track(&sets, &ctx, args.tracking.delivered).await?,
         Some(Command::Url { command }) => {
             handle_url_command(command, &sets).await?
         }
@@ -112,16 +112,20 @@ fn handle_config_command(command: ConfigCommand, sets: Settings) -> Result<()> {
 }
 
 #[derive(Parser)]
+// `args_conflicts_with_subcommands` makes non-global args only accessible for
+// the default subcommand. So all the options related to tracking (sender, etc)
+// are not available for the config subcommand, for example.
+#[clap(args_conflicts_with_subcommands = true)]
 #[command(version, about)]
 struct Cli {
     #[command(subcommand)]
-    command: Option<Command>,
+    subcommand: Option<Command>,
+
+    #[clap(flatten)]
+    tracking: TrackArgs,
 
     #[clap(flatten)]
     globals: GlobalArgs,
-
-    #[clap(flatten)]
-    filter_opts: FilterOpts,
 }
 
 #[derive(Args)]
@@ -129,31 +133,10 @@ struct GlobalArgs {
     /// Set verbosity. `-v` = 1, `-vvv` = 3
     #[arg(short, long, action = clap::ArgAction::Count, global=true)]
     verbosity: u8,
-
-    /// Max age for cache entries to be reused
-    #[arg(short = 'C', long, global = true)]
-    cache_seconds: Option<usize>,
-
-    /// Don't use the cache (even for delivered packages)
-    #[arg(short, long, global = true)]
-    no_cache: bool,
-
-    // FIXME: This is only relevant for CLI printout (not JSON)
-    /// Display detailed info on delivered packages
-    #[arg(short, long, global = true)]
-    delivered: bool,
-
-    /// Preferred language (passed to the carrier)
-    #[arg(short, long, global = true)]
-    language: Option<String>,
-
-    /// Recipient postcode (sometimes required to get full info)
-    #[arg(short, long, global = true)]
-    postcode: Option<String>,
 }
 
 #[derive(Args)]
-struct FilterOpts {
+struct TrackArgs {
     /// Either a new URL, or a fragment of an existing URL
     url: Option<String>,
 
@@ -168,6 +151,27 @@ struct FilterOpts {
     /// Filter by recipient
     #[arg(short, long)]
     recipient: Option<String>,
+
+    /// Max age for cache entries to be reused
+    #[arg(short = 'C', long)]
+    cache_seconds: Option<usize>,
+
+    /// Don't use the cache (even for delivered packages)
+    #[arg(short, long)]
+    no_cache: bool,
+
+    // FIXME: This is only relevant for CLI printout (not JSON)
+    /// Display detailed info on delivered packages
+    #[arg(short, long)]
+    delivered: bool,
+
+    /// Preferred language (passed to the carrier)
+    #[arg(short, long)]
+    language: Option<String>,
+
+    /// Recipient postcode (sometimes required to get full info)
+    #[arg(short, long)]
+    postcode: Option<String>,
 }
 
 #[derive(Subcommand)]
