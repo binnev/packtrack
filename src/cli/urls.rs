@@ -94,9 +94,6 @@ pub enum UrlError {
 
     #[display("'{_0}' was not found in the URLs file")]
     NotFound(String),
-
-    #[display("Found multiple URLs that match '{_0}'")]
-    MultipleMatches(String),
 }
 impl From<UrlError> for Error {
     fn from(e: UrlError) -> Error {
