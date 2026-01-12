@@ -1,12 +1,14 @@
 use enum_iterator::all;
+use packtrack::utils::check_path_exists;
 use std::collections::HashMap;
+use std::path::{Path, PathBuf};
 use std::time::Instant;
 
 use crate::cli::settings;
 use crate::cli::settings::Settings;
 use crate::cli::urls;
 use crate::cli::utils::{display_package, heading};
-use clap::Args;
+use clap::{Args, value_parser};
 use clap::{Parser, Subcommand};
 use log::{self, LevelFilter};
 use packtrack::Result;
@@ -75,22 +77,38 @@ async fn handle_url_command(
     command: UrlCommand,
     settings: &Settings,
 ) -> Result<()> {
-    let file = &settings.urls_file;
+    let default_file = &settings.urls_file;
     match command {
-        UrlCommand::Add { url } => match urls::add(file, &url) {
-            Ok(()) => println!("Added {url}"),
-            Err(err) => return Err(err),
-        },
-        UrlCommand::Remove { url } => match urls::remove(file, url) {
-            Ok(removed) => {
-                println!("Removed urls:");
-                for url in removed {
-                    println!("{url}");
-                }
+        UrlCommand::Add { url, args } => {
+            let file = args
+                .file
+                .as_ref()
+                .unwrap_or(default_file);
+            match urls::add(file, &url) {
+                Ok(()) => println!("Added {url}"),
+                Err(err) => return Err(err),
             }
-            Err(err) => return Err(err),
-        },
-        UrlCommand::List { query } => {
+        }
+        UrlCommand::Remove { url, args } => {
+            let file = args
+                .file
+                .as_ref()
+                .unwrap_or(default_file);
+            match urls::remove(file, url) {
+                Ok(removed) => {
+                    println!("Removed urls:");
+                    for url in removed {
+                        println!("{url}");
+                    }
+                }
+                Err(err) => return Err(err),
+            }
+        }
+        UrlCommand::List { query, args } => {
+            let file = args
+                .file
+                .as_ref()
+                .unwrap_or(default_file);
             let urls = urls::filter(file, query.as_deref())?;
             for url in urls {
                 println!("{url}");
@@ -197,11 +215,29 @@ enum Command {
 #[derive(Subcommand)]
 enum UrlCommand {
     /// List the URLs currently in the file
-    List { query: Option<String> },
+    List {
+        query: Option<String>,
+        #[clap(flatten)]
+        args:  UrlArgs,
+    },
     /// Add a URL to the urls file
-    Add { url: String },
+    Add {
+        url:  String,
+        #[clap(flatten)]
+        args: UrlArgs,
+    },
     /// Remove a URL from the urls file
-    Remove { url: String },
+    Remove {
+        url:  String,
+        #[clap(flatten)]
+        args: UrlArgs,
+    },
+}
+#[derive(Args)]
+struct UrlArgs {
+    /// Path to the urls file
+    #[arg(short, long, value_parser = check_path_exists)]
+    file: Option<PathBuf>,
 }
 #[derive(Subcommand)]
 enum ConfigCommand {

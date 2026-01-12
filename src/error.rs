@@ -1,13 +1,14 @@
 use std::{num::ParseIntError, sync::PoisonError};
 
-use derive_more::From;
+use derive_more::{From, derive::Display};
 
 pub type Result<T> = core::result::Result<T, Error>;
 
-#[derive(Debug, From)]
+#[derive(Debug, From, Display)]
 pub enum Error {
     // -- Internals
     #[from]
+    #[display("{_0}")]
     Custom(String),
 
     // -- Externals
@@ -43,15 +44,6 @@ impl PartialEq for Error {
 impl From<&str> for Error {
     fn from(val: &str) -> Self {
         Self::Custom(val.to_string())
-    }
-}
-
-impl core::fmt::Display for Error {
-    fn fmt(
-        &self,
-        fmt: &mut core::fmt::Formatter,
-    ) -> core::result::Result<(), core::fmt::Error> {
-        write!(fmt, "{self:?}")
     }
 }
 

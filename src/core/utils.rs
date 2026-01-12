@@ -49,3 +49,12 @@ pub fn save_json(path: &Path, value: impl Serialize) -> Result<()> {
 }
 
 pub type UtcTime = DateTime<Utc>;
+
+pub fn check_path_exists(s: &str) -> Result<PathBuf> {
+    let path = PathBuf::from(s);
+    if path.exists() {
+        Ok(path)
+    } else {
+        Err(format!("{s} does not exist").into())
+    }
+}
