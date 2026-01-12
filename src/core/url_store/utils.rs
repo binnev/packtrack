@@ -49,8 +49,14 @@ pub fn filter<'a>(
     match query {
         Some(q) => urls
             .into_iter()
-            .filter(|url| url.url.contains(&q))
-            // TODO: search description too
+            .filter(|url| {
+                url.url.contains(&q)
+                    || url
+                        .description
+                        .as_ref()
+                        .map(|d| d.contains(&q))
+                        .unwrap_or(false)
+            })
             .cloned()
             .collect(),
         None => urls.clone(),
