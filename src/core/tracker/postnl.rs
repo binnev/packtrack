@@ -129,25 +129,24 @@ impl PostNLPackage {
             .collect()
     }
     fn eta(&self) -> Option<UtcTime> {
-        self.route_information
-            .as_ref()
-            .and_then(|info| Some(info.expected_delivery_time.clone()))
+        self.route_information?
+            .expected_delivery_time
     }
     fn eta_window(&self) -> Option<TimeWindow> {
         self.eta_window_from_route_info()
             .or(self.eta_window_from_eta())
     }
     fn eta_window_from_route_info(&self) -> Option<TimeWindow> {
-        self.route_information
-            .as_ref()
-            .map(|info| TimeWindow {
-                start: info
-                    .expected_delivery_time_window
-                    .start_date_time,
-                end:   info
-                    .expected_delivery_time_window
-                    .end_date_time,
-            })
+        let PostNLTimeWindow {
+            start_date_time: s,
+            end_date_time: e,
+        } = self
+            .route_information?
+            .expected_delivery_time_window?;
+        Some(TimeWindow {
+            start: s?,
+            end:   e?,
+        })
     }
     fn eta_window_from_eta(&self) -> Option<TimeWindow> {
         self.eta
@@ -183,11 +182,11 @@ impl Party {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone, Copy)]
 #[serde(rename_all = "camelCase")]
 struct PostNLTimeWindow {
-    start_date_time: UtcTime,
-    end_date_time:   UtcTime,
+    start_date_time: Option<UtcTime>,
+    end_date_time:   Option<UtcTime>,
 }
 
 #[derive(Deserialize)]
@@ -205,11 +204,11 @@ impl PostNLEvent {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone, Copy)]
 #[serde(rename_all = "camelCase")]
 struct RouteInfo {
-    expected_delivery_time:        UtcTime,
-    expected_delivery_time_window: PostNLTimeWindow,
+    expected_delivery_time:        Option<UtcTime>,
+    expected_delivery_time_window: Option<PostNLTimeWindow>,
 }
 
 #[derive(Deserialize)]
@@ -406,6 +405,14 @@ mod tests {
             .unwrap();
         assert_eq!(event.timestamp, utc("2024-11-16T10:45:27+01:00"));
         assert_eq!(event.text, "Shipment delivered");
+        Ok(())
+    }
+
+    #[test]
+    fn test_deserialization_missing_datetime() -> Result<()> {
+        let mock = mocks::load_json("postnl_missing_datetime")?;
+        let data = get_first_package(mock)?;
+        let package: PostNLPackage = serde_json::from_value(data)?;
         Ok(())
     }
 
