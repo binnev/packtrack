@@ -37,8 +37,9 @@ impl UrlStore for JsonUrlStore {
     }
     fn remove(&mut self, query: &str) -> Result<Vec<AnnotatedUrl>> {
         let removed = remove_from_list(&mut self.urls, query)?;
-        self.save()?;
-        log::info!("removed URLs matching pattern {query}: {removed:#?}");
+        self.save().inspect(|_| {
+            log::info!("Removed URLs matching pattern {query}: {removed:#?}")
+        });
         return Ok(removed);
     }
     fn filter(&self, query: Option<&str>) -> Vec<AnnotatedUrl> {

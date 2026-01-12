@@ -50,6 +50,7 @@ pub fn filter<'a>(
         Some(q) => urls
             .into_iter()
             .filter(|url| url.url.contains(&q))
+            // TODO: search description too
             .cloned()
             .collect(),
         None => urls.clone(),
