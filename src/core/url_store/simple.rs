@@ -19,13 +19,21 @@ pub struct SimpleUrlStore {
 }
 impl SimpleUrlStore {
     pub fn new(path: PathBuf) -> Result<Self> {
+        // Don't load from file in tests
+        #[cfg(test)]
+        return Ok(Self { path, urls: vec![] });
+
         let urls = fs::read_to_string(&path)?
             .lines()
             .map(deserialize)
             .collect::<Result<Vec<_>>>()?;
+
         Ok(Self { path, urls })
     }
     pub fn save(&self) -> Result<()> {
+        #[cfg(test)]
+        return Ok(());
+
         let urls: Vec<String> = self
             .urls
             .iter()
@@ -103,55 +111,72 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_serialize_deserialize() {
-        let url = AnnotatedUrl::new(
-            "https://example.com".to_owned(),
-            Some("description".to_owned()),
-        );
-        let s = serialize(&url);
-        assert_eq!(
-            s,
-            format!(
-                "https://example.com | {} | description",
-                url.created.unwrap()
-            )
-        );
-        let deserialized = deserialize(&s).unwrap();
-        assert_eq!(deserialized, url);
-    }
-    #[test]
-    fn test_serialize_deserialize_no_description() {
-        let url = AnnotatedUrl::new("https://example.com".to_owned(), None);
-        let s = serialize(&url);
-        assert_eq!(
-            s,
-            format!("https://example.com | {}", url.created.unwrap())
-        );
-        let deserialized = deserialize(&s).unwrap();
-        assert_eq!(deserialized, url);
-    }
-    #[test]
-    fn test_serialize_deserialize_no_created() {
-        let url = AnnotatedUrl {
-            url:         "https://example.com".to_owned(),
-            created:     None,
-            description: Some("description".to_owned()),
+    fn test_simple_url_store() {
+        let mut s = SimpleUrlStore {
+            path: "./tmp.txt".into(),
+            urls: vec![],
         };
-        let s = serialize(&url);
-        assert_eq!(s, format!("https://example.com | description"));
-        let deserialized = deserialize(&s).unwrap();
-        assert_eq!(deserialized, url);
-    }
-    #[test]
-    fn test_serialize_deserialize_only_url() {
         let url = AnnotatedUrl {
-            url:         "https://example.com".to_owned(),
-            created:     None,
+            url:         "example.com".into(),
             description: None,
+            created:     None,
         };
-        let s = serialize(&url);
-        assert_eq!(s, format!("https://example.com"));
-        let deserialized = deserialize(&s).unwrap();
-        assert_eq!(deserialized, url);
+        let result = s
+            .add(url.clone())
+            .expect("The first add should work");
+        assert_eq!(s.urls.len(), 1);
+        let result = s.add(url.clone());
+        assert!(result.is_err())
+    }
+
+    #[test]
+    fn test_serialize_deserialize() {
+        let dt: DateTime<Utc> = "2026-01-26 20:29:30.811840299 UTC"
+            .parse()
+            .unwrap();
+        let testcases = [
+            (
+                "fully populated",
+                AnnotatedUrl {
+                    url:         "https://example.com".to_owned(),
+                    description: Some("description".to_owned()),
+                    created:     Some(dt),
+                },
+                "https://example.com | 2026-01-26 20:29:30.811840299 UTC | description",
+            ),
+            (
+                "no description",
+                AnnotatedUrl {
+                    url:         "https://example.com".to_owned(),
+                    description: None,
+                    created:     Some(dt),
+                },
+                "https://example.com | 2026-01-26 20:29:30.811840299 UTC",
+            ),
+            (
+                "no created time",
+                AnnotatedUrl {
+                    url:         "https://example.com".to_owned(),
+                    description: Some("description".to_owned()),
+                    created:     None,
+                },
+                "https://example.com | description",
+            ),
+            (
+                "only url",
+                AnnotatedUrl {
+                    url:         "https://example.com".to_owned(),
+                    description: None,
+                    created:     None,
+                },
+                "https://example.com",
+            ),
+        ];
+        for (description, url, expected_string) in testcases {
+            let s = serialize(&url);
+            assert_eq!(s, expected_string, "testcase {description}");
+            let deserialized = deserialize(&s).unwrap();
+            assert_eq!(deserialized, url, "testcase {description}")
+        }
     }
 }
