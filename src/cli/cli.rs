@@ -88,7 +88,7 @@ async fn handle_url_command(
             args,
         } => {
             let file = args
-                .file
+                .urls_file
                 .as_ref()
                 .unwrap_or(default_file);
             let msg = format!("Added {url}");
@@ -100,7 +100,7 @@ async fn handle_url_command(
         }
         UrlCommand::Remove { url, args } => {
             let file = args
-                .file
+                .urls_file
                 .as_ref()
                 .unwrap_or(default_file);
             match urls::remove(file, url) {
@@ -115,7 +115,7 @@ async fn handle_url_command(
         }
         UrlCommand::List { query, args } => {
             let file = args
-                .file
+                .urls_file
                 .as_ref()
                 .unwrap_or(default_file);
             let urls = urls::filter(file, query.as_deref())?;
@@ -174,6 +174,7 @@ struct TrackArgs {
     /// Either a new URL, or a fragment of an existing URL
     url: Option<String>,
 
+    /// Path to the URLs file
     #[arg(short, long, value_parser = check_path_exists)]
     urls_file: Option<PathBuf>,
 
@@ -249,9 +250,9 @@ enum UrlCommand {
 }
 #[derive(Args)]
 struct UrlArgs {
-    /// Path to the urls file
+    /// Path to the URLs file
     #[arg(short, long, value_parser = check_path_exists)]
-    file: Option<PathBuf>,
+    urls_file: Option<PathBuf>,
 }
 #[derive(Subcommand)]
 enum ConfigCommand {
