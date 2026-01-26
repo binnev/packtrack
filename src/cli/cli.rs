@@ -1,14 +1,15 @@
 use enum_iterator::all;
+use packtrack::url_store::AnnotatedUrl;
 use packtrack::utils::check_path_exists;
 use std::collections::HashMap;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::time::Instant;
 
 use crate::cli::settings;
 use crate::cli::settings::Settings;
 use crate::cli::urls;
 use crate::cli::utils::{display_package, heading};
-use clap::{Args, value_parser};
+use clap::Args;
 use clap::{Parser, Subcommand};
 use log::{self, LevelFilter};
 use packtrack::Result;
@@ -42,18 +43,20 @@ pub async fn main() -> Result<()> {
             .unwrap_or(sets.cache_seconds.clone()),
         use_cache:          !args.tracking.no_cache,
         filters:            Filters {
-            url:       args.tracking.url,
-            sender:    args.tracking.sender,
-            recipient: args.tracking.recipient,
-            carrier:   args.tracking.carrier,
+            url:       args.tracking.url.clone(),
+            sender:    args.tracking.sender.clone(),
+            recipient: args.tracking.recipient.clone(),
+            carrier:   args.tracking.carrier.clone(),
         },
         default_postcode:   args
             .tracking
             .postcode
+            .clone()
             .or(sets.postcode.clone()),
         preferred_language: args
             .tracking
             .language
+            .clone()
             .or(sets.language.clone())
             .unwrap_or(Context::default().preferred_language),
     };
@@ -61,7 +64,7 @@ pub async fn main() -> Result<()> {
 
     // Handle subcommands
     match args.subcommand {
-        None => track(&sets, &ctx, args.tracking.delivered).await?,
+        None => track(&sets, &ctx, args.tracking).await?,
         Some(Command::Url { command }) => {
             handle_url_command(command, &sets).await?
         }
@@ -79,13 +82,19 @@ async fn handle_url_command(
 ) -> Result<()> {
     let default_file = &settings.urls_file;
     match command {
-        UrlCommand::Add { url, args } => {
+        UrlCommand::Add {
+            url,
+            description,
+            args,
+        } => {
             let file = args
                 .file
                 .as_ref()
                 .unwrap_or(default_file);
-            match urls::add(file, &url) {
-                Ok(()) => println!("Added {url}"),
+            let msg = format!("Added {url}");
+            let aurl = AnnotatedUrl::new(url, description);
+            match urls::add(file, aurl) {
+                Ok(()) => println!("{msg}"),
                 Err(err) => return Err(err),
             }
         }
@@ -165,6 +174,9 @@ struct TrackArgs {
     /// Either a new URL, or a fragment of an existing URL
     url: Option<String>,
 
+    #[arg(short, long, value_parser = check_path_exists)]
+    urls_file: Option<PathBuf>,
+
     /// Filter by sender
     #[arg(short, long)]
     sender: Option<String>,
@@ -222,9 +234,11 @@ enum UrlCommand {
     },
     /// Add a URL to the urls file
     Add {
-        url:  String,
+        url:         String,
+        #[arg(short, long)]
+        description: Option<String>,
         #[clap(flatten)]
-        args: UrlArgs,
+        args:        UrlArgs,
     },
     /// Remove a URL from the urls file
     Remove {
@@ -324,7 +338,7 @@ fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
 async fn track(
     settings: &Settings,
     ctx: &Context,
-    delivered_detail: bool,
+    track_args: TrackArgs,
 ) -> Result<()> {
     let start = Instant::now();
     // TODO: Move this somewhere else, and make it completely stateless, so that
@@ -334,13 +348,22 @@ async fn track(
     // - Pass -f urls_file (use different URLs file)
     //     - allow filtering by query
     // - Pass one or more URLs as a "\n" separated string
-    let mut urls =
-        urls::filter(&settings.urls_file, ctx.filters.url.as_deref())?;
+    let urls_file: &PathBuf = track_args
+        .urls_file
+        .as_ref()
+        .unwrap_or(&settings.urls_file);
+    let mut urls: Vec<String> =
+        urls::filter(urls_file, ctx.filters.url.as_deref())?
+            .into_iter()
+            .map(|a| a.url)
+            .collect();
+
+    // TODO: make this clearer
     if urls.len() == 0 && ctx.filters.url.is_some() {
         urls = vec![ctx.filters.url.clone().unwrap()]
     }
     let jobs = track_urls(urls, ctx).await?;
-    display_jobs(jobs, delivered_detail);
+    display_jobs(jobs, track_args.delivered);
     log::info!("track_all took {:?}", start.elapsed());
     Ok(())
 }

@@ -18,19 +18,19 @@ pub struct SimpleUrlStore {
     urls: Vec<AnnotatedUrl>,
 }
 impl SimpleUrlStore {
-    fn new(path: PathBuf) -> Result<Self> {
+    pub fn new(path: PathBuf) -> Result<Self> {
         let urls = fs::read_to_string(&path)?
             .lines()
             .map(deserialize)
             .collect::<Result<Vec<_>>>()?;
         Ok(Self { path, urls })
     }
-    fn save(&self) -> Result<()> {
+    pub fn save(&self) -> Result<()> {
         let urls: Vec<String> = self
             .urls
             .iter()
             .cloned()
-            .map(|u| u.url)
+            .map(|u| serialize(&u))
             .collect();
         fs::write(&self.path, urls.join("\n"))?;
         Ok(())
@@ -38,10 +38,7 @@ impl SimpleUrlStore {
 }
 impl UrlStore for SimpleUrlStore {
     fn add(&mut self, entry: AnnotatedUrl) -> Result<()> {
-        if let Some(_) = entry.description {
-            return Err("SimpleUrlStore doesn't store descriptions".into());
-        }
-        add_to_list(&mut self.urls, entry.clone());
+        add_to_list(&mut self.urls, entry.clone())?;
         self.save()
             .inspect(|_| log::info!("Added URL {entry}"))
     }
@@ -58,7 +55,10 @@ impl UrlStore for SimpleUrlStore {
 }
 
 fn serialize(entry: &AnnotatedUrl) -> String {
-    let mut s = format!("{} | {}", entry.url, entry.created);
+    let mut s = format!("{}", entry.url);
+    if let Some(c) = &entry.created {
+        s += &format!(" | {c}")
+    }
     if let Some(d) = &entry.description {
         s += &format!(" | {d}");
     }
@@ -68,20 +68,29 @@ fn deserialize(s: &str) -> Result<AnnotatedUrl> {
     let parts: Vec<String> = s
         .split("|")
         .take(3)
-        .map(|s| s.to_owned())
+        .map(|s| s.trim().to_owned())
         .collect();
-    let url = parts
-        .get(0)
-        .map(|s| s.trim().to_owned())
-        .ok_or(format!("Couldn't get URL from {s}"))?;
-    let created_string = parts
-        .get(1)
-        .map(|s| s.trim().to_owned())
-        .ok_or(format!("Couldn't get created time from {s}"))?;
-    let created: DateTime<Utc> = created_string.parse()?;
-    let description = parts
-        .get(2)
-        .map(|d| d.trim().to_owned());
+
+    let mut created: Option<DateTime<Utc>> = None;
+    let mut description: Option<String> = None;
+    let url = match parts.len() {
+        1 => parts[0].clone(),
+        2 => {
+            let second = parts[1].clone();
+            if let Ok(dt) = second.parse() {
+                created = Some(dt)
+            } else {
+                description = Some(second)
+            }
+            parts[0].clone()
+        }
+        3 => {
+            created = Some(parts[1].parse()?);
+            description = Some(parts[2].clone());
+            parts[0].clone()
+        }
+        n => panic!("Unexpected length {n}!"),
+    };
     Ok(AnnotatedUrl {
         url,
         description,
@@ -102,7 +111,10 @@ mod tests {
         let s = serialize(&url);
         assert_eq!(
             s,
-            format!("https://example.com | {} | description", url.created)
+            format!(
+                "https://example.com | {} | description",
+                url.created.unwrap()
+            )
         );
         let deserialized = deserialize(&s).unwrap();
         assert_eq!(deserialized, url);
@@ -111,7 +123,34 @@ mod tests {
     fn test_serialize_deserialize_no_description() {
         let url = AnnotatedUrl::new("https://example.com".to_owned(), None);
         let s = serialize(&url);
-        assert_eq!(s, format!("https://example.com | {}", url.created));
+        assert_eq!(
+            s,
+            format!("https://example.com | {}", url.created.unwrap())
+        );
+        let deserialized = deserialize(&s).unwrap();
+        assert_eq!(deserialized, url);
+    }
+    #[test]
+    fn test_serialize_deserialize_no_created() {
+        let url = AnnotatedUrl {
+            url:         "https://example.com".to_owned(),
+            created:     None,
+            description: Some("description".to_owned()),
+        };
+        let s = serialize(&url);
+        assert_eq!(s, format!("https://example.com | description"));
+        let deserialized = deserialize(&s).unwrap();
+        assert_eq!(deserialized, url);
+    }
+    #[test]
+    fn test_serialize_deserialize_only_url() {
+        let url = AnnotatedUrl {
+            url:         "https://example.com".to_owned(),
+            created:     None,
+            description: None,
+        };
+        let s = serialize(&url);
+        assert_eq!(s, format!("https://example.com"));
         let deserialized = deserialize(&s).unwrap();
         assert_eq!(deserialized, url);
     }

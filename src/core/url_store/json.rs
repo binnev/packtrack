@@ -20,12 +20,12 @@ pub struct JsonUrlStore {
 }
 impl JsonUrlStore {
     /// RAII -- instantiating the struct also loads the urls from file.
-    fn new(path: PathBuf) -> Result<Self> {
+    pub fn new(path: PathBuf) -> Result<Self> {
         let urls = load_json(&path)?;
         Ok(Self { path, urls })
     }
     /// Save the in-memory list of URLs to file.
-    fn save(&self) -> Result<()> {
+    pub fn save(&self) -> Result<()> {
         save_json(&self.path, &self.urls)
     }
 }

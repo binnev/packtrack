@@ -65,14 +65,6 @@ pub fn reset() -> Result<()> {
     save(&settings)
 }
 
-/// Update a key/value pair in the settings file
-pub fn update(key: &str, value: String) -> Result<()> {
-    let mut sets = load()?;
-    sets = sets.update(key, value)?;
-    save(&sets)?;
-    Ok(())
-}
-
 pub fn print() -> Result<()> {
     let dict = get_settings_as_dict()?;
     for (key, value) in dict.iter() {

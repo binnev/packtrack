@@ -31,14 +31,14 @@ pub struct AnnotatedUrl {
     /// the package is. Users can describe a URL here to remember that context.
     pub description: Option<String>,
     /// When the URL was added to the URL store.
-    pub created:     UtcTime,
+    pub created:     Option<UtcTime>,
 }
 impl AnnotatedUrl {
     pub fn new(url: String, description: Option<String>) -> Self {
         Self {
             url,
             description,
-            created: Utc::now(),
+            created: Some(Utc::now()),
         }
     }
 }
