@@ -1,8 +1,11 @@
-use std::fmt::Display;
+use std::fmt::{Display, format};
 
 // use crate::core::tracker::{Package, PackageStatus};
 use chrono::{DateTime, Datelike, Local, TimeZone};
-use packtrack::tracker::{Event, Package, PackageStatus, TimeWindow};
+use packtrack::{
+    api::Job,
+    tracker::{Event, Package, PackageStatus, TimeWindow},
+};
 
 pub fn heading(s: &dyn Display) {
     println!("{}", "=".repeat(80));
@@ -44,10 +47,7 @@ fn display_package_oneliner(package: &Package) -> String {
         .map(|dt| display_time(dt))
         .unwrap_or("???".to_owned());
     let mut f = String::new();
-    f.push_str(&format!(
-        "[{time}] {} Package {}",
-        package.channel, package.barcode
-    ));
+    f.push_str(&format!("[{time}] {} {}", package.channel, package.barcode));
     if let Some(sender) = &package.sender {
         f.push_str(&format!(" from {sender}"));
     }
@@ -94,6 +94,43 @@ pub fn display_package(
         _ => display_package_full(package),
     }
 }
+pub fn display_job(job: &Job, delivered_detail: bool) -> String {
+    match &job.result {
+        Ok(package) => match package.status() {
+            PackageStatus::Delivered if !delivered_detail => {
+                display_job_oneliner(job, delivered_detail)
+            }
+            _ => display_job_full(job, delivered_detail),
+        },
+        Err(_) => display_job_error(job),
+    }
+}
+fn display_job_oneliner(job: &Job, delivered_detail: bool) -> String {
+    let mut s = String::new();
+    s += &display_package(job.result.as_ref().unwrap(), delivered_detail);
+    if let Some(description) = &job.url.description {
+        s += &format!(" ({})", description);
+    }
+    return s;
+}
+fn display_job_full(job: &Job, delivered_detail: bool) -> String {
+    let mut s = String::new();
+    if let Some(description) = &job.url.description {
+        s += &format!("Description: {}\n", description);
+    }
+    s += &display_package(job.result.as_ref().unwrap(), delivered_detail);
+    return s;
+}
+fn display_job_error(job: &Job) -> String {
+    let mut parts: Vec<String> = vec![];
+    if let Some(description) = &job.url.description {
+        parts.push(format!("Description: {description}"))
+    }
+    parts.push(format!("URL: {}", job.url.url.clone()));
+    parts.push(format!("Error: {:?}", job.result));
+    return parts.join("\n");
+}
+
 pub fn display_timewindow(tw: &TimeWindow) -> String {
     let start = tw.start.with_timezone(&Local);
     let end = tw.end.with_timezone(&Local);

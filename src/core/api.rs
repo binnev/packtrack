@@ -4,6 +4,7 @@ use crate::error::{Error, Result};
 use crate::tracker::get_handler;
 use crate::tracker::{self, TrackerContext};
 use crate::tracker::{Package, PackageStatus};
+use crate::url_store::AnnotatedUrl;
 use log;
 use std::collections::HashMap;
 use std::iter::repeat;
@@ -49,21 +50,21 @@ pub struct Filters {
 
 // TODO: This should probably be a custom error
 pub struct Job {
-    pub url:    String,
+    pub url:    AnnotatedUrl,
     pub result: Result<Package>,
 }
 
 /// Get the Tracker implementation for the given URL, and track the package.
 pub async fn track_url(
-    url: &str,
+    url: &AnnotatedUrl,
     cache: &Mutex<dyn Cache>,
     ctx: &Context,
 ) -> Job {
-    let tracker = match get_handler(url) {
+    let tracker = match get_handler(&url.url) {
         Ok(tracker) => tracker,
         Err(err) => {
             return Job {
-                url:    url.to_string(),
+                url:    url.clone(),
                 result: Err(err),
             };
         }
@@ -77,16 +78,19 @@ pub async fn track_url(
         language:           &ctx.preferred_language,
     };
     let result = tracker
-        .track(url, ctx.cache_seconds, ctx.use_cache, &tracker_context)
+        .track(&url.url, ctx.cache_seconds, ctx.use_cache, &tracker_context)
         .await;
     Job {
-        url: url.to_string(),
+        url: url.clone(),
         result,
     }
 }
 
-/// Track all the URLs in the URLs file.
-pub async fn track_urls(urls: Vec<String>, ctx: &Context) -> Result<Vec<Job>> {
+/// Track all the given URLs asynchronously
+pub async fn track_urls(
+    urls: Vec<AnnotatedUrl>,
+    ctx: &Context,
+) -> Result<Vec<Job>> {
     // fire off all the tasks in parallel
     let cache = Mutex::new(JsonCache::new()?);
     let tasks: Vec<_> = urls

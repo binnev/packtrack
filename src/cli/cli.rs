@@ -8,7 +8,7 @@ use std::time::Instant;
 use crate::cli::settings;
 use crate::cli::settings::Settings;
 use crate::cli::urls;
-use crate::cli::utils::{display_package, heading};
+use crate::cli::utils::{display_job, display_package, heading};
 use clap::Args;
 use clap::{Parser, Subcommand};
 use log::{self, LevelFilter};
@@ -16,7 +16,7 @@ use packtrack::Result;
 use packtrack::api::Filters;
 use packtrack::api::Job;
 use packtrack::api::{Context, track_urls};
-use packtrack::tracker::{Package, PackageStatus};
+use packtrack::tracker::PackageStatus;
 
 pub async fn main() -> Result<()> {
     let args = Cli::parse();
@@ -267,16 +267,15 @@ enum ConfigCommand {
 fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
     // sort the results by status / error
     let mut errors: Vec<Job> = vec![];
-    let mut jobs_by_status: HashMap<PackageStatus, Vec<Package>> =
-        HashMap::new();
+    let mut jobs_by_status: HashMap<PackageStatus, Vec<Job>> = HashMap::new();
     for job in jobs {
         match &job.result {
             Ok(package) => {
                 let status = package.status();
                 jobs_by_status
                     .entry(status)
-                    .and_modify(|e| e.push(package.clone()))
-                    .or_insert(vec![package.clone()]);
+                    .or_default()
+                    .push(job);
             }
             Err(_) => errors.push(job),
         }
@@ -284,17 +283,37 @@ fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
     // sort by time
     for (status, packages) in jobs_by_status.iter_mut() {
         if status == &PackageStatus::Delivered {
-            packages.sort_by(|a, b| a.delivered.cmp(&b.delivered));
+            packages.sort_by(|a, b| {
+                a.result
+                    .as_ref()
+                    .unwrap() // TODO: make this better
+                    .delivered
+                    .cmp(&b.result.as_ref().unwrap().delivered)
+            });
         }
         if status == &PackageStatus::InTransit {
-            packages.sort_by(|a, b| a.eta.cmp(&b.eta));
             packages.sort_by(|a, b| {
-                let a_time = a
+                a.result
+                    .as_ref()
+                    .unwrap()
                     .eta
-                    .or(a.eta_window.as_ref().map(|w| w.start));
-                let b_time = b
-                    .eta
-                    .or(b.eta_window.as_ref().map(|w| w.start));
+                    .cmp(&b.result.as_ref().unwrap().eta)
+            });
+            packages.sort_by(|a, b| {
+                let a_time = a.result.as_ref().unwrap().eta.or(a
+                    .result
+                    .as_ref()
+                    .unwrap()
+                    .eta_window
+                    .as_ref()
+                    .map(|w| w.start));
+                let b_time = b.result.as_ref().unwrap().eta.or(b
+                    .result
+                    .as_ref()
+                    .unwrap()
+                    .eta_window
+                    .as_ref()
+                    .map(|w| w.start));
                 a_time.cmp(&b_time)
             });
         }
@@ -303,7 +322,7 @@ fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
     // display successful results
     let line = format!("\n{}\n", "-".repeat(80));
     for status in all::<PackageStatus>() {
-        let packages = jobs_by_status
+        let jobs = jobs_by_status
             .entry(status.clone())
             .or_insert(vec![]);
         let separator = match status {
@@ -317,9 +336,9 @@ fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
             PackageStatus::InTransit => line.clone(),
         };
         heading(&status);
-        let s = packages
+        let s = jobs
             .iter()
-            .map(|package| display_package(package, delivered_detail))
+            .map(|job| display_job(job, delivered_detail))
             .collect::<Vec<_>>()
             .join(&separator);
         println!("{s}");
@@ -330,7 +349,7 @@ fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
     let separator = format!("\n{}\n", "-".repeat(80));
     let s = errors
         .iter()
-        .map(|job| format!("{}\n{:?}", job.url, job.result))
+        .map(|job| display_job(job, delivered_detail))
         .collect::<Vec<_>>()
         .join(&separator);
     println!("{s}");
@@ -353,15 +372,14 @@ async fn track(
         .urls_file
         .as_ref()
         .unwrap_or(&settings.urls_file);
-    let mut urls: Vec<String> =
-        urls::filter(urls_file, ctx.filters.url.as_deref())?
-            .into_iter()
-            .map(|a| a.url)
-            .collect();
+    let mut urls = urls::filter(urls_file, ctx.filters.url.as_deref())?;
 
     // TODO: make this clearer
     if urls.len() == 0 && ctx.filters.url.is_some() {
-        urls = vec![ctx.filters.url.clone().unwrap()]
+        urls = vec![AnnotatedUrl::new(
+            ctx.filters.url.clone().unwrap(),
+            Some("dynamic".into()),
+        )]
     }
     let jobs = track_urls(urls, ctx).await?;
     display_jobs(jobs, track_args.delivered);
