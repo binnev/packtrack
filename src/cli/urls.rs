@@ -7,6 +7,9 @@ use std::path::PathBuf;
 
 /// Load URLs from file
 pub fn load(file: &PathBuf) -> Result<Box<dyn UrlStore>> {
+    if !file.exists() {
+        return Err(format!("File {} does not exist!", file.display()).into());
+    }
     let ext = match file.extension() {
         Some(s) => s
             .to_str()

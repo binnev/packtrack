@@ -1,7 +1,9 @@
 mod cli;
-use packtrack::error::Result;
 
 #[tokio::main]
-async fn main() -> Result<()> {
-    cli::main().await
+async fn main() {
+    match cli::main().await {
+        Err(err) => println!("{err}"),
+        _ => {}
+    }
 }

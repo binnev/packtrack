@@ -127,7 +127,7 @@ fn display_job_error(job: &Job) -> String {
         parts.push(format!("Description: {description}"))
     }
     parts.push(format!("URL: {}", job.url.url.clone()));
-    parts.push(format!("Error: {:?}", job.result));
+    parts.push(format!("Error: {}", job.result.as_ref().err().unwrap()));
     return parts.join("\n");
 }
 
