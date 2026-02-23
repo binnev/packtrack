@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Instant;
 
-use crate::cli::display::{display_job, display_package, heading};
+use crate::cli::display::{display_job, heading, line};
 use crate::cli::settings;
 use crate::cli::settings::Settings;
 use crate::cli::urls;
@@ -320,7 +320,7 @@ fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
     }
 
     // display successful results
-    let line = format!("\n{}\n", "-".repeat(80));
+    let line = format!("\n{}\n", line());
     for status in all::<PackageStatus>() {
         let jobs = jobs_by_status
             .entry(status.clone())

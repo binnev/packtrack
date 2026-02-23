@@ -8,14 +8,16 @@ use packtrack::{
 };
 
 pub fn heading(s: &dyn Display) {
-    println!("{}", "=".repeat(80));
+    println!("╭{}╮", "─".repeat(78));
     let text = format!(" {s} ");
     let text = spaced(text).to_uppercase();
-    let text = format!("{text:^80}");
-    println!("{}", text);
-    println!("{}", "=".repeat(80));
+    println!("│{text:^78}│");
+    println!("╰{}╯", "─".repeat(78));
 }
 
+pub fn line() -> String {
+    return "─".repeat(80);
+}
 /// "hello" -> "h e l l o"
 pub fn spaced(s: String) -> String {
     s.chars()
