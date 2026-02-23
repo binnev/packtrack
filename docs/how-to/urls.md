@@ -7,6 +7,12 @@
 Added example.com/barcode/1234
 ```
 
+Add an optional description: 
+```
+❯ packtrack url add example.com/barcode/1234 --description foo
+Added example.com/barcode/1234
+```
+
 ## Remove a URL 
 ```
 ❯ packtrack url remove example.com/barcode/1234
