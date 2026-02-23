@@ -10,7 +10,7 @@ use packtrack::{
 pub fn heading(s: &dyn Display) {
     println!("╭{}╮", "─".repeat(78));
     let text = format!(" {s} ");
-    let text = spaced(text).to_uppercase();
+    let text = spaced(&text).to_uppercase();
     println!("│{text:^78}│");
     println!("╰{}╯", "─".repeat(78));
 }
@@ -19,8 +19,16 @@ pub fn line() -> String {
     return "─".repeat(80);
 }
 /// "hello" -> "h e l l o"
-pub fn spaced(s: String) -> String {
-    s.chars()
+/// InTransit -> I N   T R A N S I T
+pub fn spaced(s: &str) -> String {
+    let mut out = String::new();
+    for char in s.chars() {
+        if out.len() > 0 && char.is_uppercase() {
+            out.push(' ');
+        }
+        out.push(char);
+    }
+    out.chars()
         .map(|c| c.to_string())
         .collect::<Vec<_>>()
         .join(" ")
@@ -180,5 +188,13 @@ mod tests {
             "Tue 19 Nov 13:00 -- Wed 20 Nov 14:00"
         );
         Ok(())
+    }
+
+    #[test]
+    fn test_spaced() {
+        assert_eq!(spaced("hello"), "h e l l o",);
+        assert_eq!(spaced("contains space"), "c o n t a i n s   s p a c e",);
+        assert_eq!(spaced("Delivered"), "D e l i v e r e d",);
+        assert_eq!(spaced("InTransit"), "I n   T r a n s i t",)
     }
 }
