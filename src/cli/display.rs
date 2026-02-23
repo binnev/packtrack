@@ -50,97 +50,6 @@ pub fn display_time<T: TimeZone>(dt: DateTime<T>) -> String {
     let local = dt.with_timezone(&Local);
     format!("{} {}", display_date(dt), local.format("%H:%M"))
 }
-
-fn display_package_oneliner(package: &Package) -> String {
-    let time = package
-        .delivered
-        .map(|dt| display_time(dt))
-        .unwrap_or("???".to_owned());
-    let mut f = String::new();
-    f.push_str(&format!("[{time}] {} {}", package.channel, package.barcode));
-    if let Some(sender) = &package.sender {
-        f.push_str(&format!(" from {sender}"));
-    }
-    if let Some(recipient) = &package.recipient {
-        f.push_str(&format!(" to {recipient}"));
-    }
-    f
-}
-fn display_package_full(package: &Package) -> String {
-    let mut f = String::new();
-    f.push_str(&format!("{} Package {}", package.channel, package.barcode));
-    if let Some(sender) = package.sender.as_ref() {
-        f.push_str(&format!(" from {sender}"));
-    } else {
-        f.push_str(&format!(""));
-    }
-    if let Some(recipient) = package.recipient.as_ref() {
-        f.push_str(&format!(" to {recipient}"));
-    }
-    if let Some(eta) = package.eta {
-        f.push_str(&format!("\nexpected delivery: {}", display_time(eta)));
-    }
-    if let Some(window) = package.eta_window.as_ref() {
-        f.push_str(&format!(
-            "\ndelivery window: {}",
-            display_timewindow(window)
-        ));
-    }
-    f.push_str(&format!("\nevents:"));
-    for event in package.events.iter() {
-        f.push_str(&format!("\n    {}", display_event(event)));
-    }
-    f
-}
-pub fn display_package(
-    package: &Package,
-    // if true, display delivered packages in full detail
-    delivered_detail: bool,
-) -> String {
-    match package.status() {
-        PackageStatus::Delivered if !delivered_detail => {
-            display_package_oneliner(package)
-        }
-        _ => display_package_full(package),
-    }
-}
-pub fn display_job(job: &Job, delivered_detail: bool) -> String {
-    match &job.result {
-        Ok(package) => match package.status() {
-            PackageStatus::Delivered if !delivered_detail => {
-                display_job_oneliner(job, delivered_detail)
-            }
-            _ => display_job_full(job, delivered_detail),
-        },
-        Err(_) => display_job_error(job),
-    }
-}
-fn display_job_oneliner(job: &Job, delivered_detail: bool) -> String {
-    let mut s = String::new();
-    s += &display_package(job.result.as_ref().unwrap(), delivered_detail);
-    if let Some(description) = &job.url.description {
-        s += &format!(" ({})", description);
-    }
-    return s;
-}
-fn display_job_full(job: &Job, delivered_detail: bool) -> String {
-    let mut s = String::new();
-    if let Some(description) = &job.url.description {
-        s += &format!("Description: {}\n", description);
-    }
-    s += &display_package(job.result.as_ref().unwrap(), delivered_detail);
-    return s;
-}
-fn display_job_error(job: &Job) -> String {
-    let mut parts: Vec<String> = vec![];
-    if let Some(description) = &job.url.description {
-        parts.push(format!("Description: {description}"))
-    }
-    parts.push(format!("URL: {}", job.url.url.clone()));
-    parts.push(format!("Error: {}", job.result.as_ref().err().unwrap()));
-    return parts.join("\n");
-}
-
 pub fn display_timewindow(tw: &TimeWindow) -> String {
     let start = tw.start.with_timezone(&Local);
     let end = tw.end.with_timezone(&Local);
@@ -158,6 +67,74 @@ pub fn display_timewindow(tw: &TimeWindow) -> String {
 pub fn display_event(event: &Event) -> String {
     format!("[{}] {}", display_time(event.timestamp), event.text)
 }
+
+pub fn display_job(job: &Job, delivered_detail: bool) -> String {
+    match &job.result {
+        Ok(package) => match package.status() {
+            PackageStatus::Delivered if !delivered_detail => {
+                display_job_delivered_oneliner(job, package)
+            }
+            _ => display_job_full(job, package),
+        },
+        Err(_) => display_job_error(job),
+    }
+}
+fn display_job_delivered_oneliner(job: &Job, package: &Package) -> String {
+    let mut parts: Vec<String> = Vec::new();
+    let time = package
+        .delivered
+        .map(|dt| display_time(dt))
+        .unwrap_or("????????????????".to_owned());
+
+    parts.push(format!("[{time}] {} {}", package.channel, package.barcode));
+    if let Some(sender) = &package.sender {
+        parts.push(format!("from {sender}"));
+    }
+    if let Some(recipient) = &package.recipient {
+        parts.push(format!("to {recipient}"));
+    }
+    if let Some(description) = &job.url.description {
+        parts.push(format!("({description})"));
+    }
+    return parts.join(" ");
+}
+fn display_job_full(job: &Job, package: &Package) -> String {
+    let mut parts: Vec<String> = Vec::new();
+    if let Some(description) = &job.url.description {
+        parts.push(format!("Description: {}", description));
+    }
+    parts.push(format!("URL: {}", job.url.url));
+    parts.push(format!("Carrier: {}", package.channel));
+    parts.push(format!("Barcode: {}", package.barcode));
+    if let Some(sender) = package.sender.as_ref() {
+        parts.push(format!("From: {sender}"));
+    }
+    if let Some(recipient) = package.recipient.as_ref() {
+        parts.push(format!("To: {recipient}"));
+    }
+    if let Some(eta) = package.eta {
+        parts.push(format!("ETA: {}", display_time(eta)));
+    }
+    if let Some(window) = package.eta_window.as_ref() {
+        parts.push(format!("ETA window: {}", display_timewindow(window)));
+    }
+    parts.push(format!("events:"));
+    for event in package.events.iter() {
+        parts.push(format!("    {}", display_event(event)));
+    }
+
+    return parts.join("\n");
+}
+fn display_job_error(job: &Job) -> String {
+    let mut parts: Vec<String> = vec![];
+    if let Some(description) = &job.url.description {
+        parts.push(format!("Description: {description}"))
+    }
+    parts.push(format!("URL: {}", job.url.url.clone()));
+    parts.push(format!("Error: {}", job.result.as_ref().err().unwrap()));
+    return parts.join("\n");
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

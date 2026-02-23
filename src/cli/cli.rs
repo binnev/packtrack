@@ -346,7 +346,7 @@ fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
 
     // display errors
     heading(&"errors");
-    let separator = format!("\n{}\n", "-".repeat(80));
+    let separator = line;
     let s = errors
         .iter()
         .map(|job| display_job(job, delivered_detail))
