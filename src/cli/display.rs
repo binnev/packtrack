@@ -1,4 +1,4 @@
-use std::fmt::{Display, format};
+use std::fmt::Display;
 
 // use crate::core::tracker::{Package, PackageStatus};
 use chrono::{DateTime, Datelike, Local, TimeZone};
@@ -150,10 +150,9 @@ pub fn display_event(event: &Event) -> String {
 }
 #[cfg(test)]
 mod tests {
-    use packtrack::utils::UtcTime;
-
     use super::*;
-    use crate::Result;
+    use packtrack::Result;
+    use packtrack::utils::UtcTime;
 
     #[test]
     fn test_display_time() -> Result<()> {

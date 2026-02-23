@@ -5,10 +5,10 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Instant;
 
+use crate::cli::display::{display_job, display_package, heading};
 use crate::cli::settings;
 use crate::cli::settings::Settings;
 use crate::cli::urls;
-use crate::cli::utils::{display_job, display_package, heading};
 use clap::Args;
 use clap::{Parser, Subcommand};
 use log::{self, LevelFilter};
