@@ -284,37 +284,24 @@ fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
     for (status, packages) in jobs_by_status.iter_mut() {
         if status == &PackageStatus::Delivered {
             packages.sort_by(|a, b| {
-                a.result
-                    .as_ref()
-                    .unwrap() // TODO: make this better
-                    .delivered
-                    .cmp(&b.result.as_ref().unwrap().delivered)
+                let a_time = a.result.as_ref().unwrap().delivered;
+                let b_time = b.result.as_ref().unwrap().delivered;
+                a_time.cmp(&b_time)
             });
         }
         if status == &PackageStatus::InTransit {
             packages.sort_by(|a, b| {
-                a.result
-                    .as_ref()
-                    .unwrap()
-                    .eta
-                    .cmp(&b.result.as_ref().unwrap().eta)
-            });
-            packages.sort_by(|a, b| {
-                let a_time = a.result.as_ref().unwrap().eta.or(a
-                    .result
-                    .as_ref()
-                    .unwrap()
+                let a_package = a.result.as_ref().unwrap();
+                let a_eta = a_package.eta.or(a_package
                     .eta_window
                     .as_ref()
                     .map(|w| w.start));
-                let b_time = b.result.as_ref().unwrap().eta.or(b
-                    .result
-                    .as_ref()
-                    .unwrap()
+                let b_package = b.result.as_ref().unwrap();
+                let b_eta = b_package.eta.or(b_package
                     .eta_window
                     .as_ref()
                     .map(|w| w.start));
-                a_time.cmp(&b_time)
+                a_eta.cmp(&b_eta)
             });
         }
     }
@@ -325,34 +312,38 @@ fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
         let jobs = jobs_by_status
             .entry(status.clone())
             .or_insert(vec![]);
-        let separator = match status {
-            PackageStatus::Delivered => {
-                if delivered_detail {
-                    line.clone()
-                } else {
-                    "\n".to_owned()
+        if jobs.len() > 0 {
+            let separator = match status {
+                PackageStatus::Delivered => {
+                    if delivered_detail {
+                        line.clone()
+                    } else {
+                        "\n".to_owned()
+                    }
                 }
-            }
-            PackageStatus::InTransit => line.clone(),
-        };
-        heading(&status);
-        let s = jobs
+                PackageStatus::InTransit => line.clone(),
+            };
+            heading(&status);
+            let s = jobs
+                .iter()
+                .map(|job| display_job(job, delivered_detail))
+                .collect::<Vec<_>>()
+                .join(&separator);
+            println!("{s}");
+        }
+    }
+
+    if errors.len() > 0 {
+        // display errors
+        heading(&"errors");
+        let separator = line;
+        let s = errors
             .iter()
             .map(|job| display_job(job, delivered_detail))
             .collect::<Vec<_>>()
             .join(&separator);
         println!("{s}");
     }
-
-    // display errors
-    heading(&"errors");
-    let separator = line;
-    let s = errors
-        .iter()
-        .map(|job| display_job(job, delivered_detail))
-        .collect::<Vec<_>>()
-        .join(&separator);
-    println!("{s}");
 }
 
 async fn track(
