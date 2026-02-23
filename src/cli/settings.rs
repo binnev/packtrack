@@ -139,11 +139,7 @@ mod tests {
 
         let result = Settings::default().update("cache_seconds", "thirty");
         assert!(
-            result
-                .err()
-                .unwrap()
-                .to_string()
-                .contains("ParseIntError")
+            format!("{:?}", result.err().unwrap()).contains("ParseIntError")
         );
         Ok(())
     }
