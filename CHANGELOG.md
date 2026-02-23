@@ -2,6 +2,75 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.0] - 2026-02-23
+
+### 🚀 Features
+
+- Added UrlStore trait and JSON implementation
+
+
+- *(cli)* Verbosity arg now accepts info|debug|etc and 0|1|2|etc
+
+
+- *(cli)* Added file parameter to url commands
+
+
+- Added SimpleUrlStore for plain text files
+  - Now we just need to have the urls.rs detect the UrlStore type depending on the file extension
+
+- Url filtering also searches description
+
+
+- Url -f flag, main -u flag, and SimpleUrlStore
+  - Added the --file flag to the url management commands. Added the --description flag to the url add command. Got SimpleUrlStore working in a backwards-compatible way. Added the --urls-file flag to the main command. The settings module now returns a UrlStore object.
+
+- *(cli)* URL description is displayed in CLI output
+
+
+- Better error display
+
+
+- *(cli)* Nicer headings and lines
+
+
+- *(cli)* Better heading text
+
+
+### 🐛 Bug Fixes
+
+- *(postnl)* Fixed a deserialization bug when a datetime was missing
+
+
+- *(cli)* Tracker args are no longer available for subcommands
+
+
+- Rename urls -f flag to -u to match main command
+
+
+- *(cli)* Headings are only displayed if they contain packages
+
+
+### 🚜 Refactor
+
+- Rename cli/utils -> cli/display
+
+
+- *(cli)* Simplified job display
+
+
+### 📚 Documentation
+
+- Update display
+
+
+### 🧪 Testing
+
+- SimpleUrlStore tests
+
+
+- Fix settings test
+
+
 ## [2.3.0] - 2025-11-16
 
 ### 🚀 Features
