@@ -168,10 +168,33 @@ struct Names {
     company_name: Option<String>,
     person_name:  Option<String>,
 }
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct Address {
+    street:              Option<String>,
+    house_number:        Option<String>,
+    house_number_suffix: Option<String>,
+    postal_code:         Option<String>,
+    town:                Option<String>,
+    country:             Option<String>,
+}
+impl Address {
+    fn format(&self) -> String {
+        let mut parts: Vec<&str> = Vec::new();
+        if let Some(street) = &self.street {
+            parts.push(street)
+        }
+        if let Some(house_number) = &self.house_number {
+            parts.push(house_number);
+        }
+        parts.join(" ")
+    }
+}
 
 #[derive(Deserialize)]
 struct Party {
-    names: Names,
+    names:   Names,
+    address: Option<Address>,
 }
 impl Party {
     fn name(&self) -> Option<String> {
@@ -179,6 +202,10 @@ impl Party {
             .company_name
             .clone()
             .or(self.names.person_name.clone())
+            .or(self
+                .address
+                .as_ref()
+                .map(|a| a.format()))
     }
 }
 
@@ -413,6 +440,16 @@ mod tests {
         let mock = mocks::load_json("postnl_missing_datetime")?;
         let data = get_first_package(mock)?;
         let package: PostNLPackage = serde_json::from_value(data)?;
+        Ok(())
+    }
+
+    #[test]
+    fn test_deserialization_null_names() -> Result<()> {
+        let mock = mocks::load_json("postnl_recipient_null_names")?;
+        let data = get_first_package(mock)?;
+        let package: PostNLPackage = serde_json::from_value(data)?;
+        let recipient = package.recipient().ok_or("")?;
+        assert_eq!(recipient, "Streetname 420");
         Ok(())
     }
 
