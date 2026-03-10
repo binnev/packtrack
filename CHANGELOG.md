@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0] - 2026-03-10
+
+### 🚀 Features
+
+- *(GLS)* Handle gls-group.eu URLs
+
+
+### 🐛 Bug Fixes
+
+- *(postnl)* If company and person name are missing, show address instead
+
+
 ## [2.4.0] - 2026-02-23
 
 ### 🚀 Features
