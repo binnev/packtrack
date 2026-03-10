@@ -13,7 +13,7 @@ pub struct GlsTracker;
 #[async_trait]
 impl Tracker for GlsTracker {
     fn can_handle(&self, url: &str) -> bool {
-        url.contains("www.gls")
+        url.contains("gls-info.nl") || url.contains("gls-group.eu")
     }
     async fn get_raw(&self, url: &str, ctx: &TrackerContext) -> Result<String> {
         let (barcode, postcode) =
@@ -164,6 +164,17 @@ fn get_barcode_postcode(
     url: &str,
     default_postcode: Option<&str>,
 ) -> Result<(String, String)> {
+    if url.contains("gls-info.nl") {
+        return get_barcode_postcode_gls_info(url, default_postcode);
+    } else if url.contains("gls-group.eu") {
+        return get_barcode_postcode_gls_group(url, default_postcode);
+    }
+    Err(format!("Unrecognized GLS URL format: {url}").into())
+}
+fn get_barcode_postcode_gls_info(
+    url: &str,
+    default_postcode: Option<&str>,
+) -> Result<(String, String)> {
     // https://www.gls-info.nl/tracking?parcelNo=123412341234&zipcode=1234AB
     log::debug!("Parsing GLS url {url}");
     let barcode = Regex::new(r".*parcelNo=([A-Z0-9]+).*")?
@@ -184,6 +195,30 @@ fn get_barcode_postcode(
         ))?
         .to_owned();
     log::debug!("Parsed postcode {postcode}");
+    Ok((barcode, postcode))
+}
+fn get_barcode_postcode_gls_group(
+    url: &str,
+    default_postcode: Option<&str>,
+) -> Result<(String, String)> {
+    // https://gls-group.eu/GROUP/en/parcel-tracking?match=123456789012&txtAction=71000
+    log::debug!("Parsing GLS url {url}");
+    let barcode = Regex::new(r".*match=([A-Z0-9]+).*")?
+        .captures(url)
+        .and_then(|caps| caps.get(1))
+        .map(|m| m.as_str())
+        .ok_or(format!("Couldn't get barcode from url {url}"))?
+        .to_owned();
+    log::debug!("Parsed barcode {barcode}");
+
+    let postcode = default_postcode
+        .ok_or(format!(
+            "Couldn't get postcode from url {url}, and no default postcode!"
+        ))?
+        .to_owned();
+    log::debug!(
+        "Didn't attempt to parse a postcode. Using default postcode {postcode}"
+    );
     Ok((barcode, postcode))
 }
 
@@ -212,14 +247,30 @@ mod tests {
     fn test_get_barcode_postcode() {
         // happy flow -- both barcode and postcode are present
         assert_eq!(
-            get_barcode_postcode("url?parcelNo=69Z&zipcode=1234AB", None)
-                .unwrap(),
+            get_barcode_postcode(
+                "https://www.gls-info.nl/tracking?parcelNo=69Z&zipcode=1234AB",
+                None
+            )
+            .unwrap(),
             ("69Z".to_owned(), "1234AB".to_owned())
         );
         // happy flow -- only barcode present, but default postcode passed
         assert_eq!(
-            get_barcode_postcode("url?parcelNo=69Z", Some("1234AB")).unwrap(),
+            get_barcode_postcode(
+                "https://www.gls-info.nl/tracking?parcelNo=69Z",
+                Some("1234AB")
+            )
+            .unwrap(),
             ("69Z".to_owned(), "1234AB".to_owned())
+        );
+        // GLS group w. default postcode
+        assert_eq!(
+            get_barcode_postcode(
+                "https://gls-group.eu/GROUP/en/parcel-tracking?match=123456789012&txtAction=71000",
+                Some("1234AB")
+            )
+            .unwrap(),
+            ("123456789012".to_owned(), "1234AB".to_owned())
         );
 
         // sad flows
@@ -227,13 +278,22 @@ mod tests {
             get_barcode_postcode("foo.com", None)
                 .err()
                 .unwrap(),
-            "Couldn't get barcode from url foo.com".into()
+            "Unrecognized GLS URL format: foo.com".into()
         );
         assert_eq!(
-            get_barcode_postcode("url?parcelNo=1234", None)
+            get_barcode_postcode("https://www.gls-info.nl/tracking?parcelNo=1234", None)
                 .err()
                 .unwrap(),
-            "Couldn't get postcode from url url?parcelNo=1234, and no default postcode!".into()
+            "Couldn't get postcode from url https://www.gls-info.nl/tracking?parcelNo=1234, and no default postcode!".into()
+        );
+        assert_eq!(
+            get_barcode_postcode(
+                "https://gls-group.eu/GROUP/en/parcel-tracking?match=123456789012&txtAction=71000",
+                None
+            )
+            .err()
+            .unwrap(),
+            "Couldn't get postcode from url https://gls-group.eu/GROUP/en/parcel-tracking?match=123456789012&txtAction=71000, and no default postcode!".into()
         );
     }
 
@@ -382,6 +442,26 @@ mod tests {
         assert_eq!(event.timestamp, utc("2024-11-22T08:28:43Z"));
         assert_eq!(event.text, "The parcel has been delivered.");
         assert_eq!(package.delivered.unwrap(), utc("2024-11-22T08:28:43Z"));
+        Ok(())
+    }
+    #[test]
+    fn test_deserialize_delivered_neighbours() -> Result<()> {
+        let data = mocks::load_json("gls_delivered_neighbours")?;
+        let package = parse_package(data)?;
+        assert_eq!(package.sender.unwrap(), "Sender name");
+        assert_eq!(package.recipient, None);
+        assert_eq!(package.barcode, "12345678906040");
+        assert_eq!(package.eta, None);
+        assert_eq!(package.eta_window, None);
+        assert_eq!(package.events.len(), 8);
+        let event = package
+            .events
+            .into_iter()
+            .last()
+            .unwrap();
+        assert_eq!(event.timestamp, utc("2026-03-10T08:58:33Z"));
+        assert_eq!(event.text, "Afgeleverd - bij buren");
+        assert_eq!(package.delivered.unwrap(), utc("2026-03-10T08:58:33Z"));
         Ok(())
     }
 }
