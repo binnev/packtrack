@@ -119,8 +119,9 @@ struct DeliveryScanInfo {
 #[derive(Deserialize, Clone, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 struct GlsEvent {
-    date_time:          Option<NaiveDateTime>,
-    event_reason_descr: Option<String>,
+    date_time:                   Option<NaiveDateTime>,
+    event_reason_descr:          Option<String>,
+    event_reason_descr_alt_cust: Option<String>,
 }
 impl GlsEvent {
     fn to_event(&self) -> Result<Event> {
@@ -128,10 +129,16 @@ impl GlsEvent {
             .date_time
             .ok_or("No datetime on event!")?
             .and_utc();
-        let text = self
-            .event_reason_descr
-            .clone()
-            .ok_or("No event description!")?;
+        let mut text_parts: Vec<String> = Vec::new();
+        text_parts.push(
+            self.event_reason_descr
+                .clone()
+                .ok_or("No event description!")?,
+        );
+        if let Some(alt_text) = self.event_reason_descr_alt_cust.clone() {
+            text_parts.push(alt_text)
+        }
+        let text = text_parts.join(" | ");
         Ok(Event { timestamp, text })
     }
 }
@@ -460,7 +467,7 @@ mod tests {
             .last()
             .unwrap();
         assert_eq!(event.timestamp, utc("2026-03-10T08:58:33Z"));
-        assert_eq!(event.text, "Afgeleverd - bij buren");
+        assert_eq!(event.text, "Afgeleverd - bij buren | Buren 69");
         assert_eq!(package.delivered.unwrap(), utc("2026-03-10T08:58:33Z"));
         Ok(())
     }
