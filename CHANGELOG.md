@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.0] - 2026-03-15
+
+### 🚀 Features
+
+- GLS events now mention the neighbour the package was delivered to
+
+
 ## [2.5.0] - 2026-03-10
 
 ### 🚀 Features
