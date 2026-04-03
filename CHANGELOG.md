@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.1] - 2026-04-03
+
+### 🐛 Bug Fixes
+
+- PostNL now correctly handles letterbox deliveries
+
+
 ## [2.6.0] - 2026-03-15
 
 ### 🚀 Features
