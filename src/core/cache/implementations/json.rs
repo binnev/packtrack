@@ -1,3 +1,4 @@
+use std::os::unix::fs::MetadataExt;
 use std::time::Duration;
 use std::{collections::HashMap, fs, path::PathBuf};
 
@@ -10,6 +11,7 @@ use crate::{Result, utils};
 use async_trait::async_trait;
 use chrono::{TimeDelta, Utc};
 use serde::{Deserialize, Serialize};
+use std::fs::metadata;
 
 #[derive(Default)]
 pub struct JsonCache {
@@ -86,6 +88,10 @@ impl Cache for JsonCache {
         utils::save_json(&cache_file, &self.contents)?;
         log::info!("Saved JSON cache to {cache_file:?}");
         Ok(())
+    }
+    fn size_bytes(&self) -> Result<u64> {
+        let cache_file = Self::get_file()?;
+        Ok(metadata(cache_file)?.size())
     }
 }
 

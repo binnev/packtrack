@@ -46,4 +46,7 @@ pub trait Cache {
     /// Save the cache to preserve it between runs
     /// `Result` so the implementation can do IO.
     async fn save(&self) -> Result<()>;
+
+    /// Get the size of the cache in bytes
+    fn size_bytes(&self) -> Result<u64>;
 }

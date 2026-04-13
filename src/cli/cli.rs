@@ -1,22 +1,23 @@
-use enum_iterator::all;
-use packtrack::url_store::AnnotatedUrl;
-use packtrack::utils::check_path_exists;
-use std::collections::HashMap;
-use std::path::PathBuf;
-use std::time::Instant;
-
 use crate::cli::display::{display_job, heading, line};
 use crate::cli::settings;
 use crate::cli::settings::Settings;
 use crate::cli::urls;
+use byte_unit::{Byte, UnitType};
 use clap::Args;
 use clap::{Parser, Subcommand};
+use enum_iterator::all;
 use log::{self, LevelFilter};
 use packtrack::Result;
 use packtrack::api::Filters;
 use packtrack::api::Job;
 use packtrack::api::{Context, track_urls};
+use packtrack::cache::{Cache, JsonCache};
 use packtrack::tracker::PackageStatus;
+use packtrack::url_store::AnnotatedUrl;
+use packtrack::utils::check_path_exists;
+use std::collections::HashMap;
+use std::path::PathBuf;
+use std::time::Instant;
 
 pub async fn main() -> Result<()> {
     let args = Cli::parse();
@@ -71,10 +72,27 @@ pub async fn main() -> Result<()> {
         Some(Command::Config { command }) => {
             handle_config_command(command, sets)?
         }
+        Some(Command::Cache { command }) => {
+            handle_cache_command(command, &sets)?
+        }
     }
     Ok(())
 }
-
+fn handle_cache_command(
+    command: CacheCommand,
+    settings: &Settings,
+) -> Result<()> {
+    match command {
+        CacheCommand::Size => {
+            let cache = JsonCache::new()?;
+            let size = cache.size_bytes()?;
+            let human_readable =
+                Byte::from_u64(size).get_appropriate_unit(UnitType::Binary);
+            println!("{human_readable:#.1}")
+        }
+    }
+    Ok(())
+}
 /// URL file management
 async fn handle_url_command(
     command: UrlCommand,
@@ -224,6 +242,11 @@ enum Command {
         #[command(subcommand)]
         command: ConfigCommand,
     },
+    /// Cache management
+    Cache {
+        #[command(subcommand)]
+        command: CacheCommand,
+    },
 }
 #[derive(Subcommand)]
 enum UrlCommand {
@@ -254,6 +277,13 @@ struct UrlArgs {
     #[arg(short, long, value_parser = check_path_exists)]
     urls_file: Option<PathBuf>,
 }
+
+#[derive(Subcommand)]
+enum CacheCommand {
+    /// Get the cache size
+    Size,
+}
+
 #[derive(Subcommand)]
 enum ConfigCommand {
     /// List the current settings
