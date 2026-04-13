@@ -51,6 +51,9 @@ impl JsonCache {
 }
 #[async_trait]
 impl Cache for JsonCache {
+    fn get_all_urls(&self) -> Vec<String> {
+        self.contents.keys().cloned().collect()
+    }
     fn get_all(&self, url: &str) -> Vec<&CacheEntry> {
         self.contents
             .get(url)
@@ -78,6 +81,21 @@ impl Cache for JsonCache {
             .or_insert(vec![entry]);
         log::info!("Inserted new cache entry for {url}");
         self.modified = true;
+    }
+    fn remove(&mut self, url: &str) -> Vec<CacheEntry> {
+        let entries = self
+            .contents
+            .remove(url)
+            .unwrap_or_default();
+        if entries.len() > 0 {
+            log::info!(
+                "Removed {} from cache which had {} entries",
+                url,
+                entries.len()
+            );
+            self.modified = true;
+        }
+        entries
     }
     // Save to file
     async fn save(&self) -> Result<()> {
@@ -169,6 +187,36 @@ mod tests {
                 .text
                 .eq("text3")
         );
+    }
+    #[test]
+    fn test_remove() {
+        let now = Utc::now();
+        let mut cache = JsonCache::default();
+        cache.insert("url".into(), "text".into());
+        cache.insert("url".into(), "text2".into());
+        cache.insert("url2".into(), "text3".into());
+
+        let removed = cache.remove("url");
+        assert_eq!(removed.len(), 2);
+        assert_eq!(cache.contents.len(), 1);
+    }
+    #[test]
+    fn test_prune() {
+        let now = Utc::now();
+        let mut cache = JsonCache::default();
+        cache.insert("url".into(), "text".into());
+        cache.insert("url".into(), "text2".into());
+        cache.insert("url2".into(), "text3".into());
+        cache.insert("url3".into(), "text4".into());
+
+        let keep: Vec<String> = vec!["url2".into(), "url3".into()];
+        let removed = cache.prune(&keep);
+        assert_eq!(removed.len(), 1);
+        assert_eq!(removed, ["url"]);
+        assert_eq!(cache.contents.len(), 2);
+
+        let removed = cache.prune(&vec![]);
+        assert_eq!(removed, ["url2", "url3"]);
     }
     #[test]
     fn test_get_younger_than() {

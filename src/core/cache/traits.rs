@@ -12,6 +12,9 @@ use serde::{Deserialize, Serialize};
 
 #[async_trait]
 pub trait Cache {
+    /// Get all the URLs in the cache
+    fn get_all_urls(&self) -> Vec<String>;
+
     /// Get all the entries for the given url
     fn get_all(&self, url: &str) -> Vec<&CacheEntry>;
 
@@ -49,4 +52,26 @@ pub trait Cache {
 
     /// Get the size of the cache in bytes
     fn size_bytes(&self) -> Result<u64>;
+
+    /// Remove any entries associated with the given URL, returning the removed
+    /// entries.
+    fn remove(&mut self, url: &str) -> Vec<CacheEntry>;
+
+    /// Remove any entries that are not associated with the given list of URLs.
+    /// Return the URLs that were removed.
+    fn prune(&mut self, keep: &Vec<String>) -> Vec<String> {
+        // Make a list of the URLs to remove
+        let remove: Vec<String> = self
+            .get_all_urls()
+            .iter()
+            .filter(|url| !keep.contains(url))
+            .map(|s| s.to_string())
+            .collect();
+
+        // Remove entries associated with those URLs
+        for url in remove.iter() {
+            self.remove(url);
+        }
+        remove
+    }
 }
