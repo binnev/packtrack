@@ -1,0 +1,166 @@
+[
+  {
+    "id": "202604ff-7dfb-783d-e751-3435cbffabb6",
+    "barcode": "3SHKM05421234",
+    "barcodes": [
+      "3SHKM05421234"
+    ],
+    "view": {
+      "barcode": "3SHKM05421234",
+      "shipmentVariant": "SHIPMENT",
+      "receiver": {
+        "name": "Receiver Name",
+        "address": {
+          "countryCode": "NL",
+          "postalCode": "1234AB",
+          "street": "Receiver Street",
+          "city": "City",
+          "houseNumber": "420"
+        },
+        "email": "email@example.com",
+        "telephone": "+00000000000"
+      },
+      "shipper": {
+        "name": "Sender name"
+      },
+      "message": "DELIVERED_AT",
+      "moment": "2026-04-18T11:53:41+02:00",
+      "originalDestination": {
+        "address": {
+          "countryCode": "NL",
+          "postalCode": "1234AB",
+          "street": "Receiver Street",
+          "city": "City",
+          "houseNumber": "420"
+        },
+        "type": "ADDRESS"
+      },
+      "lastDestination": {
+        "address": {
+          "countryCode": "NL",
+          "postalCode": "1234AB",
+          "street": "Receiver Street",
+          "city": "City",
+          "houseNumber": "416"
+        },
+        "type": "NEIGHBOUR"
+      },
+      "queryType": "BarcodeWithPostalCode",
+      "phases": [
+        {
+          "phase": "DELIVERED",
+          "events": [
+            {
+              "timestamp": "2026-04-18T09:53:41Z",
+              "key": "DELIVERED_AT_NEIGHBOURS",
+              "exception": false
+            },
+            {
+              "timestamp": "2026-04-18T09:50:00Z",
+              "key": "DELIVERED",
+              "exception": false
+            }
+          ]
+        },
+        {
+          "phase": "IN_DELIVERY",
+          "events": [
+            {
+              "timestamp": "2026-04-18T09:07:50Z",
+              "key": "OUT_FOR_DELIVERY",
+              "exception": false
+            }
+          ]
+        },
+        {
+          "phase": "UNDERWAY",
+          "events": [
+            {
+              "timestamp": "2026-04-18T05:21:10Z",
+              "key": "PARCEL_ARRIVED_AT_LOCAL_DEPOT",
+              "exception": false
+            },
+            {
+              "timestamp": "2026-04-17T19:39:00Z",
+              "key": "PARCEL_SORTED_AT_HUB",
+              "exception": false
+            }
+          ]
+        },
+        {
+          "phase": "DATA_RECEIVED",
+          "events": [
+            {
+              "timestamp": "2026-04-17T15:05:13Z",
+              "key": "PRENOTIFICATION_RECEIVED",
+              "exception": false
+            }
+          ]
+        }
+      ],
+      "phaseDisplay": [
+        {
+          "phase": "DATA_RECEIVED",
+          "completed": true,
+          "exception": false
+        },
+        {
+          "phase": "UNDERWAY",
+          "completed": true,
+          "exception": false
+        },
+        {
+          "phase": "IN_DELIVERY",
+          "completed": true,
+          "exception": false
+        },
+        {
+          "phase": "DELIVERED",
+          "completed": true,
+          "exception": false
+        }
+      ],
+      "intervenable": false,
+      "showAsReturn": false,
+      "expectedMailboxDelivery": false,
+      "deliveryNetwork": "NL Ecommerce",
+      "shipmentOptions": [],
+      "destinationType": "NEIGHBOUR",
+      "isClimateNeutralDelivery": false,
+      "returnable": true,
+      "deliveryMomentView": {
+        "stateMessage": "DELIVERED_AT",
+        "deliveredAt": "2026-04-18T11:53:41+02:00",
+        "momentIndication": "2026-04-18T11:53:41+02:00",
+        "timeVisible": true,
+        "dateVisible": true,
+        "showServicePointDetails": "CLOSE_SERVICE_POINT_DETAILS"
+      },
+      "infoMessages": [],
+      "supportOption": "Chatbot"
+    },
+    "options": [],
+    "returnOptions": [
+      "CONTACT_SHIPPER",
+      "ALREADY_RECEIVED_LABEL",
+      "ALREADY_RECEIVED_QRCODE"
+    ],
+    "packageType": "Pakje",
+    "deliveredAt": "2026-04-18T11:53:41+02:00",
+    "returnedAt": null,
+    "undeliverableSince": null,
+    "lastKnownDestination": {
+      "address": {
+        "countryCode": "NL",
+        "postalCode": "1234AB",
+        "street": "Receiver Street",
+        "city": "City",
+        "houseNumber": "416"
+      },
+      "type": "NEIGHBOUR"
+    },
+    "isReturn": false,
+    "agreedPlaceProofOfDelivery": null,
+    "orderId": null
+  }
+]
