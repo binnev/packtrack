@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.0] - 2026-05-02
+
+### 🚀 Features
+
+- Cache size command
+
+
+- Cache prune command
+
+
+### 🚜 Refactor
+
+- Split up cache into module
+
+
+### 📚 Documentation
+
+- Documentation for cache commands
+
+
+### 🧪 Testing
+
+- Added dhl mock for delivered to neighbours
+
+
+- Added fedex mocks
+
+
+- Added dpd mocks
+
+
+- Fix flaky test
+
+
+### ⚙️ Miscellaneous Tasks
+
+- Update flake
+
+
 ## [2.6.1] - 2026-04-03
 
 ### 🐛 Bug Fixes
