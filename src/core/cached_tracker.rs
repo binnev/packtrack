@@ -9,7 +9,9 @@ use crate::cache::{Cache, JsonCache};
 use crate::tracker::{Package, PackageStatus, Tracker, TrackerContext};
 use crate::{Error, Result};
 
-/// Composed type with pluggable tracker + cache handlers.
+/// Composed type with pluggable tracker + cache handlers. Orchestrates:
+/// - Fetching a raw value from either the Tracker or the Cache
+/// - Parsing the raw value with Tracker
 pub struct CachedTracker<'a> {
     pub tracker: Box<dyn Tracker>,
     pub cache:   &'a Mutex<dyn Cache>,
@@ -24,7 +26,7 @@ impl<'a> CachedTracker<'a> {
     ) -> Result<Package> {
         if use_cache {
             match self
-                .get_cached(url, cache_seconds, use_cache, ctx)
+                .get_cached(url, cache_seconds, ctx)
                 .await
             {
                 Ok(Some(package)) => return Ok(package),
@@ -36,13 +38,12 @@ impl<'a> CachedTracker<'a> {
                 ),
             }
         }
-        self.get_fresh(url, use_cache, ctx)
-            .await
+        self.get_fresh(url, ctx).await
     }
+
     async fn get_fresh(
         &mut self,
         url: &str,
-        use_cache: bool,
         ctx: &'a TrackerContext<'_>,
     ) -> Result<Package> {
         let text = match self.tracker.get_raw(url, ctx).await {
@@ -67,33 +68,23 @@ impl<'a> CachedTracker<'a> {
             }
             Err(err) => return Err(err),
         };
-        // TODO: Is this what we want? If `use_cache` is false, should we _not_
-        // store the result in the cache? Do we need separate flags for "read
-        // from cache" and "write to cache"? If we want to make this program
-        // totally stateless, then no reading OR writing to a cache should be
-        // the default. In which case, maybe the decision should be made higher
-        // up to use a bare Tracker, not a CachedTracker. That also means we can
-        // remove the quite silly `use_cache` arg from CachedTracker. Why is it
-        // called CachedTracker if we don't want to use the cache?
-        if use_cache {
-            self.cache
-                .lock()
-                .await
-                .insert(url.to_owned(), text.clone());
-        }
+        self.cache
+            .lock()
+            .await
+            .insert(url.to_owned(), text.clone());
         let package = self.tracker.parse(text)?;
         Ok(package)
     }
+
     async fn get_cached(
         &mut self,
         url: &str,
         cache_seconds: usize,
-        use_cache: bool,
         ctx: &'a TrackerContext<'_>,
     ) -> Result<Option<Package>> {
         let cache = self.cache.lock().await;
         let cached = cache.get(url).cloned();
-        drop(cache); // allows other async threads to continue
+        drop(cache); // allows other async threads to use it
 
         if let Some(entry) = cached {
             match self.tracker.parse(entry.text.clone()) {
