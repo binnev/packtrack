@@ -215,7 +215,8 @@ mod tests {
         assert_eq!(removed, ["url"]);
         assert_eq!(cache.contents.len(), 2);
 
-        let removed = cache.prune(&vec![]);
+        let mut removed = cache.prune(&vec![]);
+        removed.sort();
         assert_eq!(removed, ["url2", "url3"]);
     }
     #[test]
