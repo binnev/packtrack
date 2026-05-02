@@ -1,22 +1,23 @@
-use enum_iterator::all;
-use packtrack::url_store::AnnotatedUrl;
-use packtrack::utils::check_path_exists;
-use std::collections::HashMap;
-use std::path::PathBuf;
-use std::time::Instant;
-
 use crate::cli::display::{display_job, heading, line};
 use crate::cli::settings;
 use crate::cli::settings::Settings;
 use crate::cli::urls;
+use byte_unit::{Byte, UnitType};
 use clap::Args;
 use clap::{Parser, Subcommand};
+use enum_iterator::all;
 use log::{self, LevelFilter};
 use packtrack::Result;
 use packtrack::api::Filters;
 use packtrack::api::Job;
 use packtrack::api::{Context, track_urls};
+use packtrack::cache::{Cache, JsonCache};
 use packtrack::tracker::PackageStatus;
+use packtrack::url_store::AnnotatedUrl;
+use packtrack::utils::check_path_exists;
+use std::collections::HashMap;
+use std::path::PathBuf;
+use std::time::Instant;
 
 pub async fn main() -> Result<()> {
     let args = Cli::parse();
@@ -71,10 +72,77 @@ pub async fn main() -> Result<()> {
         Some(Command::Config { command }) => {
             handle_config_command(command, sets)?
         }
+        Some(Command::Cache { command }) => {
+            handle_cache_command(command, &sets).await?
+        }
     }
     Ok(())
 }
+async fn handle_cache_command(
+    command: CacheCommand,
+    settings: &Settings,
+) -> Result<()> {
+    match command {
+        CacheCommand::Size => {
+            let cache = JsonCache::new()?;
+            let size = cache.size_bytes()?;
+            let human_readable =
+                Byte::from_u64(size).get_appropriate_unit(UnitType::Binary);
+            println!("{human_readable:#.1}");
+        }
+        CacheCommand::Prune { dry_run, args } => {
+            let urls_file = args
+                .urls_file
+                .as_ref()
+                .unwrap_or(&settings.urls_file);
+            log::info!("Using URLs file {urls_file:#?}");
 
+            let mut cache = JsonCache::new()?;
+            let cache_size_before = cache.size_bytes()?;
+
+            let keep: Vec<String> = urls::filter(&urls_file, None)?
+                .into_iter()
+                .map(|au| au.url)
+                .collect();
+            log::info!("Aiming to keep {} urls", keep.len());
+            for url in keep.iter() {
+                log::debug!("Keep {url}");
+            }
+
+            let removed_urls = cache.prune(&keep);
+
+            if dry_run {
+                println!("Would remove {} urls (dry run)", removed_urls.len());
+                for url in removed_urls {
+                    log::debug!("Removed {url}");
+                }
+            } else {
+                cache.save().await?;
+                let cache_size_after = cache.size_bytes()?;
+                println!("Removed {} urls", removed_urls.len());
+                for url in &removed_urls {
+                    log::debug!("Removed {url}");
+                }
+                if removed_urls.len() > 0 {
+                    println!(
+                        "Cache size reduced from {:#.1} to {:#.1}",
+                        Byte::from_u64(cache_size_before)
+                            .get_appropriate_unit(UnitType::Binary),
+                        Byte::from_u64(cache_size_after)
+                            .get_appropriate_unit(UnitType::Binary),
+                    );
+                } else {
+                    println!(
+                        "Cache size is still {:#.1}",
+                        Byte::from_u64(cache_size_before)
+                            .get_appropriate_unit(UnitType::Binary),
+                    )
+                }
+            }
+        }
+    }
+    Ok(())
+}
 /// URL file management
 async fn handle_url_command(
     command: UrlCommand,
@@ -224,6 +292,11 @@ enum Command {
         #[command(subcommand)]
         command: ConfigCommand,
     },
+    /// Cache management
+    Cache {
+        #[command(subcommand)]
+        command: CacheCommand,
+    },
 }
 #[derive(Subcommand)]
 enum UrlCommand {
@@ -254,6 +327,21 @@ struct UrlArgs {
     #[arg(short, long, value_parser = check_path_exists)]
     urls_file: Option<PathBuf>,
 }
+
+#[derive(Subcommand)]
+enum CacheCommand {
+    /// Get the cache size
+    Size,
+    /// Remove cache entries for URLs that are no longer in the URL store
+    Prune {
+        /// Perform a dry run without modifying the cache
+        #[arg(long)]
+        dry_run: bool,
+        #[clap(flatten)]
+        args:    UrlArgs,
+    },
+}
+
 #[derive(Subcommand)]
 enum ConfigCommand {
     /// List the current settings

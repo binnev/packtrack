@@ -1,67 +1,18 @@
+use std::os::unix::fs::MetadataExt;
 use std::time::Duration;
 use std::{collections::HashMap, fs, path::PathBuf};
 
+use crate::cache::models::CacheEntry;
+use crate::cache::traits::Cache;
+use crate::cache::utils::{get_cache_dir, log_hit};
 use crate::tracker::TimeWindow;
 use crate::utils::UtcTime;
 use crate::{Result, utils};
 use async_trait::async_trait;
 use chrono::{TimeDelta, Utc};
 use serde::{Deserialize, Serialize};
+use std::fs::metadata;
 
-#[async_trait]
-pub trait Cache {
-    /// Get all the entries for the given url
-    fn get_all(&self, url: &str) -> Vec<&CacheEntry>;
-
-    /// Get the latest cached response.text for the given URL.
-    /// Ignores the age of the entry.
-    fn get(&self, url: &str) -> Option<&CacheEntry> {
-        self.get_all(url)
-            .into_iter()
-            .max_by(|a, b| a.created.cmp(&b.created))
-            .inspect(|entry| log_hit(url, entry))
-    }
-
-    /// Get the latest cached entry younger than a given age.
-    fn get_younger_than(
-        &self,
-        url: &str,
-        max_age: Duration,
-    ) -> Option<&CacheEntry> {
-        let now = Utc::now();
-        let min_created = now - max_age;
-        self.get_all(url)
-            .into_iter()
-            .filter(|entry| entry.created >= min_created)
-            .max_by(|a, b| a.created.cmp(&b.created))
-            .inspect(|entry| log_hit(url, entry))
-    }
-
-    /// Insert a cached response.text for the given URL.
-    /// `mut` because the implementation must store its state in memory.
-    fn insert(&mut self, url: String, text: String);
-
-    /// Save the cache to preserve it between runs
-    /// `Result` so the implementation can do IO.
-    async fn save(&self) -> Result<()>;
-}
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct CacheEntry {
-    pub text:    String,
-    pub created: UtcTime,
-}
-impl CacheEntry {
-    pub fn age(&self) -> TimeDelta {
-        Utc::now() - self.created
-    }
-}
-
-fn log_hit(url: &str, entry: &CacheEntry) {
-    log::debug!(
-        "Reusing {}s old cache entry for {url}",
-        entry.age().num_seconds()
-    )
-}
 #[derive(Default)]
 pub struct JsonCache {
     contents:        HashMap<String, Vec<CacheEntry>>,
@@ -100,6 +51,9 @@ impl JsonCache {
 }
 #[async_trait]
 impl Cache for JsonCache {
+    fn get_all_urls(&self) -> Vec<String> {
+        self.contents.keys().cloned().collect()
+    }
     fn get_all(&self, url: &str) -> Vec<&CacheEntry> {
         self.contents
             .get(url)
@@ -128,6 +82,21 @@ impl Cache for JsonCache {
         log::info!("Inserted new cache entry for {url}");
         self.modified = true;
     }
+    fn remove(&mut self, url: &str) -> Vec<CacheEntry> {
+        let entries = self
+            .contents
+            .remove(url)
+            .unwrap_or_default();
+        if entries.len() > 0 {
+            log::info!(
+                "Removed {} from cache which had {} entries",
+                url,
+                entries.len()
+            );
+            self.modified = true;
+        }
+        entries
+    }
     // Save to file
     async fn save(&self) -> Result<()> {
         #[cfg(test)]
@@ -138,12 +107,10 @@ impl Cache for JsonCache {
         log::info!("Saved JSON cache to {cache_file:?}");
         Ok(())
     }
-}
-
-fn get_cache_dir() -> Result<PathBuf> {
-    let dirs = utils::project_dirs()?;
-    let cache_dir = dirs.cache_dir();
-    Ok(cache_dir.to_owned())
+    fn size_bytes(&self) -> Result<u64> {
+        let cache_file = Self::get_file()?;
+        Ok(metadata(cache_file)?.size())
+    }
 }
 
 #[cfg(test)]
@@ -220,6 +187,37 @@ mod tests {
                 .text
                 .eq("text3")
         );
+    }
+    #[test]
+    fn test_remove() {
+        let now = Utc::now();
+        let mut cache = JsonCache::default();
+        cache.insert("url".into(), "text".into());
+        cache.insert("url".into(), "text2".into());
+        cache.insert("url2".into(), "text3".into());
+
+        let removed = cache.remove("url");
+        assert_eq!(removed.len(), 2);
+        assert_eq!(cache.contents.len(), 1);
+    }
+    #[test]
+    fn test_prune() {
+        let now = Utc::now();
+        let mut cache = JsonCache::default();
+        cache.insert("url".into(), "text".into());
+        cache.insert("url".into(), "text2".into());
+        cache.insert("url2".into(), "text3".into());
+        cache.insert("url3".into(), "text4".into());
+
+        let keep: Vec<String> = vec!["url2".into(), "url3".into()];
+        let removed = cache.prune(&keep);
+        assert_eq!(removed.len(), 1);
+        assert_eq!(removed, ["url"]);
+        assert_eq!(cache.contents.len(), 2);
+
+        let mut removed = cache.prune(&vec![]);
+        removed.sort();
+        assert_eq!(removed, ["url2", "url3"]);
     }
     #[test]
     fn test_get_younger_than() {
