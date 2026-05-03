@@ -1,5 +1,5 @@
-mod cli;
 mod display;
+mod main;
 mod settings;
 mod urls;
-pub use cli::*;
+pub use main::*;
