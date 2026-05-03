@@ -1,6 +1,6 @@
-use std::{num::ParseIntError, sync::PoisonError};
-
+use crate::url_store::UrlError;
 use derive_more::{From, derive::Display};
+use std::{num::ParseIntError, sync::PoisonError};
 
 pub type Result<T> = core::result::Result<T, Error>;
 
@@ -10,6 +10,9 @@ pub enum Error {
     #[from]
     #[display("{_0}")]
     Custom(String),
+
+    #[from]
+    Url(UrlError),
 
     // -- Externals
     #[from]

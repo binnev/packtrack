@@ -1,6 +1,5 @@
-use derive_more::Display;
 use packtrack::{
-    error::{Error, Result},
+    error::Result,
     url_store::{AnnotatedUrl, JsonUrlStore, SimpleUrlStore, UrlStore},
 };
 use std::path::PathBuf;
@@ -47,18 +46,4 @@ pub fn filter(
 ) -> Result<Vec<AnnotatedUrl>> {
     let urls = load(file)?;
     Ok(urls.filter(query))
-}
-
-#[derive(Debug, Display)]
-pub enum UrlError {
-    #[display("'{_0}' is already in the URLs file")]
-    AlreadyInFile(String),
-
-    #[display("'{_0}' was not found in the URLs file")]
-    NotFound(String),
-}
-impl From<UrlError> for Error {
-    fn from(e: UrlError) -> Error {
-        Error::Custom(e.to_string())
-    }
 }

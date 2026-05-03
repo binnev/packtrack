@@ -4,13 +4,14 @@ use crate::{
     Result,
     url_store::{
         UrlStore,
+        models::AnnotatedUrl,
         utils::{add_to_list, filter, remove_from_list},
     },
     utils::save_json,
 };
 use std::{fs, path::PathBuf};
 
-use crate::{url_store::traits::AnnotatedUrl, utils::load_json};
+use crate::utils::load_json;
 
 /// Simple text-based url store with 1 url per line
 pub struct SimpleUrlStore {

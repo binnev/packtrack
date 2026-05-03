@@ -4,7 +4,7 @@ use crate::{
     Result,
     url_store::{
         UrlStore,
-        traits::{AnnotatedUrl, UrlError},
+        models::AnnotatedUrl,
         utils::{add_to_list, filter, remove_from_list},
     },
     utils::{load_json, save_json},

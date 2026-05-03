@@ -1,5 +1,6 @@
 use crate::Result;
-use crate::url_store::traits::{AnnotatedUrl, UrlError};
+use crate::url_store::error::UrlError;
+use crate::url_store::models::AnnotatedUrl;
 
 /// Add a URL to a list of URLs, but only if it's not already present in the
 /// list
