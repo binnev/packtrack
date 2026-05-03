@@ -4,8 +4,8 @@ use regex::Regex;
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{Event, Package, TimeWindow, tracker::Tracker};
 use crate::Result;
+use crate::tracker::{Event, Package, TimeWindow, Tracker};
 
 pub struct DhlTracker;
 

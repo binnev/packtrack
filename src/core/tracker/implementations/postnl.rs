@@ -1,9 +1,9 @@
 use std::default;
 
-use super::models::{Event, Package, TimeWindow};
-use super::tracker::Tracker;
 use crate::Result;
+use crate::tracker::Tracker;
 use crate::tracker::TrackerContext;
+use crate::tracker::{Event, Package, TimeWindow};
 use crate::utils::UtcTime;
 use async_trait::async_trait;
 use chrono::DateTime;
