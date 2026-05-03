@@ -5,7 +5,6 @@ use crate::cli::urls;
 use clap::Subcommand;
 use packtrack::Result;
 use packtrack::cache::{Cache, JsonCache};
-use std::fs;
 
 pub async fn handle_cache_command(
     command: CacheCommand,
@@ -13,16 +12,13 @@ pub async fn handle_cache_command(
 ) -> Result<()> {
     match command {
         CacheCommand::Clear => {
-            let file = JsonCache::get_file()?;
-            if !file.exists() {
-                println!("No cache exists currently");
-                return Ok(());
-            } else {
-                let bytes = JsonCache::new()?.size_bytes()?;
-                let human_readable = human_readable_bytes(bytes);
-                fs::remove_file(file)?;
-                println!("Cleared cache (was {human_readable})")
-            }
+            let mut cache = JsonCache::new()?;
+            let bytes = cache.size_bytes()?;
+            cache.clear();
+            cache.save()?;
+            let human_readable = human_readable_bytes(bytes);
+            println!("Cleared cache (was {human_readable})");
+            return Ok(());
         }
         CacheCommand::Location => {
             println!("{}", JsonCache::get_file()?.display())
@@ -65,7 +61,7 @@ pub async fn handle_cache_command(
                     log::debug!("Removed {url}");
                 }
             } else {
-                cache.save().await?;
+                cache.save()?;
                 let cache_size_after = cache.size_bytes()?;
                 println!("Removed {} urls", removed_urls.len());
                 for url in &removed_urls {

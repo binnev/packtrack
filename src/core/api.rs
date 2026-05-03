@@ -101,7 +101,7 @@ pub async fn track_urls(
     {
         let cache = cache.lock().await;
         if cache.modified {
-            cache.save().await?;
+            cache.save()?;
         }
     }
 

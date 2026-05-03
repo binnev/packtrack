@@ -6,11 +6,9 @@ use crate::cache::utils::{get_cache_dir, log_hit};
 use crate::tracker::TimeWindow;
 use crate::utils::UtcTime;
 use crate::{Result, utils};
-use async_trait::async_trait;
 use chrono::{TimeDelta, Utc};
 use serde::{Deserialize, Serialize};
 
-#[async_trait]
 pub trait Cache {
     /// Get all the URLs in the cache
     fn get_all_urls(&self) -> Vec<String>;
@@ -48,7 +46,7 @@ pub trait Cache {
 
     /// Save the cache to preserve it between runs
     /// `Result` so the implementation can do IO.
-    async fn save(&self) -> Result<()>;
+    fn save(&self) -> Result<()>;
 
     /// Get the size of the cache in bytes
     fn size_bytes(&self) -> Result<u64>;
@@ -74,4 +72,7 @@ pub trait Cache {
         }
         remove
     }
+
+    /// Remove all entries from the cache
+    fn clear(&mut self);
 }

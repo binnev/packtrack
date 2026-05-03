@@ -8,7 +8,6 @@ use crate::cache::utils::{get_cache_dir, log_hit};
 use crate::tracker::TimeWindow;
 use crate::utils::UtcTime;
 use crate::{Result, utils};
-use async_trait::async_trait;
 use chrono::{TimeDelta, Utc};
 use serde::{Deserialize, Serialize};
 use std::fs::metadata;
@@ -18,7 +17,7 @@ pub struct JsonCache {
     contents:        HashMap<String, Vec<CacheEntry>>,
     /// max entries per url
     pub max_entries: Option<usize>,
-    /// any entries older than this will not be reused
+    /// If true, the in-memory cache has been modified compared to the file
     pub modified:    bool,
 }
 impl JsonCache {
@@ -49,7 +48,6 @@ impl JsonCache {
         Ok(get_cache_dir()?.join("packtrack-cache.json"))
     }
 }
-#[async_trait]
 impl Cache for JsonCache {
     fn get_all_urls(&self) -> Vec<String> {
         self.contents.keys().cloned().collect()
@@ -98,7 +96,7 @@ impl Cache for JsonCache {
         entries
     }
     // Save to file
-    async fn save(&self) -> Result<()> {
+    fn save(&self) -> Result<()> {
         #[cfg(test)]
         return Ok(()); // don't write to file in tests
 
@@ -114,6 +112,11 @@ impl Cache for JsonCache {
         } else {
             Ok(0)
         }
+    }
+
+    fn clear(&mut self) {
+        self.contents.clear();
+        self.modified = true;
     }
 }
 
