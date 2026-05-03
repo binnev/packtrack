@@ -109,7 +109,11 @@ impl Cache for JsonCache {
     }
     fn size_bytes(&self) -> Result<u64> {
         let cache_file = Self::get_file()?;
-        Ok(metadata(cache_file)?.size())
+        if cache_file.exists() {
+            Ok(metadata(cache_file)?.size())
+        } else {
+            Ok(0)
+        }
     }
 }
 
