@@ -22,6 +22,10 @@ pub trait UrlStore {
     /// Filter the contents of the url store by a query. If the query is none,
     /// return all the urls.
     fn filter(&self, query: Option<&str>) -> Vec<AnnotatedUrl>;
+
+    /// Save the URL store to preserve it between runs.
+    /// `Result` so the implementation can do IO.
+    fn save(&self) -> Result<()>;
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]

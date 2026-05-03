@@ -30,19 +30,6 @@ impl SimpleUrlStore {
 
         Ok(Self { path, urls })
     }
-    pub fn save(&self) -> Result<()> {
-        #[cfg(test)]
-        return Ok(());
-
-        let urls: Vec<String> = self
-            .urls
-            .iter()
-            .cloned()
-            .map(|u| serialize(&u))
-            .collect();
-        fs::write(&self.path, urls.join("\n"))?;
-        Ok(())
-    }
 }
 impl UrlStore for SimpleUrlStore {
     fn add(&mut self, entry: AnnotatedUrl) -> Result<()> {
@@ -59,6 +46,19 @@ impl UrlStore for SimpleUrlStore {
     }
     fn filter(&self, query: Option<&str>) -> Vec<AnnotatedUrl> {
         filter(&self.urls, query)
+    }
+    fn save(&self) -> Result<()> {
+        #[cfg(test)]
+        return Ok(());
+
+        let urls: Vec<String> = self
+            .urls
+            .iter()
+            .cloned()
+            .map(|u| serialize(&u))
+            .collect();
+        fs::write(&self.path, urls.join("\n"))?;
+        Ok(())
     }
 }
 

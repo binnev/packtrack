@@ -27,7 +27,8 @@ pub fn load(file: &PathBuf) -> Result<Box<dyn UrlStore>> {
 pub fn add(file: &PathBuf, url: AnnotatedUrl) -> Result<()> {
     log::info!("adding {url}");
     let mut urls = load(file)?;
-    urls.add(url)
+    urls.add(url)?;
+    urls.save()
 }
 
 /// Remove a URL from file
@@ -35,6 +36,7 @@ pub fn remove(file: &PathBuf, pattern: String) -> Result<Vec<AnnotatedUrl>> {
     log::info!("removing URLs matching pattern {pattern}");
     let mut urls = load(file)?;
     let removed = urls.remove(&pattern)?;
+    urls.save()?;
     Ok(removed)
 }
 

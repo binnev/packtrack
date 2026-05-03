@@ -24,10 +24,6 @@ impl JsonUrlStore {
         let urls = load_json(&path)?;
         Ok(Self { path, urls })
     }
-    /// Save the in-memory list of URLs to file.
-    pub fn save(&self) -> Result<()> {
-        save_json(&self.path, &self.urls)
-    }
 }
 impl UrlStore for JsonUrlStore {
     fn add(&mut self, entry: AnnotatedUrl) -> Result<()> {
@@ -44,5 +40,9 @@ impl UrlStore for JsonUrlStore {
     }
     fn filter(&self, query: Option<&str>) -> Vec<AnnotatedUrl> {
         filter(&self.urls, query)
+    }
+    /// Save the in-memory list of URLs to file.
+    fn save(&self) -> Result<()> {
+        save_json(&self.path, &self.urls)
     }
 }
