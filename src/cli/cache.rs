@@ -1,6 +1,7 @@
 use crate::cli::display::human_readable_bytes;
 use crate::cli::settings::Settings;
-use crate::cli::{UrlArgs, urls};
+use crate::cli::url::UrlArgs;
+use crate::cli::urls;
 use clap::Subcommand;
 use packtrack::Result;
 use packtrack::cache::{Cache, JsonCache};
