@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.8.0] - 2026-05-03
+
+### 🚀 Features
+
+- *(CLI)* Cache commands to show location and clear cache
+
+
+### 📚 Documentation
+
+- Cache clear and location commands
+
+
 ## [2.7.0] - 2026-05-02
 
 ### 🚀 Features
