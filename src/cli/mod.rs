@@ -1,9 +1,12 @@
+mod commands;
 mod display;
 mod main;
 mod settings;
 mod urls;
+
 pub use main::*;
-mod cache;
-mod config;
-mod track;
-mod url;
+
+pub use commands::cache;
+pub use commands::config;
+pub use commands::track;
+pub use commands::url;

@@ -4,6 +4,7 @@ use packtrack::{
 };
 use std::path::PathBuf;
 
+// TODO: This should be in core
 /// Load URLs from file
 pub fn load(file: &PathBuf) -> Result<Box<dyn UrlStore>> {
     if !file.exists() {

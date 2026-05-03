@@ -7,6 +7,7 @@ use std::{collections::HashMap, path::PathBuf};
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 
+// TODO: This should be in core
 #[derive(Serialize, Deserialize)]
 pub struct Settings {
     pub urls_file:         PathBuf, // owned equivalent to Path

@@ -1,7 +1,6 @@
 use std::fmt::Display;
 
 use byte_unit::{Byte, UnitType};
-// use crate::core::tracker::{Package, PackageStatus};
 use chrono::{DateTime, Datelike, Local, TimeZone};
 use packtrack::{
     api::Job,
