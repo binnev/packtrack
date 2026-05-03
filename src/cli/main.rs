@@ -1,4 +1,5 @@
 use crate::cli::cache::{CacheCommand, handle_cache_command};
+use crate::cli::config::{ConfigCommand, handle_config_command};
 use crate::cli::display::{display_job, heading, line};
 use crate::cli::settings;
 use crate::cli::settings::Settings;
@@ -75,18 +76,6 @@ pub async fn main() -> Result<()> {
         Some(Command::Cache { command }) => {
             handle_cache_command(command, &sets).await?
         }
-    }
-    Ok(())
-}
-
-fn handle_config_command(command: ConfigCommand, sets: Settings) -> Result<()> {
-    match command {
-        ConfigCommand::List => settings::print()?,
-        ConfigCommand::Set { key, value } => {
-            let sets = sets.update(&key, value)?;
-            settings::save(&sets)?;
-        }
-        ConfigCommand::Reset => settings::reset()?,
     }
     Ok(())
 }
@@ -181,16 +170,6 @@ enum Command {
         #[command(subcommand)]
         command: CacheCommand,
     },
-}
-
-#[derive(Subcommand)]
-enum ConfigCommand {
-    /// List the current settings
-    List,
-    /// Update the settings
-    Set { key: String, value: String },
-    /// Reset settings to the defaults
-    Reset,
 }
 
 fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
