@@ -16,6 +16,7 @@ use packtrack::tracker::PackageStatus;
 use packtrack::url_store::AnnotatedUrl;
 use packtrack::utils::check_path_exists;
 use std::collections::HashMap;
+use std::fs;
 use std::path::PathBuf;
 use std::time::Instant;
 
@@ -83,7 +84,25 @@ async fn handle_cache_command(
     settings: &Settings,
 ) -> Result<()> {
     match command {
+        CacheCommand::Clear => {
+            let file = JsonCache::get_file()?;
+            if !file.exists() {
+                println!("No cache exists currently");
+                return Ok(());
+            } else {
+                let cache = JsonCache::new()?;
+                let size = cache.size_bytes()?;
+                let human_readable =
+                    Byte::from_u64(size).get_appropriate_unit(UnitType::Binary);
+                fs::remove_file(file)?;
+                println!("Cleared cache (was {human_readable:#.1})")
+            }
+        }
+        CacheCommand::Location => {
+            println!("{}", JsonCache::get_file()?.display())
+        }
         CacheCommand::Size => {
+            // TODO: Handle cache no exist
             let cache = JsonCache::new()?;
             let size = cache.size_bytes()?;
             let human_readable =
@@ -91,6 +110,12 @@ async fn handle_cache_command(
             println!("{human_readable:#.1}");
         }
         CacheCommand::Prune { dry_run, args } => {
+            let file = JsonCache::get_file()?;
+            if !file.exists() {
+                println!("Cache is empty");
+                return Ok(());
+            }
+
             let urls_file = args
                 .urls_file
                 .as_ref()
@@ -340,6 +365,10 @@ enum CacheCommand {
         #[clap(flatten)]
         args:    UrlArgs,
     },
+    /// Show where the cache is stored on disk
+    Location,
+    /// Empty the cache
+    Clear,
 }
 
 #[derive(Subcommand)]

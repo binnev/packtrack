@@ -45,7 +45,7 @@ impl JsonCache {
         log::info!("Loaded JSON cache from {cache_file:?}");
         Ok(contents)
     }
-    fn get_file() -> Result<PathBuf> {
+    pub fn get_file() -> Result<PathBuf> {
         Ok(get_cache_dir()?.join("packtrack-cache.json"))
     }
 }
