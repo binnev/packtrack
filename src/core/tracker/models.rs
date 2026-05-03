@@ -1,8 +1,8 @@
-use chrono_tz::{Europe::Amsterdam, Tz};
-use std::fmt::Display;
-
+use crate::Error;
 use chrono::{DateTime, Datelike, Local, TimeZone, Utc};
+use chrono_tz::{Europe::Amsterdam, Tz};
 use enum_iterator::Sequence;
+use std::fmt::Display;
 
 use crate::utils::UtcTime;
 
@@ -37,9 +37,10 @@ pub struct Event {
     pub text:      String,
 }
 
-#[derive(Debug, Hash, PartialEq, Eq, Sequence, Clone)]
+#[derive(Debug, Hash, PartialEq, Eq, Clone)]
 pub enum PackageStatus {
     Delivered,
+    DeliveredToNeighbour { address: String },
     InTransit,
 }
 impl Display for PackageStatus {
