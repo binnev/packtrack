@@ -1,5 +1,6 @@
 use std::fmt::Display;
 
+use byte_unit::{Byte, UnitType};
 // use crate::core::tracker::{Package, PackageStatus};
 use chrono::{DateTime, Datelike, Local, TimeZone};
 use packtrack::{
@@ -133,6 +134,12 @@ fn display_job_error(job: &Job) -> String {
     parts.push(format!("URL: {}", job.url.url.clone()));
     parts.push(format!("Error: {}", job.result.as_ref().err().unwrap()));
     return parts.join("\n");
+}
+
+pub fn human_readable_bytes(bytes: u64) -> String {
+    let human_readable =
+        Byte::from_u64(bytes).get_appropriate_unit(UnitType::Binary);
+    format!("{human_readable:#.1}")
 }
 
 #[cfg(test)]
