@@ -10,20 +10,13 @@ use crate::utils::UtcTime;
 pub struct Package {
     pub barcode:    String,
     pub channel:    String,
+    pub status:     PackageStatus,
     pub sender:     Option<String>,
     pub recipient:  Option<String>,
     pub eta:        Option<UtcTime>,
     pub eta_window: Option<TimeWindow>,
     pub delivered:  Option<UtcTime>,
     pub events:     Vec<Event>,
-}
-impl Package {
-    pub fn status(&self) -> PackageStatus {
-        match self.delivered {
-            Some(time) => PackageStatus::Delivered,
-            None => PackageStatus::InTransit,
-        }
-    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]

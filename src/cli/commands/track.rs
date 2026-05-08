@@ -69,7 +69,7 @@ pub fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
     let mut errors: Vec<Job> = Vec::new();
     for job in jobs {
         match &job.result {
-            Ok(package) => match package.status() {
+            Ok(package) => match package.status {
                 PackageStatus::Delivered => delivered.push(job),
                 PackageStatus::DeliveredToNeighbour { .. } => {
                     delivered_to_neighbour.push(job)
@@ -105,11 +105,11 @@ pub fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
     let line = format!("\n{}\n", line());
     for jobs in [delivered, delivered_to_neighbour, in_transit] {
         if let Some(first) = jobs.first() {
-            let status = first
+            let status = &first
                 .result
                 .as_ref()
                 .expect("This should be a success!")
-                .status();
+                .status;
             let separator = match status {
                 PackageStatus::Delivered
                 | PackageStatus::DeliveredToNeighbour { .. } => {

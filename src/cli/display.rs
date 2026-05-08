@@ -70,7 +70,7 @@ pub fn display_event(event: &Event) -> String {
 
 pub fn display_job(job: &Job, delivered_detail: bool) -> String {
     match &job.result {
-        Ok(package) => match package.status() {
+        Ok(package) => match package.status {
             PackageStatus::Delivered if !delivered_detail => {
                 display_job_delivered_oneliner(job, package)
             }
