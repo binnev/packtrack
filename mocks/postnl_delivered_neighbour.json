@@ -71,7 +71,7 @@
                 "address": {
                     "street": "Streetname",
                     "houseNumber": "69",
-                    "houseNumberSuffix": null,
+                    "houseNumberSuffix": "b",
                     "postalCode": "1234AB",
                     "town": "UTRECHT",
                     "country": "NL"

@@ -1,6 +1,7 @@
 use std::default;
 
 use crate::Result;
+use crate::tracker::PackageStatus;
 use crate::tracker::Tracker;
 use crate::tracker::TrackerContext;
 use crate::tracker::{Event, Package, TimeWindow};
@@ -40,6 +41,7 @@ impl Tracker for PostNLTracker {
         Ok(Package {
             barcode:    package.barcode.clone(),
             channel:    "PostNL".into(),
+            status:     package.status(),
             sender:     package.sender(),
             recipient:  package.recipient(),
             eta:        package.eta(),
@@ -100,19 +102,43 @@ fn build_url(
     url
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 struct PostNLPackage {
-    barcode:           String,
-    sender:            Option<Party>,
-    recipient:         Option<Party>,
-    delivery_date:     Option<UtcTime>,
-    route_information: Option<RouteInfo>,
-    analytics_info:    AnalyticsInfo,
-    eta:               Option<Eta>,
-    status_phase:      Option<StatusPhase>,
+    barcode:               String,
+    sender:                Option<Party>,
+    recipient:             Option<Party>,
+    delivery_date:         Option<UtcTime>,
+    route_information:     Option<RouteInfo>,
+    analytics_info:        AnalyticsInfo,
+    eta:                   Option<Eta>,
+    status_phase:          Option<StatusPhase>,
+    delivery_address_type: Option<String>,
+    delivery_address:      Option<Party>,
 }
 impl PostNLPackage {
+    fn get_neighbour_address(&self) -> Option<String> {
+        if self.delivery_address_type.as_ref()? != "Neighbour" {
+            return None;
+        }
+        let address = self.clone().delivery_address?.address?;
+        let street = address.street?;
+        let mut number = address.house_number?;
+        if let Some(suffix) = address.house_number_suffix {
+            number += &suffix;
+        }
+        Some(format!("{street} {number}"))
+    }
+    fn status(&self) -> PackageStatus {
+        if let Some(dt) = self.delivery_datetime() {
+            if let Some(address) = self.get_neighbour_address() {
+                return PackageStatus::DeliveredToNeighbour { address };
+            }
+            return PackageStatus::Delivered;
+        };
+
+        PackageStatus::InTransit
+    }
     fn sender(&self) -> Option<String> {
         self.sender
             .as_ref()
@@ -190,23 +216,23 @@ fn get_last_event_datetime(events: &Vec<Event>) -> Option<UtcTime> {
         .map(|e| e.timestamp)
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 struct StatusPhase {
     message: Option<String>,
 }
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 struct AnalyticsInfo {
     all_observations: Vec<PostNLEvent>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 struct Names {
     company_name: Option<String>,
     person_name:  Option<String>,
 }
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 struct Address {
     street:              Option<String>,
@@ -229,7 +255,7 @@ impl Address {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 struct Party {
     names:   Names,
     address: Option<Address>,
@@ -254,7 +280,7 @@ struct PostNLTimeWindow {
     end_date_time:   Option<UtcTime>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 struct PostNLEvent {
     observation_date: UtcTime,
@@ -276,7 +302,7 @@ struct RouteInfo {
     expected_delivery_time_window: Option<PostNLTimeWindow>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 struct Eta {
     r#type: String, // r# allows us to use a keyword as a field name
     start:  Option<UtcTime>,
@@ -503,6 +529,19 @@ mod tests {
             .unwrap();
         assert_eq!(event.timestamp, utc("2024-11-16T10:45:27+01:00"));
         assert_eq!(event.text, "Shipment delivered");
+        Ok(())
+    }
+
+    #[test]
+    fn test_delivered_to_neighbour() -> Result<()> {
+        let mock = mocks::load_text("postnl_delivered_neighbour.json")?;
+        let package = PostNLTracker.parse(mock)?;
+        assert_eq!(
+            package.status,
+            PackageStatus::DeliveredToNeighbour {
+                address: "Streetname 69b".into(),
+            }
+        );
         Ok(())
     }
 
