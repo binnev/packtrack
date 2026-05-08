@@ -98,8 +98,13 @@ impl GlsPackage {
             let mut neighbour = None;
             if let Some(events) = &self.scans {
                 for event in events.iter() {
-                    if let Some(name) = &event.deliver_name {
-                        neighbour = Some(name.clone());
+                    // FIXME: so robust
+                    if let Some(scan_type) = event.scan_type
+                        && scan_type == 7
+                    {
+                        if let Some(name) = &event.deliver_name {
+                            neighbour = Some(name.clone());
+                        }
                     }
                 }
             }
@@ -143,6 +148,7 @@ struct GlsEvent {
     // Populated if the package is delivered to someone other than the
     // addressee
     deliver_name:                Option<String>,
+    scan_type:                   Option<u32>,
 }
 impl GlsEvent {
     fn to_event(&self) -> Result<Event> {
@@ -496,6 +502,14 @@ mod tests {
         assert_eq!(event.timestamp, utc("2026-03-10T08:58:33Z"));
         assert_eq!(event.text, "Afgeleverd - bij buren | Buren 69");
         assert_eq!(package.delivered.unwrap(), utc("2026-03-10T08:58:33Z"));
+        Ok(())
+    }
+
+    #[test]
+    fn test_delivered_not_to_neighbour() -> Result<()> {
+        let mock = mocks::load_text("gls_delivered_not_to_neighbour.json")?;
+        let package = GlsTracker.parse(mock)?;
+        assert_eq!(package.status, PackageStatus::Delivered);
         Ok(())
     }
 }
