@@ -5,7 +5,7 @@ use serde::Deserialize;
 use serde_json::Value;
 
 use crate::Result;
-use crate::tracker::{Event, Package, TimeWindow, Tracker};
+use crate::tracker::{Event, Package, PackageStatus, TimeWindow, Tracker};
 
 pub struct DhlTracker;
 
@@ -31,6 +31,7 @@ impl Tracker for DhlTracker {
         Ok(Package {
             barcode:    package.barcode.clone(),
             channel:    "DHL".into(),
+            status:     package.status(),
             sender:     package.sender(),
             recipient:  package.recipient(),
             eta:        package.eta(),
@@ -107,7 +108,7 @@ fn get_url(barcode: String) -> String {
     )
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 struct DhlPackage {
     barcode:                    String,
@@ -117,8 +118,29 @@ struct DhlPackage {
     shipper:                    Option<Party>,
     events:                     Vec<DhlEvent>,
     transit_time:               Option<TransitTime>,
+    destination:                Option<Destination>,
+}
+fn get_neighbour_address(package: &DhlPackage) -> Option<String> {
+    let dest = package.clone().destination?;
+    let receiver = dest.r#type?;
+    if receiver != "NEIGHBOUR" {
+        return None;
+    }
+    let address = dest.address?;
+    let street = address.street?;
+    let number = address.house_number?;
+    Some(format!("{street} {number}"))
 }
 impl DhlPackage {
+    fn status(&self) -> PackageStatus {
+        if let Some(delivered) = &self.delivered_at {
+            if let Some(address) = get_neighbour_address(self) {
+                return PackageStatus::DeliveredToNeighbour { address };
+            }
+            return PackageStatus::Delivered;
+        }
+        PackageStatus::InTransit
+    }
     fn events(&self) -> Vec<Event> {
         self.events
             .iter()
@@ -163,16 +185,16 @@ fn parse_eta_window(s: &str) -> Result<TimeWindow> {
         end:   right.parse()?,
     })
 }
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 struct Party {
     name: String,
 }
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 struct TransitTime {
     expected_delivery_moment: UtcTime,
 }
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 struct DhlEvent {
     timestamp: UtcTime,
     category:  String,
@@ -185,6 +207,20 @@ impl DhlEvent {
             text:      format!("{}: {}", self.category, self.status),
         }
     }
+}
+#[derive(Deserialize, Clone)]
+struct Destination {
+    address: Option<Address>,
+    r#type:  Option<String>,
+}
+#[derive(Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+struct Address {
+    country_code: Option<String>,
+    postal_code:  Option<String>,
+    street:       Option<String>,
+    city:         Option<String>,
+    house_number: Option<String>,
 }
 
 #[cfg(test)]
@@ -245,6 +281,27 @@ mod tests {
             .unwrap();
         assert_eq!(event.timestamp, utc("2024-11-08T12:07:05Z"));
         assert_eq!(event.text, "IN_DELIVERY: OUT_FOR_DELIVERY");
+        Ok(())
+    }
+
+    #[test]
+    fn test_delivered_neighbours() -> Result<()> {
+        for (mock_name, expected_address) in [
+            ("dhlecommerce_delivered_neighbours.json", "Streetname 418"),
+            ("dhlecommerce_delivered_neighbours2.json", "Streetname 416"),
+            ("dhlecommerce_delivered_neighbours5.json", "Streetname 419"),
+            ("dhlecommerce_delivered_neighbours6.json", "Streetname 419"),
+        ] {
+            let mock = mocks::load_text(mock_name)?;
+            let package = DhlTracker.parse(mock)?;
+            assert_eq!(
+                package.status,
+                PackageStatus::DeliveredToNeighbour {
+                    address: expected_address.into(),
+                },
+                "{mock_name} should give {expected_address}"
+            );
+        }
         Ok(())
     }
 }

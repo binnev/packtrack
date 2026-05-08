@@ -1,0 +1,211 @@
+[
+    {
+        "id": "20260132-5864-f8cc-81ef-064cdaba4835",
+        "barcode": "JVGL06284186000746323283",
+        "barcodes": [
+            "JVGL06284186000746323283"
+        ],
+        "date": "2026-01-11T16:14:01Z",
+        "declaredWeight": 0.5,
+        "destination": {
+            "address": {
+                "countryCode": "NL",
+                "postalCode": "1234EA",
+                "street": "Streetname",
+                "city": "City",
+                "houseNumber": "419"
+            },
+            "type": "NEIGHBOUR"
+        },
+        "events": [
+            {
+                "category": "DATA_RECEIVED",
+                "localTimestamp": "2026-01-11T06:35:16+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "DATA_RECEIVED_WITH_PREFIX_LABEL",
+                "timestamp": "2026-01-11T05:35:16Z",
+                "type": "PIECE_EVENT",
+                "references": [
+                    {
+                        "refType": "LocalNetworkIdentifier",
+                        "value": "2377372228"
+                    }
+                ]
+            },
+            {
+                "category": "DATA_RECEIVED",
+                "localTimestamp": "2026-01-11T06:35:16.135+01:00",
+                "leg": {
+                    "accountId": "06284186",
+                    "declaredWeight": 0.5,
+                    "network": "MDP",
+                    "reference": "24797999"
+                },
+                "status": "PRENOTIFICATION_RECEIVED",
+                "timestamp": "2026-01-11T05:35:16.135Z",
+                "type": "LEG_EVENT"
+            },
+            {
+                "category": "UNDERWAY",
+                "facility": "DOR>422",
+                "height": 8,
+                "length": 38,
+                "localTimestamp": "2026-01-11T17:14:01+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "PARCEL_SORTED_AT_HUB",
+                "timestamp": "2026-01-11T16:14:01Z",
+                "type": "PIECE_EVENT",
+                "weight": 0.45,
+                "width": 27,
+                "references": [
+                    {
+                        "refType": "LocalNetworkIdentifier",
+                        "value": "2377372228"
+                    }
+                ]
+            },
+            {
+                "category": "UNDERWAY",
+                "facility": "UTRPAK",
+                "localTimestamp": "2026-01-12T08:49:41+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "route": "15",
+                "status": "PARCEL_ARRIVED_AT_LOCAL_DEPOT",
+                "timestamp": "2026-01-12T07:49:41Z",
+                "type": "PIECE_EVENT",
+                "references": [
+                    {
+                        "refType": "LocalNetworkIdentifier",
+                        "value": "2377372228"
+                    }
+                ]
+            },
+            {
+                "category": "IN_DELIVERY",
+                "facility": "UTRPAK",
+                "localTimestamp": "2026-01-12T10:24:32+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "plannedDeliveryTimeframe": "2026-01-12T11:20:00+01:00/2026-01-12T15:20:00+01:00",
+                "route": "15",
+                "status": "OUT_FOR_DELIVERY",
+                "timestamp": "2026-01-12T09:24:32Z",
+                "type": "PIECE_EVENT",
+                "references": []
+            },
+            {
+                "category": "DELIVERED",
+                "deliveryAddress": {
+                    "countryCode": "NL",
+                    "postalCode": "1234EA",
+                    "street": "Streetname",
+                    "city": "City",
+                    "houseNumber": "419"
+                },
+                "deliveryCode": "15XF8201MP",
+                "facility": "UTRPAK",
+                "geoLocation": {
+                    "latitude": 52.06208,
+                    "longitude": 5.120169
+                },
+                "localTimestamp": "2026-01-12T13:56:43+01:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "route": "15",
+                "status": "DELIVERED_AT_NEIGHBOURS",
+                "timestamp": "2026-01-12T12:56:43Z",
+                "type": "PIECE_EVENT",
+                "momentIndication": "2026-01-12T13:56:43+01:00",
+                "references": [
+                    {
+                        "refType": "DeliveryCode",
+                        "value": "15XF8201MP"
+                    },
+                    {
+                        "refType": "LocalNetworkIdentifier",
+                        "value": "2377372228"
+                    }
+                ]
+            }
+        ],
+        "height": 8,
+        "length": 38,
+        "options": [
+            "PHONE"
+        ],
+        "packageType": "Pakje,SMALL",
+        "product": {
+            "code": "DFY",
+            "description": "DHL FOR YOU"
+        },
+        "receiver": {
+            "address": {
+                "countryCode": "NL",
+                "postalCode": "1234EC",
+                "street": "Streetname",
+                "city": "City",
+                "houseNumber": "20"
+            },
+            "email": "2o6a7xdzjt2blphjqkclemss3rfe3u@verkopen.bol.com",
+            "name": "Familie Neville"
+        },
+        "reference": "24797999",
+        "shipper": {
+            "name": "Plein.nl"
+        },
+        "shipperAccountNumber": "06284186",
+        "transitTime": {
+            "days": {
+                "total": 1,
+                "standard": 1,
+                "holiday": 0,
+                "remoteArea": 0,
+                "weekend": 0
+            },
+            "destination": {
+                "countryCode": "NL",
+                "postalCode": "1234EC"
+            },
+            "expectedDeliveryMoment": "2026-01-12T20:00:00Z",
+            "origin": {
+                "countryCode": "NL"
+            },
+            "product": {
+                "code": "DFY",
+                "description": "DHL FOR YOU"
+            },
+            "shipmentDate": "2026-01-11"
+        },
+        "type": "SHIPMENT",
+        "weight": 0.45,
+        "width": 27,
+        "geoLocation": {
+            "lat": 52.06208,
+            "lon": 5.120169
+        },
+        "deliveredAt": "2026-01-12T13:56:43+01:00",
+        "volumetricWeight": 1.6416,
+        "created": "2026-01-11T05:35:16Z",
+        "lastUpdated": "2026-01-12T12:59:45.627787874Z",
+        "lastKnownDestination": {
+            "address": {
+                "countryCode": "NL",
+                "postalCode": "1234EA",
+                "street": "Streetname",
+                "city": "City",
+                "houseNumber": "419"
+            },
+            "type": "NEIGHBOUR"
+        },
+        "totalEvents": 6,
+        "isReturn": false
+    }
+]

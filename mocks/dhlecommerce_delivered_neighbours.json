@@ -1,0 +1,172 @@
+[
+    {
+        "id": "2026032f-fbd4-b4f9-8f84-8ff1098ffcd5",
+        "barcode": "3SMPK30698136",
+        "barcodes": [
+            "3SMPK30698136"
+        ],
+        "date": "2026-03-29T21:53:00Z",
+        "destination": {
+            "address": {
+                "countryCode": "NL",
+                "postalCode": "1234EC",
+                "street": "Streetname",
+                "city": "City",
+                "houseNumber": "418"
+            },
+            "type": "NEIGHBOUR"
+        },
+        "events": [
+            {
+                "category": "DATA_RECEIVED",
+                "localTimestamp": "2026-03-29T16:43:03+02:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "PRENOTIFICATION_RECEIVED",
+                "timestamp": "2026-03-29T14:43:03Z",
+                "type": "PIECE_EVENT",
+                "references": [
+                    {
+                        "refType": "LocalNetworkIdentifier",
+                        "value": "2483300834"
+                    }
+                ]
+            },
+            {
+                "category": "UNDERWAY",
+                "facility": "DD/ZLB",
+                "height": 10,
+                "length": 36,
+                "localTimestamp": "2026-03-29T23:53:00+02:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "status": "PARCEL_SORTED_AT_HUB",
+                "timestamp": "2026-03-29T21:53:00Z",
+                "type": "PIECE_EVENT",
+                "weight": 2.95,
+                "width": 21,
+                "references": [
+                    {
+                        "refType": "LocalNetworkIdentifier",
+                        "value": "2483300834"
+                    }
+                ]
+            },
+            {
+                "category": "UNDERWAY",
+                "facility": "UTRPAK",
+                "localTimestamp": "2026-03-30T06:49:45+02:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "route": "15",
+                "status": "PARCEL_ARRIVED_AT_LOCAL_DEPOT",
+                "timestamp": "2026-03-30T04:49:45Z",
+                "type": "PIECE_EVENT",
+                "references": [
+                    {
+                        "refType": "LocalNetworkIdentifier",
+                        "value": "2483300834"
+                    }
+                ]
+            },
+            {
+                "category": "IN_DELIVERY",
+                "facility": "UTRPAK",
+                "localTimestamp": "2026-03-30T10:05:20+02:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "plannedDeliveryTimeframe": "2026-03-30T10:40:00+02:00/2026-03-30T14:40:00+02:00",
+                "route": "15",
+                "status": "OUT_FOR_DELIVERY",
+                "timestamp": "2026-03-30T08:05:20Z",
+                "type": "PIECE_EVENT",
+                "references": []
+            },
+            {
+                "category": "DELIVERED",
+                "deliveryAddress": {
+                    "countryCode": "NL",
+                    "postalCode": "1234EC",
+                    "street": "Streetname",
+                    "city": "City",
+                    "houseNumber": "418"
+                },
+                "deliveryCode": "15UH8541LV",
+                "facility": "UTRPAK",
+                "geoLocation": {
+                    "latitude": 52.061992,
+                    "longitude": 5.119778
+                },
+                "localTimestamp": "2026-03-30T13:59:45+02:00",
+                "leg": {
+                    "network": "ECOMMERCE"
+                },
+                "route": "15",
+                "status": "DELIVERED_AT_NEIGHBOURS",
+                "timestamp": "2026-03-30T11:59:45Z",
+                "type": "PIECE_EVENT",
+                "momentIndication": "2026-03-30T13:59:45+02:00",
+                "references": [
+                    {
+                        "refType": "DeliveryCode",
+                        "value": "15UH8541LV"
+                    },
+                    {
+                        "refType": "LocalNetworkIdentifier",
+                        "value": "2483300834"
+                    }
+                ]
+            }
+        ],
+        "height": 10,
+        "length": 36,
+        "packageType": "Pakje",
+        "product": {
+            "code": "DFY",
+            "description": "DHL FOR YOU"
+        },
+        "receiver": {
+            "address": {
+                "countryCode": "NL",
+                "postalCode": "1234EC",
+                "street": "Streetname",
+                "city": "City",
+                "houseNumber": "20"
+            },
+            "email": "receiver.email@example.com",
+            "name": "Receiver Name"
+        },
+        "reference": "306247410",
+        "shipper": {
+            "name": "Sender Name"
+        },
+        "shipperAccountNumber": "79852100",
+        "type": "SHIPMENT",
+        "weight": 2.95,
+        "width": 21,
+        "geoLocation": {
+            "lat": 52.061992,
+            "lon": 5.119778
+        },
+        "deliveredAt": "2026-03-30T13:59:45+02:00",
+        "volumetricWeight": 1.512,
+        "created": "2026-03-29T14:09:29.190Z",
+        "lastUpdated": "2026-03-30T23:25:15.494516777Z",
+        "lastKnownDestination": {
+            "address": {
+                "countryCode": "NL",
+                "postalCode": "1234EC",
+                "street": "Streetname",
+                "city": "City",
+                "houseNumber": "418"
+            },
+            "type": "NEIGHBOUR"
+        },
+        "totalEvents": 5,
+        "isReturn": false
+    }
+]
