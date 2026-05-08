@@ -7,6 +7,10 @@ use packtrack::{
     tracker::{Event, Package, PackageStatus, TimeWindow},
 };
 
+/// Print a nice heading with the given text like this:
+/// ╭──────────────────────────────────────────────────────────────────────────╮
+/// │                D E L I V E R E D   T O   N E I G H B O U R               │
+/// ╰──────────────────────────────────────────────────────────────────────────╯
 pub fn heading(s: &dyn Display) {
     println!("╭{}╮", "─".repeat(78));
     let text = format!(" {s} ");
@@ -18,6 +22,7 @@ pub fn heading(s: &dyn Display) {
 pub fn line() -> String {
     return "─".repeat(80);
 }
+
 /// "hello" -> "h e l l o"
 /// InTransit -> I N   T R A N S I T
 pub fn spaced(s: &str) -> String {
@@ -70,16 +75,14 @@ pub fn display_event(event: &Event) -> String {
 
 pub fn display_job(job: &Job, delivered_detail: bool) -> String {
     match &job.result {
-        Ok(package) => match package.status {
-            PackageStatus::Delivered if !delivered_detail => {
-                display_job_delivered_oneliner(job, package)
-            }
+        Ok(package) => match package.status.is_final() {
+            true if !delivered_detail => display_job_oneliner(job, package),
             _ => display_job_full(job, package),
         },
         Err(_) => display_job_error(job),
     }
 }
-fn display_job_delivered_oneliner(job: &Job, package: &Package) -> String {
+fn display_job_oneliner(job: &Job, package: &Package) -> String {
     let mut parts: Vec<String> = Vec::new();
     let time = package
         .delivered

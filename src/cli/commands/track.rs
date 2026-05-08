@@ -6,9 +6,9 @@ use log;
 use packtrack::Result;
 use packtrack::api::Job;
 use packtrack::api::{Context, track_urls};
-use packtrack::tracker::PackageStatus;
 use packtrack::url_store::AnnotatedUrl;
 use packtrack::utils::check_path_exists;
+use std::cmp::Ordering;
 use std::path::PathBuf;
 use std::time::Instant;
 
@@ -55,91 +55,82 @@ pub struct TrackArgs {
     pub postcode: Option<String>,
 }
 
-pub fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
-    // THOUGHT: Maybe the sorting by time is enough? InTransit packages will
-    // naturally fall below Delivered packages...
-    //
-    // No. Because there's no guarantee that we can extract any time from a
-    // package. It might have no `delivered`, no `eta`, no `eta_window`, and no
-    // events to grab a time from either.
+/// Provide an ordering for two jobs, based on various time fields.
+fn order_jobs(a: &Job, b: &Job) -> Ordering {
+    let a_package = match &a.result {
+        Ok(package) => package,
+        Err(_) => return Ordering::Equal,
+    };
+    let b_package = match &b.result {
+        Ok(package) => package,
+        Err(_) => return Ordering::Equal,
+    };
+    let a_time = a_package
+        .delivered
+        .or(a_package.eta)
+        .or(a_package
+            .eta_window
+            .as_ref()
+            .map(|w| w.start));
+    let b_time = b_package
+        .delivered
+        .or(b_package.eta)
+        .or(b_package
+            .eta_window
+            .as_ref()
+            .map(|w| w.start));
+    a_time.cmp(&b_time)
+}
 
-    let mut delivered: Vec<Job> = Vec::new();
-    let mut delivered_to_neighbour: Vec<Job> = Vec::new();
-    let mut in_transit: Vec<Job> = Vec::new();
+/// Display jobs to the user in the CLI
+pub fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
+    let mut finished: Vec<Job> = Vec::new(); // Packages with a final status
+    let mut in_progress: Vec<Job> = Vec::new();
     let mut errors: Vec<Job> = Vec::new();
     for job in jobs {
         match &job.result {
-            Ok(package) => match package.status {
-                PackageStatus::Delivered => delivered.push(job),
-                PackageStatus::DeliveredToNeighbour { .. } => {
-                    delivered_to_neighbour.push(job)
-                }
-                PackageStatus::InTransit => in_transit.push(job),
+            Ok(package) => match package.status.is_final() {
+                true => finished.push(job),
+                false => in_progress.push(job),
             },
             Err(_) => errors.push(job),
         }
     }
-    for list in [&mut delivered, &mut delivered_to_neighbour, &mut in_transit] {
-        list.sort_by(|a, b| {
-            let a_package = a.result.as_ref().unwrap();
-            let b_package = b.result.as_ref().unwrap();
-            let a_time = a_package
-                .delivered
-                .or(a_package.eta)
-                .or(a_package
-                    .eta_window
-                    .as_ref()
-                    .map(|w| w.start));
-            let b_time = b_package
-                .delivered
-                .or(b_package.eta)
-                .or(b_package
-                    .eta_window
-                    .as_ref()
-                    .map(|w| w.start));
-            a_time.cmp(&b_time)
-        });
+    for list in [&mut finished, &mut in_progress] {
+        list.sort_by(order_jobs);
     }
 
-    // display successful results
-    let line = format!("\n{}\n", line());
-    for jobs in [delivered, delivered_to_neighbour, in_transit] {
-        if let Some(first) = jobs.first() {
-            let status = &first
-                .result
-                .as_ref()
-                .expect("This should be a success!")
-                .status;
-            let separator = match status {
-                PackageStatus::Delivered
-                | PackageStatus::DeliveredToNeighbour { .. } => {
-                    if delivered_detail {
-                        line.clone()
-                    } else {
-                        "\n".to_owned()
-                    }
-                }
-                PackageStatus::InTransit => line.clone(),
-            };
-            heading(&status);
-            let s = jobs
-                .iter()
-                .map(|job| display_job(job, delivered_detail))
-                .collect::<Vec<_>>()
-                .join(&separator);
-            println!("{s}");
-        }
+    // display final packages
+    if finished.len() > 0 {
+        heading(&"finished");
+        let s = finished
+            .iter()
+            .map(|job| display_job(job, delivered_detail))
+            .collect::<Vec<_>>()
+            .join("\n");
+        println!("{s}")
+    }
+
+    if in_progress.len() > 0 {
+        heading(&"in progress");
+        let line = format!("\n{}\n", line());
+        let s = in_progress
+            .iter()
+            .map(|job| display_job(job, delivered_detail))
+            .collect::<Vec<_>>()
+            .join(&line);
+        println!("{s}")
     }
 
     if errors.len() > 0 {
         // display errors
         heading(&"errors");
-        let separator = line;
+        let line = format!("\n{}\n", line());
         let s = errors
             .iter()
             .map(|job| display_job(job, delivered_detail))
             .collect::<Vec<_>>()
-            .join(&separator);
+            .join(&line);
         println!("{s}");
     }
 }
