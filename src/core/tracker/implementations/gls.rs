@@ -6,7 +6,7 @@ use regex::Regex;
 use serde::Deserialize;
 use serde_json::Value;
 
-use crate::tracker::{Event, Package, TimeWindow, Tracker};
+use crate::tracker::{Event, Package, PackageStatus, TimeWindow, Tracker};
 use crate::{Error, Result};
 pub struct GlsTracker;
 
@@ -93,6 +93,23 @@ impl GlsPackage {
             .and_then(|x| x.name.clone())
             .filter(|name| !name.is_empty()) // convert "" to None
     }
+    fn status(&self) -> PackageStatus {
+        if let Some(time) = self.delivered() {
+            let mut neighbour = None;
+            if let Some(events) = &self.scans {
+                for event in events.iter() {
+                    if let Some(name) = &event.deliver_name {
+                        neighbour = Some(name.clone());
+                    }
+                }
+            }
+            if let Some(address) = neighbour {
+                return PackageStatus::DeliveredToNeighbour { address };
+            }
+            return PackageStatus::Delivered;
+        }
+        PackageStatus::InTransit
+    }
     fn to_package(&self) -> Result<Package> {
         Ok(Package {
             barcode:    self
@@ -100,6 +117,7 @@ impl GlsPackage {
                 .clone()
                 .ok_or("No barcode!")?,
             channel:    "GLS".into(),
+            status:     self.status(),
             sender:     self.sender(),
             recipient:  self.recipient(),
             eta:        self.eta(),
@@ -122,6 +140,9 @@ struct GlsEvent {
     date_time:                   Option<NaiveDateTime>,
     event_reason_descr:          Option<String>,
     event_reason_descr_alt_cust: Option<String>,
+    // Populated if the package is delivered to someone other than the
+    // addressee
+    deliver_name:                Option<String>,
 }
 impl GlsEvent {
     fn to_event(&self) -> Result<Event> {
@@ -241,7 +262,7 @@ mod tests {
     use serde_json::json;
 
     use super::*;
-    use crate::mocks;
+    use crate::{mocks, tracker::PackageStatus};
 
     fn utc(s: &str) -> UtcTime {
         s.parse().unwrap()
@@ -455,6 +476,12 @@ mod tests {
     fn test_deserialize_delivered_neighbours() -> Result<()> {
         let data = mocks::load_json("gls_delivered_neighbours")?;
         let package = parse_package(data)?;
+        assert_eq!(
+            package.status,
+            PackageStatus::DeliveredToNeighbour {
+                address: "Buren 69".into(),
+            }
+        );
         assert_eq!(package.sender.unwrap(), "Sender name");
         assert_eq!(package.recipient, None);
         assert_eq!(package.barcode, "12345678906040");
