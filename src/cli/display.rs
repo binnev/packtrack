@@ -1,7 +1,8 @@
+/// Functions to display stuff in the CLI
 use std::fmt::Display;
 
 use byte_unit::{Byte, UnitType};
-use chrono::{DateTime, Datelike, Local, TimeZone};
+use chrono::{DateTime, Datelike, Local, TimeZone, format};
 use packtrack::{
     api::Job,
     tracker::{Event, Package, PackageStatus, TimeWindow},
@@ -55,6 +56,7 @@ pub fn display_time<T: TimeZone>(dt: DateTime<T>) -> String {
     let local = dt.with_timezone(&Local);
     format!("{} {}", display_date(dt), local.format("%H:%M"))
 }
+
 pub fn display_timewindow(tw: &TimeWindow) -> String {
     let start = tw.start.with_timezone(&Local);
     let end = tw.end.with_timezone(&Local);
@@ -69,6 +71,7 @@ pub fn display_timewindow(tw: &TimeWindow) -> String {
         format!("{} -- {}", display_time(start), display_time(end))
     }
 }
+
 pub fn display_event(event: &Event) -> String {
     format!("[{}] {}", display_time(event.timestamp), event.text)
 }
@@ -82,8 +85,13 @@ pub fn display_job(job: &Job, delivered_detail: bool) -> String {
         Err(_) => display_job_error(job),
     }
 }
+
 fn display_job_oneliner(job: &Job, package: &Package) -> String {
     let mut parts: Vec<String> = Vec::new();
+    // FIXME: This will become a problem when we introduce a new final status
+    // for packages that have reached the international border. They are final
+    // because they'll receive no more updates, but they're not delivered. We
+    // should probably attempt to use the timestamp from the last update.
     let time = package
         .delivered
         .map(|dt| display_time(dt))
@@ -99,16 +107,25 @@ fn display_job_oneliner(job: &Job, package: &Package) -> String {
     if let Some(description) = &job.url.description {
         parts.push(format!("({description})"));
     }
-    return parts.join(" ");
+    let mut out = parts.join(" ");
+    match &package.status {
+        PackageStatus::DeliveredToNeighbour { .. } => {
+            out += &format!("\n  ╰─ {}", display_status(&package.status));
+        }
+        _ => {}
+    }
+
+    out
 }
+
 fn display_job_full(job: &Job, package: &Package) -> String {
     let mut parts: Vec<String> = Vec::new();
+    parts.push(format!("{} {}", package.channel, package.barcode));
     if let Some(description) = &job.url.description {
         parts.push(format!("Description: {}", description));
     }
     parts.push(format!("URL: {}", job.url.url));
-    parts.push(format!("Carrier: {}", package.channel));
-    parts.push(format!("Barcode: {}", package.barcode));
+    parts.push(format!("Status: {}", display_status(&package.status)));
     if let Some(sender) = package.sender.as_ref() {
         parts.push(format!("From: {sender}"));
     }
@@ -128,6 +145,7 @@ fn display_job_full(job: &Job, package: &Package) -> String {
 
     return parts.join("\n");
 }
+
 fn display_job_error(job: &Job) -> String {
     let mut parts: Vec<String> = vec![];
     if let Some(description) = &job.url.description {
@@ -142,6 +160,17 @@ pub fn human_readable_bytes(bytes: u64) -> String {
     let human_readable =
         Byte::from_u64(bytes).get_appropriate_unit(UnitType::Binary);
     format!("{human_readable:#.1}")
+}
+
+fn display_status(s: &PackageStatus) -> String {
+    use PackageStatus::*;
+    match s {
+        Delivered => "Delivered".into(),
+        DeliveredToNeighbour { address } => {
+            format!("Delivered to neighbour at {address}")
+        }
+        InTransit => "In transit".into(),
+    }
 }
 
 #[cfg(test)]
