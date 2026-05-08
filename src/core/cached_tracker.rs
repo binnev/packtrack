@@ -97,8 +97,9 @@ impl<'a> CachedTracker<'a> {
                 Ok(package) => {
                     let age = entry.age().num_seconds().unsigned_abs() as usize;
 
-                    // Always cache delivered packages
-                    if package.status == PackageStatus::Delivered {
+                    // Always cache packages with a final status, because they
+                    // will receive no more updates.
+                    if package.status.is_final() {
                         log::info!(
                             "Reusing {age}s old cache entry for delivered {} {} from url {url}",
                             package.channel,

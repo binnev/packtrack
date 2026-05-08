@@ -36,6 +36,18 @@ pub enum PackageStatus {
     DeliveredToNeighbour { address: String },
     InTransit,
 }
+impl PackageStatus {
+    /// A status is "final" if the status will not change anymore, and there
+    /// will be no more updates.
+    pub fn is_final(&self) -> bool {
+        use PackageStatus::*;
+        match self {
+            Delivered => true,
+            DeliveredToNeighbour { address: _ } => true,
+            _ => false,
+        }
+    }
+}
 impl Display for PackageStatus {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // just using debug for now
