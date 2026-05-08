@@ -37,14 +37,14 @@ pub struct TrackArgs {
     #[arg(short = 'C', long)]
     pub cache_seconds: Option<usize>,
 
-    /// Don't use the cache (even for delivered packages)
+    /// Don't use the cache (even for completed packages)
     #[arg(short, long)]
     pub no_cache: bool,
 
     // FIXME: This is only relevant for CLI printout (not JSON)
-    /// Display detailed info on delivered packages
+    /// Display detailed info on completed packages
     #[arg(short, long)]
-    pub delivered: bool,
+    pub detail: bool,
 
     /// Preferred language (passed to the carrier)
     #[arg(short, long)]
@@ -83,29 +83,29 @@ fn order_jobs(a: &Job, b: &Job) -> Ordering {
 }
 
 /// Display jobs to the user in the CLI
-pub fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
-    let mut finished: Vec<Job> = Vec::new(); // Packages with a final status
+pub fn display_jobs(jobs: Vec<Job>, completed_detail: bool) {
+    let mut completed: Vec<Job> = Vec::new(); // Packages with a final status
     let mut in_progress: Vec<Job> = Vec::new();
     let mut errors: Vec<Job> = Vec::new();
     for job in jobs {
         match &job.result {
             Ok(package) => match package.status.is_final() {
-                true => finished.push(job),
+                true => completed.push(job),
                 false => in_progress.push(job),
             },
             Err(_) => errors.push(job),
         }
     }
-    for list in [&mut finished, &mut in_progress] {
+    for list in [&mut completed, &mut in_progress] {
         list.sort_by(order_jobs);
     }
 
     // display final packages
-    if finished.len() > 0 {
-        heading(&"finished");
-        let s = finished
+    if completed.len() > 0 {
+        heading(&"completed");
+        let s = completed
             .iter()
-            .map(|job| display_job(job, delivered_detail))
+            .map(|job| display_job(job, completed_detail))
             .collect::<Vec<_>>()
             .join("\n");
         println!("{s}")
@@ -116,7 +116,7 @@ pub fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
         let line = format!("\n{}\n", line());
         let s = in_progress
             .iter()
-            .map(|job| display_job(job, delivered_detail))
+            .map(|job| display_job(job, completed_detail))
             .collect::<Vec<_>>()
             .join(&line);
         println!("{s}")
@@ -128,7 +128,7 @@ pub fn display_jobs(jobs: Vec<Job>, delivered_detail: bool) {
         let line = format!("\n{}\n", line());
         let s = errors
             .iter()
-            .map(|job| display_job(job, delivered_detail))
+            .map(|job| display_job(job, completed_detail))
             .collect::<Vec<_>>()
             .join(&line);
         println!("{s}");
@@ -162,7 +162,7 @@ pub async fn track(
         )]
     }
     let jobs = track_urls(urls, ctx).await?;
-    display_jobs(jobs, track_args.delivered);
+    display_jobs(jobs, track_args.detail);
     log::info!("track_all took {:?}", start.elapsed());
     Ok(())
 }

@@ -76,10 +76,10 @@ pub fn display_event(event: &Event) -> String {
     format!("[{}] {}", display_time(event.timestamp), event.text)
 }
 
-pub fn display_job(job: &Job, delivered_detail: bool) -> String {
+pub fn display_job(job: &Job, completed_detail: bool) -> String {
     match &job.result {
         Ok(package) => match package.status.is_final() {
-            true if !delivered_detail => display_job_oneliner(job, package),
+            true if !completed_detail => display_job_oneliner(job, package),
             _ => display_job_full(job, package),
         },
         Err(_) => display_job_error(job),
