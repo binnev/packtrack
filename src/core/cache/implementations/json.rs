@@ -1,16 +1,11 @@
-use std::os::unix::fs::MetadataExt;
-use std::time::Duration;
-use std::{collections::HashMap, fs, path::PathBuf};
-
 use crate::cache::models::CacheEntry;
 use crate::cache::traits::Cache;
-use crate::cache::utils::{get_cache_dir, log_hit};
-use crate::tracker::TimeWindow;
-use crate::utils::UtcTime;
+use crate::cache::utils::get_cache_dir;
 use crate::{Result, utils};
-use chrono::{TimeDelta, Utc};
-use serde::{Deserialize, Serialize};
+use chrono::Utc;
 use std::fs::metadata;
+use std::os::unix::fs::MetadataExt;
+use std::{collections::HashMap, path::PathBuf};
 
 #[derive(Default)]
 pub struct JsonCache {
@@ -35,6 +30,7 @@ impl JsonCache {
         })
     }
     // RAII: load from file when instantiating
+    #[allow(unreachable_code, unused)]
     fn load_contents() -> Result<HashMap<String, Vec<CacheEntry>>> {
         #[cfg(test)]
         return Ok(HashMap::new()); // don't load from file in tests
@@ -96,6 +92,7 @@ impl Cache for JsonCache {
         entries
     }
     // Save to file
+    #[allow(unreachable_code, unused)]
     fn save(&self) -> Result<()> {
         #[cfg(test)]
         return Ok(()); // don't write to file in tests
@@ -123,7 +120,7 @@ impl Cache for JsonCache {
 #[cfg(test)]
 mod tests {
 
-    use std::fmt::format;
+    use std::time::Duration;
 
     use super::*;
 
@@ -171,7 +168,6 @@ mod tests {
 
     #[test]
     fn test_get() {
-        let now = Utc::now();
         let mut cache = JsonCache::default();
 
         assert!(cache.get("url").is_none());
@@ -197,7 +193,6 @@ mod tests {
     }
     #[test]
     fn test_remove() {
-        let now = Utc::now();
         let mut cache = JsonCache::default();
         cache.insert("url".into(), "text".into());
         cache.insert("url".into(), "text2".into());
@@ -209,7 +204,6 @@ mod tests {
     }
     #[test]
     fn test_prune() {
-        let now = Utc::now();
         let mut cache = JsonCache::default();
         cache.insert("url".into(), "text".into());
         cache.insert("url".into(), "text2".into());
@@ -239,7 +233,7 @@ mod tests {
                 })
                 .collect(),
         )]);
-        let mut cache = JsonCache {
+        let cache = JsonCache {
             contents: contents.clone(),
             ..Default::default()
         };

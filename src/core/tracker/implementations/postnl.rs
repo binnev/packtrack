@@ -1,5 +1,3 @@
-use std::default;
-
 use crate::Result;
 use crate::tracker::PackageStatus;
 use crate::tracker::Tracker;
@@ -7,8 +5,6 @@ use crate::tracker::TrackerContext;
 use crate::tracker::{Event, Package, TimeWindow};
 use crate::utils::UtcTime;
 use async_trait::async_trait;
-use chrono::DateTime;
-use futures::future::AndThen;
 use regex::Regex;
 use serde::Deserialize;
 use serde_json::Value;
@@ -130,7 +126,7 @@ impl PostNLPackage {
         Some(format!("{street} {number}"))
     }
     fn status(&self) -> PackageStatus {
-        if let Some(dt) = self.delivery_datetime() {
+        if let Some(_) = self.delivery_datetime() {
             if let Some(address) = self.get_neighbour_address() {
                 return PackageStatus::DeliveredToNeighbour { address };
             }
@@ -232,6 +228,7 @@ struct Names {
     company_name: Option<String>,
     person_name:  Option<String>,
 }
+#[allow(unused)]
 #[derive(Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 struct Address {
@@ -304,15 +301,12 @@ struct RouteInfo {
 
 #[derive(Deserialize, Clone)]
 struct Eta {
-    r#type: String, // r# allows us to use a keyword as a field name
-    start:  Option<UtcTime>,
-    end:    Option<UtcTime>,
+    start: Option<UtcTime>,
+    end:   Option<UtcTime>,
 }
 
 #[cfg(test)]
 mod tests {
-    use chrono::{DateTime, Utc};
-
     use super::*;
     use crate::mocks;
 
@@ -549,7 +543,7 @@ mod tests {
     fn test_deserialization_missing_datetime() -> Result<()> {
         let mock = mocks::load_json("postnl_missing_datetime")?;
         let data = get_first_package(mock)?;
-        let package: PostNLPackage = serde_json::from_value(data)?;
+        let _: PostNLPackage = serde_json::from_value(data)?;
         Ok(())
     }
 

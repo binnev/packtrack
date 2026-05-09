@@ -6,7 +6,7 @@ use std::{
 use crate::Result;
 use chrono::{DateTime, Utc};
 use directories::{ProjectDirs, UserDirs};
-use serde::{Deserialize, Serialize, de::DeserializeOwned};
+use serde::{Serialize, de::DeserializeOwned};
 
 pub fn project_dirs() -> Result<ProjectDirs> {
     ProjectDirs::from("com", "packtrack", "packtrack")
@@ -19,6 +19,7 @@ pub fn get_home_dir() -> Result<PathBuf> {
         .ok_or("Couldn't compute home dir!".into())
 }
 
+#[allow(unreachable_code, unused)]
 pub fn load_json<T: DeserializeOwned + Default>(path: &Path) -> Result<T> {
     #[cfg(test)]
     return Ok(T::default()); // don't load from file in tests
@@ -33,6 +34,7 @@ pub fn load_json<T: DeserializeOwned + Default>(path: &Path) -> Result<T> {
     }
 }
 
+#[allow(unreachable_code, unused)]
 pub fn save_json(path: &Path, value: impl Serialize) -> Result<()> {
     #[cfg(test)]
     return Ok(()); // don't write to file in tests

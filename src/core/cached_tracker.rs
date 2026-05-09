@@ -1,13 +1,7 @@
-use std::time::Duration;
-
-use log::warn;
-use tokio::sync::Mutex;
-
-use async_trait::async_trait;
-
-use crate::cache::{Cache, JsonCache};
-use crate::tracker::{Package, PackageStatus, Tracker, TrackerContext};
+use crate::cache::Cache;
+use crate::tracker::{Package, Tracker, TrackerContext};
 use crate::{Error, Result};
+use tokio::sync::Mutex;
 
 /// Composed type with pluggable tracker + cache handlers. Orchestrates:
 /// - Fetching a raw value from either the Tracker or the Cache
@@ -26,7 +20,7 @@ impl<'a> CachedTracker<'a> {
     ) -> Result<Package> {
         if use_cache {
             match self
-                .get_cached(url, cache_seconds, ctx)
+                .get_cached(url, cache_seconds)
                 .await
             {
                 Ok(Some(package)) => return Ok(package),
@@ -80,7 +74,6 @@ impl<'a> CachedTracker<'a> {
         &mut self,
         url: &str,
         cache_seconds: usize,
-        ctx: &'a TrackerContext<'_>,
     ) -> Result<Option<Package>> {
         let cache = self.cache.lock().await;
         let cached = cache.get(url).cloned();

@@ -1,6 +1,6 @@
 use crate::url_store::UrlError;
 use derive_more::{From, derive::Display};
-use std::{num::ParseIntError, sync::PoisonError};
+use std::num::ParseIntError;
 
 pub type Result<T> = core::result::Result<T, Error>;
 

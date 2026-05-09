@@ -1,13 +1,12 @@
+use crate::Result;
+use crate::tracker::{Event, Package, PackageStatus, TimeWindow, Tracker};
 use crate::{tracker::TrackerContext, utils::UtcTime};
 use async_trait::async_trait;
-use chrono::{NaiveDateTime, TimeZone, Utc};
+use chrono::NaiveDateTime;
 use log;
 use regex::Regex;
 use serde::Deserialize;
 use serde_json::Value;
-
-use crate::tracker::{Event, Package, PackageStatus, TimeWindow, Tracker};
-use crate::{Error, Result};
 pub struct GlsTracker;
 
 #[async_trait]
@@ -94,7 +93,7 @@ impl GlsPackage {
             .filter(|name| !name.is_empty()) // convert "" to None
     }
     fn status(&self) -> PackageStatus {
-        if let Some(time) = self.delivered() {
+        if let Some(_) = self.delivered() {
             let mut neighbour = None;
             if let Some(events) = &self.scans {
                 for event in events.iter() {
@@ -268,14 +267,11 @@ mod tests {
     use serde_json::json;
 
     use super::*;
-    use crate::{mocks, tracker::PackageStatus};
+    use crate::{Error, mocks, tracker::PackageStatus};
 
     fn utc(s: &str) -> UtcTime {
         s.parse().unwrap()
     }
-
-    #[allow(non_upper_case_globals)]
-    const url: &str = "www.example.com";
 
     #[test]
     fn test_get_barcode_postcode() {

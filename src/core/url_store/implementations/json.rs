@@ -1,5 +1,3 @@
-use derive_more::derive::Display;
-
 use crate::{
     Result,
     url_store::{
@@ -9,7 +7,7 @@ use crate::{
     },
     utils::{load_json, save_json},
 };
-use std::{fmt::Display, path::PathBuf};
+use std::path::PathBuf;
 
 pub struct JsonUrlStore {
     /// Path to the file containing the urls.
@@ -35,7 +33,7 @@ impl UrlStore for JsonUrlStore {
         let removed = remove_from_list(&mut self.urls, query)?;
         self.save().inspect(|_| {
             log::info!("Removed URLs matching pattern {query}: {removed:#?}")
-        });
+        })?;
         return Ok(removed);
     }
     fn filter(&self, query: Option<&str>) -> Vec<AnnotatedUrl> {

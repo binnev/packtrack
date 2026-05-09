@@ -1,12 +1,10 @@
+use crate::Result;
+use crate::tracker::{Event, Package, PackageStatus, TimeWindow, Tracker};
 use crate::{tracker::TrackerContext, utils::UtcTime};
 use async_trait::async_trait;
 use regex::Regex;
 use serde::Deserialize;
 use serde_json::Value;
-
-use crate::Result;
-use crate::tracker::{Event, Package, PackageStatus, TimeWindow, Tracker};
-
 pub struct DhlTracker;
 
 #[async_trait]
@@ -133,7 +131,7 @@ fn get_neighbour_address(package: &DhlPackage) -> Option<String> {
 }
 impl DhlPackage {
     fn status(&self) -> PackageStatus {
-        if let Some(delivered) = &self.delivered_at {
+        if let Some(_) = &self.delivered_at {
             if let Some(address) = get_neighbour_address(self) {
                 return PackageStatus::DeliveredToNeighbour { address };
             }
@@ -213,6 +211,7 @@ struct Destination {
     address: Option<Address>,
     r#type:  Option<String>,
 }
+#[allow(unused)]
 #[derive(Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 struct Address {

@@ -2,7 +2,7 @@
 use std::fmt::Display;
 
 use byte_unit::{Byte, UnitType};
-use chrono::{DateTime, Datelike, Local, TimeZone, format};
+use chrono::{DateTime, Datelike, Local, TimeZone};
 use packtrack::{
     api::Job,
     tracker::{Event, Package, PackageStatus, TimeWindow},

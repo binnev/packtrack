@@ -1,13 +1,8 @@
-use std::time::Duration;
-use std::{collections::HashMap, fs, path::PathBuf};
-
+use crate::Result;
 use crate::cache::models::CacheEntry;
-use crate::cache::utils::{get_cache_dir, log_hit};
-use crate::tracker::TimeWindow;
-use crate::utils::UtcTime;
-use crate::{Result, utils};
-use chrono::{TimeDelta, Utc};
-use serde::{Deserialize, Serialize};
+use crate::cache::utils::log_hit;
+use chrono::Utc;
+use std::time::Duration;
 
 pub trait Cache {
     /// Get all the URLs in the cache

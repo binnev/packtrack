@@ -1,8 +1,4 @@
-use std::{
-    fs::{self, File},
-    io::Read,
-    path::Path,
-};
+use std::{fs, path::Path};
 
 use crate::Result;
 use serde_json::Value;

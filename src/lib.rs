@@ -1,6 +1,3 @@
-#![allow(dead_code)]
-#![allow(unused)]
-
 mod core;
 pub mod error;
 

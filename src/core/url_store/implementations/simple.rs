@@ -7,11 +7,8 @@ use crate::{
         models::AnnotatedUrl,
         utils::{add_to_list, filter, remove_from_list},
     },
-    utils::save_json,
 };
 use std::{fs, path::PathBuf};
-
-use crate::utils::load_json;
 
 /// Simple text-based url store with 1 url per line
 pub struct SimpleUrlStore {
@@ -19,6 +16,7 @@ pub struct SimpleUrlStore {
     urls: Vec<AnnotatedUrl>,
 }
 impl SimpleUrlStore {
+    #[allow(unreachable_code, unused)]
     pub fn new(path: PathBuf) -> Result<Self> {
         // Don't load from file in tests
         #[cfg(test)]
@@ -42,12 +40,13 @@ impl UrlStore for SimpleUrlStore {
         let removed = remove_from_list(&mut self.urls, query)?;
         self.save().inspect(|_| {
             log::info!("Removed URLs matching pattern {query}: {removed:#?}")
-        });
+        })?;
         Ok(removed)
     }
     fn filter(&self, query: Option<&str>) -> Vec<AnnotatedUrl> {
         filter(&self.urls, query)
     }
+    #[allow(unreachable_code, unused)]
     fn save(&self) -> Result<()> {
         #[cfg(test)]
         return Ok(());
@@ -122,8 +121,7 @@ mod tests {
             description: None,
             created:     None,
         };
-        let result = s
-            .add(url.clone())
+        s.add(url.clone())
             .expect("The first add should work");
         assert_eq!(s.urls.len(), 1);
         let result = s.add(url.clone());

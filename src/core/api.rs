@@ -1,16 +1,10 @@
 use crate::cache::{Cache, JsonCache};
 use crate::cached_tracker::CachedTracker;
-use crate::error::{Error, Result};
+use crate::error::Result;
+use crate::tracker::Package;
+use crate::tracker::TrackerContext;
 use crate::tracker::get_handler;
-use crate::tracker::{self, TrackerContext};
-use crate::tracker::{Package, PackageStatus};
 use crate::url_store::AnnotatedUrl;
-use log;
-use std::collections::HashMap;
-use std::iter::repeat;
-use std::path::Path;
-use std::time::Instant;
-use std::{env, fs};
 use tokio::sync::Mutex;
 
 /// Container for settings and runtime flags
@@ -115,7 +109,7 @@ pub async fn track_urls(
                         .contains(&query.to_lowercase()),
                     None => false,
                 },
-                Err(err) => true, // don't remove errors
+                Err(_) => true, // don't remove errors
             })
             .collect();
     }
@@ -129,7 +123,7 @@ pub async fn track_urls(
                         .contains(&query.to_lowercase()),
                     None => false,
                 },
-                Err(err) => true, // don't remove errors
+                Err(_) => true, // don't remove errors
             })
             .collect();
     }
@@ -141,7 +135,7 @@ pub async fn track_urls(
                     .channel
                     .to_lowercase()
                     .contains(&query.to_lowercase()),
-                Err(err) => true, // don't remove errors
+                Err(_) => true, // don't remove errors
             })
             .collect();
     }
