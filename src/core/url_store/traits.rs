@@ -2,13 +2,11 @@ use crate::Result;
 use crate::url_store::models::AnnotatedUrl;
 
 pub trait UrlStore {
-    /// Add an entry to the url store. This should also persist the changes (to
-    /// disk, or wherever the data is stored)
+    /// Add an entry to the url store.
     fn add(&mut self, entry: AnnotatedUrl) -> Result<()>;
 
     /// Remove any entries that match the given query. Return the entries that
-    /// were removed. This should also persist the changes (to disk, or
-    /// wherever the data is stored)
+    /// were removed.
     fn remove(&mut self, query: &str) -> Result<Vec<AnnotatedUrl>>;
 
     /// Filter the contents of the url store by a query. If the query is none,

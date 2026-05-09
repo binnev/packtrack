@@ -2,62 +2,71 @@ use chrono::{DateTime, Utc};
 
 use crate::{
     Result,
+    file_handler::{FileHandler, TextFileHandler},
     url_store::{
         UrlStore,
         models::AnnotatedUrl,
         utils::{add_to_list, filter, remove_from_list},
     },
 };
-use std::{fs, path::PathBuf};
+use std::path::PathBuf;
 
 /// Simple text-based url store with 1 url per line
 pub struct SimpleUrlStore {
-    path: PathBuf,
-    urls: Vec<AnnotatedUrl>,
+    path:         PathBuf,
+    file_handler: Box<dyn FileHandler>,
+    urls:         Vec<AnnotatedUrl>,
 }
 impl SimpleUrlStore {
-    #[allow(unreachable_code, unused)]
     pub fn new(path: PathBuf) -> Result<Self> {
-        // Don't load from file in tests
-        #[cfg(test)]
-        return Ok(Self { path, urls: vec![] });
+        #[allow(unused_mut)]
+        let mut file_handler: Box<dyn FileHandler> = Box::new(TextFileHandler);
 
-        let urls = fs::read_to_string(&path)?
+        #[cfg(test)]
+        {
+            use crate::file_handler::MockFileHandler;
+            file_handler = Box::new(MockFileHandler);
+        }
+
+        let urls = file_handler
+            .load(&path)?
             .lines()
             .map(deserialize)
             .collect::<Result<Vec<_>>>()?;
 
-        Ok(Self { path, urls })
+        Ok(Self {
+            path,
+            file_handler,
+            urls,
+        })
     }
 }
 impl UrlStore for SimpleUrlStore {
     fn add(&mut self, entry: AnnotatedUrl) -> Result<()> {
         add_to_list(&mut self.urls, entry.clone())?;
-        self.save()
-            .inspect(|_| log::info!("Added URL {entry}"))
+        log::info!("Added URL {entry}");
+        Ok(())
     }
     fn remove(&mut self, query: &str) -> Result<Vec<AnnotatedUrl>> {
         let removed = remove_from_list(&mut self.urls, query)?;
-        self.save().inspect(|_| {
-            log::info!("Removed URLs matching pattern {query}: {removed:#?}")
-        })?;
+        log::info!(
+            "Removed {} URLs matching pattern {query}: {removed:#?}",
+            removed.len()
+        );
         Ok(removed)
     }
     fn filter(&self, query: Option<&str>) -> Vec<AnnotatedUrl> {
         filter(&self.urls, query)
     }
-    #[allow(unreachable_code, unused)]
     fn save(&self) -> Result<()> {
-        #[cfg(test)]
-        return Ok(());
-
         let urls: Vec<String> = self
             .urls
             .iter()
             .cloned()
             .map(|u| serialize(&u))
             .collect();
-        fs::write(&self.path, urls.join("\n"))?;
+        self.file_handler
+            .save(&self.path, urls.join("\n"))?;
         Ok(())
     }
 }
@@ -111,11 +120,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_simple_url_store() {
-        let mut s = SimpleUrlStore {
-            path: "./tmp.txt".into(),
-            urls: vec![],
-        };
+    fn test_simple_url_store() -> Result<()> {
+        let mut s = SimpleUrlStore::new("/dev/null".into())?;
         let url = AnnotatedUrl {
             url:         "example.com".into(),
             description: None,
@@ -125,7 +131,8 @@ mod tests {
             .expect("The first add should work");
         assert_eq!(s.urls.len(), 1);
         let result = s.add(url.clone());
-        assert!(result.is_err())
+        assert!(result.is_err());
+        Ok(())
     }
 
     #[test]
