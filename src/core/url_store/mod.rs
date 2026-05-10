@@ -4,11 +4,9 @@ mod models;
 mod traits;
 mod utils;
 
-pub use implementations::json;
-pub use implementations::simple;
+pub use implementations::file_url_store;
 
 pub use error::UrlError;
-pub use json::JsonUrlStore;
+pub use file_url_store::FileUrlStore;
 pub use models::AnnotatedUrl;
-pub use simple::SimpleUrlStore;
 pub use traits::UrlStore;

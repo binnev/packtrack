@@ -1,2 +1,1 @@
-pub mod json;
-pub mod simple;
+pub mod file_url_store;
