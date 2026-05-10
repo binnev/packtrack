@@ -1,12 +1,11 @@
 use crate::cli::display::{display_job, heading, line};
 use crate::cli::settings::Settings;
-use crate::cli::urls;
 use clap::Args;
 use log;
 use packtrack::Result;
 use packtrack::api::Job;
 use packtrack::api::{Context, track_urls};
-use packtrack::url_store::AnnotatedUrl;
+use packtrack::url_store::{AnnotatedUrl, FileUrlStore, UrlStore};
 use packtrack::utils::check_path_exists;
 use std::cmp::Ordering;
 use std::path::PathBuf;
@@ -152,7 +151,8 @@ pub async fn track(
         .urls_file
         .as_ref()
         .unwrap_or(&settings.urls_file);
-    let mut urls = urls::filter(urls_file, ctx.filters.url.as_deref())?;
+    let url_store = FileUrlStore::new(urls_file.clone())?;
+    let mut urls = url_store.filter(ctx.filters.url.as_deref());
 
     // TODO: make this clearer
     if urls.len() == 0 && ctx.filters.url.is_some() {

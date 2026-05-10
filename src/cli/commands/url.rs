@@ -1,9 +1,8 @@
 use crate::cli::settings::Settings;
-use crate::cli::urls;
 use clap::Args;
 use clap::Subcommand;
 use packtrack::Result;
-use packtrack::url_store::AnnotatedUrl;
+use packtrack::url_store::{AnnotatedUrl, FileUrlStore, UrlStore};
 use packtrack::utils::check_path_exists;
 use std::path::PathBuf;
 
@@ -12,44 +11,36 @@ pub async fn handle_url_command(
     settings: &Settings,
 ) -> Result<()> {
     let default_file = &settings.urls_file;
+    let file = match &command {
+        UrlCommand::Add { args, .. } => args,
+        UrlCommand::Remove { args, .. } => args,
+        UrlCommand::List { args, .. } => args,
+    }
+    .urls_file
+    .as_ref()
+    .unwrap_or(default_file);
+    let mut url_store = FileUrlStore::new(file.clone())?;
+
     match command {
         UrlCommand::Add {
-            url,
-            description,
-            args,
+            url, description, ..
         } => {
-            let file = args
-                .urls_file
-                .as_ref()
-                .unwrap_or(default_file);
             let msg = format!("Added {url}");
             let aurl = AnnotatedUrl::new(url, description);
-            match urls::add(file, aurl) {
-                Ok(()) => println!("{msg}"),
-                Err(err) => return Err(err),
+            url_store.add(aurl)?;
+            url_store.save()?;
+            println!("{msg}");
+        }
+        UrlCommand::Remove { url, .. } => {
+            let removed = url_store.remove(&url)?;
+            url_store.save()?;
+            println!("Removed urls:");
+            for url in removed {
+                println!("{url}");
             }
         }
-        UrlCommand::Remove { url, args } => {
-            let file = args
-                .urls_file
-                .as_ref()
-                .unwrap_or(default_file);
-            match urls::remove(file, url) {
-                Ok(removed) => {
-                    println!("Removed urls:");
-                    for url in removed {
-                        println!("{url}");
-                    }
-                }
-                Err(err) => return Err(err),
-            }
-        }
-        UrlCommand::List { query, args } => {
-            let file = args
-                .urls_file
-                .as_ref()
-                .unwrap_or(default_file);
-            let urls = urls::filter(file, query.as_deref())?;
+        UrlCommand::List { query, .. } => {
+            let urls = url_store.filter(query.as_deref());
             for url in urls {
                 println!("{url}");
             }

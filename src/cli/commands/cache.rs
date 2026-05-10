@@ -1,10 +1,10 @@
 use crate::cli::display::human_readable_bytes;
 use crate::cli::settings::Settings;
 use crate::cli::url::UrlArgs;
-use crate::cli::urls;
 use clap::Subcommand;
 use packtrack::Result;
 use packtrack::cache::{Cache, JsonCache};
+use packtrack::url_store::{FileUrlStore, UrlStore};
 
 pub async fn handle_cache_command(
     command: CacheCommand,
@@ -43,8 +43,10 @@ pub async fn handle_cache_command(
 
             let mut cache = JsonCache::new()?;
             let cache_size_before = cache.size_bytes()?;
+            let url_store = FileUrlStore::new(file.clone())?;
 
-            let keep: Vec<String> = urls::filter(&urls_file, None)?
+            let keep: Vec<String> = url_store
+                .filter(None)
                 .into_iter()
                 .map(|au| au.url)
                 .collect();

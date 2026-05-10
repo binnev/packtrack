@@ -2,7 +2,6 @@ mod commands;
 mod display;
 mod main;
 mod settings;
-mod urls;
 
 pub use main::*;
 
