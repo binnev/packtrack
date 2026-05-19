@@ -3,16 +3,17 @@ use crate::cli::settings::Settings;
 use crate::cli::url::UrlArgs;
 use clap::Subcommand;
 use packtrack::Result;
-use packtrack::cache::{Cache, JsonCache};
+use packtrack::cache::{Cache, FileCache};
 use packtrack::url_store::{FileUrlStore, UrlStore};
 
 pub async fn handle_cache_command(
     command: CacheCommand,
     settings: &Settings,
 ) -> Result<()> {
+    let cache_file = settings.cache_file.clone();
     match command {
         CacheCommand::Clear => {
-            let mut cache = JsonCache::new()?;
+            let mut cache = FileCache::new(cache_file)?;
             let bytes = cache.size_bytes()?;
             cache.clear();
             cache.save()?;
@@ -21,16 +22,15 @@ pub async fn handle_cache_command(
             return Ok(());
         }
         CacheCommand::Location => {
-            println!("{}", JsonCache::get_file()?.display())
+            println!("{}", cache_file.display())
         }
         CacheCommand::Size => {
-            let cache = JsonCache::new()?;
+            let cache = FileCache::new(cache_file)?;
             let bytes = cache.size_bytes()?;
             println!("{}", human_readable_bytes(bytes))
         }
         CacheCommand::Prune { dry_run, args } => {
-            let file = JsonCache::get_file()?;
-            if !file.exists() {
+            if !cache_file.exists() {
                 println!("Cache is empty");
                 return Ok(());
             }
@@ -41,9 +41,9 @@ pub async fn handle_cache_command(
                 .unwrap_or(&settings.urls_file);
             log::info!("Using URLs file {urls_file:#?}");
 
-            let mut cache = JsonCache::new()?;
+            let mut cache = FileCache::new(cache_file)?;
             let cache_size_before = cache.size_bytes()?;
-            let url_store = FileUrlStore::new(file.clone())?;
+            let url_store = FileUrlStore::new(urls_file.clone())?;
 
             let keep: Vec<String> = url_store
                 .filter(None)

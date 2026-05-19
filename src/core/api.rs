@@ -1,4 +1,5 @@
-use crate::cache::{Cache, JsonCache};
+use crate::cache::{Cache, FileCache};
+
 use crate::cached_tracker::CachedTracker;
 use crate::error::Result;
 use crate::tracker::Package;
@@ -83,10 +84,11 @@ pub async fn track_url(
 /// Track all the given URLs asynchronously
 pub async fn track_urls(
     urls: Vec<AnnotatedUrl>,
+    cache: FileCache,
     ctx: &Context,
 ) -> Result<Vec<Job>> {
     // fire off all the tasks in parallel
-    let cache = Mutex::new(JsonCache::new()?);
+    let cache = Mutex::new(cache);
     let tasks: Vec<_> = urls
         .iter()
         .map(|url| track_url(url, &cache, ctx))

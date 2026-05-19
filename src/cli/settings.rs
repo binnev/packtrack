@@ -1,3 +1,4 @@
+use packtrack::cache::get_cache_dir;
 use packtrack::{
     Result,
     utils::{get_home_dir, load_json, project_dirs, save_json},
@@ -13,6 +14,7 @@ pub struct Settings {
     pub urls_file:         PathBuf, // owned equivalent to Path
     pub postcode:          Option<String>,
     pub language:          Option<String>,
+    pub cache_file:        PathBuf,
     /// Maximum age (in seconds) for cache entries to be reused.
     pub cache_seconds:     usize,
     /// Maximum number of entries to cache (per URL)
@@ -45,24 +47,23 @@ impl Settings {
         }
         Ok(self)
     }
-}
-impl Default for Settings {
-    fn default() -> Self {
+    fn default() -> Result<Self> {
         let home = get_home_dir().expect("Couldn't compute home dir!");
         let urls_file = home.join("packtrack.urls");
-        Self {
+        Ok(Self {
             urls_file,
             postcode: None,
             language: None,
+            cache_file: get_cache_dir()?.join("packtrack-cache.json"),
             cache_seconds: 30,
             cache_max_entries: 10,
-        }
+        })
     }
 }
 
 /// Reset the settings file to the default values
 pub fn reset() -> Result<()> {
-    let settings = Settings::default();
+    let settings = Settings::default()?;
     save(&settings)
 }
 
@@ -80,7 +81,7 @@ pub fn load() -> Result<Settings> {
     // to Settings just yet)
     let from_file: HashMap<String, Value> = load_json(&get_settings_path()?)?;
     // Use defaults to supply any missing values
-    let mut defaults = serde_json::to_value(Settings::default())?
+    let mut defaults = serde_json::to_value(Settings::default()?)?
         .as_object()
         .ok_or("Couldn't cast default Settings to HashMap?!")?
         .clone();
@@ -121,24 +122,25 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_settings_update_invalid_key() {
-        let result = Settings::default().update("Foo", "Bar");
+    fn test_settings_update_invalid_key() -> Result<()> {
+        let result = Settings::default()?.update("Foo", "Bar");
         assert_eq!(result.err().unwrap(), "Invalid setting key: Foo".into());
+        Ok(())
     }
 
     #[test]
     fn test_settings_update_string() -> Result<()> {
-        let settings = Settings::default().update("postcode", "1234AB")?;
+        let settings = Settings::default()?.update("postcode", "1234AB")?;
         assert_eq!(settings.postcode.unwrap(), "1234AB");
         Ok(())
     }
 
     #[test]
     fn test_settings_update_int() -> Result<()> {
-        let settings = Settings::default().update("cache_seconds", "30")?;
+        let settings = Settings::default()?.update("cache_seconds", "30")?;
         assert_eq!(settings.cache_seconds, 30);
 
-        let result = Settings::default().update("cache_seconds", "thirty");
+        let result = Settings::default()?.update("cache_seconds", "thirty");
         assert!(
             format!("{:?}", result.err().unwrap()).contains("ParseIntError")
         );
@@ -147,10 +149,10 @@ mod tests {
 
     #[test]
     fn test_settings_update_path() -> Result<()> {
-        let settings = Settings::default().update("urls_file", ".")?;
+        let settings = Settings::default()?.update("urls_file", ".")?;
         assert_eq!(format!("{:?}", settings.urls_file), "\".\"");
 
-        let result = Settings::default().update("urls_file", "xxxxx");
+        let result = Settings::default()?.update("urls_file", "xxxxx");
         let err = result.err().unwrap().to_string();
         assert!(err.contains("urls_file doesn't exist:"));
         assert!(err.contains("xxxxx"));

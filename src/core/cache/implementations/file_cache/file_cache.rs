@@ -1,50 +1,89 @@
-use crate::cache::models::CacheEntry;
-use crate::cache::traits::Cache;
-use crate::cache::utils::get_cache_dir;
-use crate::{Result, utils};
-use chrono::Utc;
 use std::fs::metadata;
 use std::os::unix::fs::MetadataExt;
 use std::{collections::HashMap, path::PathBuf};
 
-#[derive(Default)]
-pub struct JsonCache {
-    contents:        HashMap<String, Vec<CacheEntry>>,
-    /// max entries per url
-    pub max_entries: Option<usize>,
-    /// If true, the in-memory cache has been modified compared to the file
-    pub modified:    bool,
-}
-impl JsonCache {
-    pub fn new() -> Result<Self> {
-        Ok(Self {
-            contents: Self::load_contents()?,
-            ..Default::default()
-        })
-    }
-    pub fn with_max_entries(max_entries: usize) -> Result<Self> {
-        Ok(Self {
-            contents: Self::load_contents()?,
-            max_entries: Some(max_entries),
-            ..Default::default()
-        })
-    }
-    // RAII: load from file when instantiating
-    #[allow(unreachable_code, unused)]
-    fn load_contents() -> Result<HashMap<String, Vec<CacheEntry>>> {
-        #[cfg(test)]
-        return Ok(HashMap::new()); // don't load from file in tests
+use chrono::Utc;
 
-        let cache_file = Self::get_file()?;
-        let contents = utils::load_json(&cache_file)?;
-        log::info!("Loaded JSON cache from {cache_file:?}");
-        Ok(contents)
+use crate::{
+    Result,
+    cache::{
+        Cache,
+        implementations::file_cache::serializer::{
+            CacheEntrySerializer, JsonCacheEntrySerializer,
+        },
+        models::CacheEntry,
+    },
+    file_handler::{FileHandler, TextFileHandler},
+};
+
+/// Cache which stores its entries as a `HashMap<String, CacheEntry>` in memory,
+/// and as a text file on disk. Handles different file formats.
+pub struct FileCache {
+    path:            PathBuf,
+    contents:        HashMap<String, Vec<CacheEntry>>,
+    pub max_entries: Option<usize>,
+    pub modified:    bool,
+    file_handler:    Box<dyn FileHandler>,
+    serializer:      Box<dyn CacheEntrySerializer>,
+}
+
+impl FileCache {
+    /// RAII -- instantiating the struct also loads the cache from file.
+    pub fn new(path: PathBuf) -> Result<Self> {
+        #[allow(unused_mut)]
+        let mut file_handler: Box<dyn FileHandler> = Box::new(TextFileHandler);
+
+        // Use a mock file handler in tests to prevent tests doing IO
+        #[cfg(test)]
+        {
+            use crate::file_handler::MockFileHandler;
+            file_handler = Box::new(MockFileHandler);
+        }
+
+        let serializer = Self::select_serializer(&path)?;
+        let text = file_handler.load(&path)?;
+        let contents = serializer.deserialize(&text)?;
+        Ok(Self {
+            path,
+            contents,
+            file_handler,
+            serializer,
+            max_entries: None,
+            modified: false,
+        })
     }
-    pub fn get_file() -> Result<PathBuf> {
-        Ok(get_cache_dir()?.join("packtrack-cache.json"))
+    fn select_serializer(
+        file: &PathBuf,
+    ) -> Result<Box<dyn CacheEntrySerializer>> {
+        if !file.exists() {
+            return Err(
+                format!("File {} does not exist!", file.display()).into()
+            );
+        }
+        let ext = match file.extension() {
+            Some(s) => s.to_str().ok_or(format!(
+                "Filename {} is invalid unicode?!",
+                file.display()
+            ))?,
+            None => {
+                return Err(format!(
+                    "File {} has no extension!",
+                    file.display()
+                )
+                .into());
+            }
+        };
+        let serializer: Box<dyn CacheEntrySerializer> = match ext {
+            "json" => Box::new(JsonCacheEntrySerializer),
+            _ => {
+                return Err(format!("Unsupported file extension: {ext}").into());
+            }
+        };
+        Ok(serializer)
     }
 }
-impl Cache for JsonCache {
+
+impl Cache for FileCache {
     fn get_all_urls(&self) -> Vec<String> {
         self.contents.keys().cloned().collect()
     }
@@ -52,12 +91,12 @@ impl Cache for JsonCache {
         self.contents
             .get(url)
             .map(|v| v.iter().collect())
-            .unwrap_or(vec![])
+            .unwrap_or_default()
     }
     fn insert(&mut self, url: String, text: String) {
         let entry = CacheEntry {
             created: Utc::now(),
-            text:    text,
+            text,
         };
         self.contents
             .entry(url.clone())
@@ -77,40 +116,37 @@ impl Cache for JsonCache {
         self.modified = true;
     }
     fn remove(&mut self, url: &str) -> Vec<CacheEntry> {
-        let entries = self
+        let removed = self
             .contents
             .remove(url)
             .unwrap_or_default();
-        if entries.len() > 0 {
+        if removed.len() > 0 {
             log::info!(
                 "Removed {} from cache which had {} entries",
                 url,
-                entries.len()
+                removed.len()
             );
             self.modified = true;
         }
-        entries
+        removed
     }
-    // Save to file
-    #[allow(unreachable_code, unused)]
     fn save(&self) -> Result<()> {
-        #[cfg(test)]
-        return Ok(()); // don't write to file in tests
-
-        let cache_file = Self::get_file()?;
-        utils::save_json(&cache_file, &self.contents)?;
-        log::info!("Saved JSON cache to {cache_file:?}");
-        Ok(())
+        let path = &self.path.display();
+        self.serializer
+            .serialize(&self.contents)
+            .and_then(|text| self.file_handler.save(&self.path, text))
+            .inspect(|_| log::info!("Saved cache to {path}"))
+            .inspect_err(|err| {
+                log::error!("Error saving cache to {path}: {err}")
+            })
     }
     fn size_bytes(&self) -> Result<u64> {
-        let cache_file = Self::get_file()?;
-        if cache_file.exists() {
-            Ok(metadata(cache_file)?.size())
+        if self.path.exists() {
+            Ok(metadata(&self.path)?.size())
         } else {
             Ok(0)
         }
     }
-
     fn clear(&mut self) {
         self.contents.clear();
         self.modified = true;
@@ -119,15 +155,28 @@ impl Cache for JsonCache {
 
 #[cfg(test)]
 mod tests {
-
     use std::time::Duration;
 
+    use crate::file_handler::MockFileHandler;
+
     use super::*;
+    impl FileCache {
+        fn for_test() -> Self {
+            FileCache {
+                contents:     HashMap::new(),
+                file_handler: Box::new(MockFileHandler),
+                max_entries:  None,
+                modified:     false,
+                path:         "/dev/null".into(),
+                serializer:   Box::new(JsonCacheEntrySerializer),
+            }
+        }
+    }
 
     #[test]
-    fn test_insert_with_max_values() -> Result<()> {
-        let mut cache = JsonCache::with_max_entries(2)?;
-        assert_eq!(cache.max_entries, Some(2));
+    fn test_insert_with_max_values() {
+        let mut cache = FileCache::for_test();
+        cache.max_entries = Some(2);
         cache.insert("url".into(), "0".into());
         cache.insert("url".into(), "1".into());
         cache.insert("url".into(), "2".into());
@@ -143,12 +192,11 @@ mod tests {
             .collect();
         // only the 2 most recent ones should be kept
         assert_eq!(entries, vec!["2", "3"]);
-        Ok(())
     }
+
     #[test]
     fn test_insert_with_no_max_values() {
-        let mut cache = JsonCache::default();
-        assert_eq!(cache.max_entries, None);
+        let mut cache = FileCache::for_test();
         cache.insert("url".into(), "0".into());
         cache.insert("url".into(), "1".into());
         cache.insert("url".into(), "2".into());
@@ -168,8 +216,7 @@ mod tests {
 
     #[test]
     fn test_get() {
-        let mut cache = JsonCache::default();
-
+        let mut cache = FileCache::for_test();
         assert!(cache.get("url").is_none());
 
         cache.insert("url".into(), "text".into());
@@ -191,9 +238,10 @@ mod tests {
                 .eq("text3")
         );
     }
+
     #[test]
     fn test_remove() {
-        let mut cache = JsonCache::default();
+        let mut cache = FileCache::for_test();
         cache.insert("url".into(), "text".into());
         cache.insert("url".into(), "text2".into());
         cache.insert("url2".into(), "text3".into());
@@ -202,9 +250,10 @@ mod tests {
         assert_eq!(removed.len(), 2);
         assert_eq!(cache.contents.len(), 1);
     }
+
     #[test]
     fn test_prune() {
-        let mut cache = JsonCache::default();
+        let mut cache = FileCache::for_test();
         cache.insert("url".into(), "text".into());
         cache.insert("url".into(), "text2".into());
         cache.insert("url2".into(), "text3".into());
@@ -233,10 +282,8 @@ mod tests {
                 })
                 .collect(),
         )]);
-        let cache = JsonCache {
-            contents: contents.clone(),
-            ..Default::default()
-        };
+        let mut cache = FileCache::for_test();
+        cache.contents = contents.clone();
 
         // we should get the youngest match
         assert!(
@@ -266,7 +313,7 @@ mod tests {
 
     #[test]
     fn test_is_modified() {
-        let mut cache = JsonCache::default();
+        let mut cache = FileCache::for_test();
         assert_eq!(cache.modified, false);
         cache.insert("url".into(), "foo".into());
         assert_eq!(cache.modified, true);

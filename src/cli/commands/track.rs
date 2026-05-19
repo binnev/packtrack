@@ -5,6 +5,7 @@ use log;
 use packtrack::Result;
 use packtrack::api::Job;
 use packtrack::api::{Context, track_urls};
+use packtrack::cache::FileCache;
 use packtrack::url_store::{AnnotatedUrl, FileUrlStore, UrlStore};
 use packtrack::utils::check_path_exists;
 use std::cmp::Ordering;
@@ -161,7 +162,9 @@ pub async fn track(
             Some("dynamic".into()),
         )]
     }
-    let jobs = track_urls(urls, ctx).await?;
+    let cache_file = settings.cache_file.clone();
+    let cache = FileCache::new(cache_file)?;
+    let jobs = track_urls(urls, cache, ctx).await?;
     display_jobs(jobs, track_args.detail);
     log::info!("track_all took {:?}", start.elapsed());
     Ok(())

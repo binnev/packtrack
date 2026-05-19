@@ -2,7 +2,7 @@ use crate::utils::UtcTime;
 use chrono::{TimeDelta, Utc};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct CacheEntry {
     pub text:    String,
     pub created: UtcTime,

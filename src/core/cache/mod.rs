@@ -3,5 +3,6 @@ mod models;
 mod traits;
 mod utils;
 
-pub use implementations::json::JsonCache;
+pub use implementations::file_cache::FileCache;
 pub use traits::Cache;
+pub use utils::get_cache_dir;
