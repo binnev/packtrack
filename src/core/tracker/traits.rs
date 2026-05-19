@@ -2,7 +2,10 @@ use async_trait::async_trait;
 
 use crate::{
     error::Result,
-    tracker::{DhlTracker, GlsTracker, PostNLTracker, models::TrackerContext},
+    tracker::{
+        DhlTracker, GlsTracker, PostNLTracker, TrunkrsTracker,
+        models::TrackerContext,
+    },
 };
 use std::sync::Mutex;
 
@@ -16,6 +19,7 @@ lazy_static::lazy_static! {
         Box::new(|| Box::new(PostNLTracker)),
         Box::new(|| Box::new(DhlTracker)),
         Box::new(|| Box::new(GlsTracker)),
+        Box::new(|| Box::new(TrunkrsTracker)),
     ]);
 }
 

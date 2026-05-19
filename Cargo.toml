@@ -1,7 +1,7 @@
 [package]
 name = "packtrack"
 description = "A simple CLI for tracking mail packages"
-version = "2.8.0"
+version = "3.0.0-alpha.0"
 edition = "2024"
 repository = "https://github.com/binnev/packtrack"
 readme = "README.md"
@@ -29,3 +29,4 @@ enum-iterator = "2.1.0"
 chrono-tz = { version = "0.10.0", features = ["serde"] }
 derive_more = { version = "1.0.0", features = ["display", "from"] }
 byte-unit = "5.2.0"
+base64 = "0.22.1"

@@ -1,0 +1,133 @@
+{
+    "trunkrsNr": "419108119",
+    "merchantName": "Sender name",
+    "senderName": "Sender name",
+    "merchantProfileName": "Sender company",
+    "merchantId": 6883,
+    "recipientName": "Receiver name",
+    "remark": null,
+    "shipmentFeatures": {
+        "requirePOD": false,
+        "noSignature": false,
+        "noNeighbourDelivery": false,
+        "deliverInMailbox": false,
+        "leaveBehindPermission": false
+    },
+    "region": "CNW",
+    "leaveBehindRemark": null,
+    "product": "SAME_DAY",
+    "currentState": {
+        "stateName": "SHIPMENT_DELIVERED",
+        "setAt": "2026-05-18T18:58:48.771Z",
+        "reasonCode": null,
+        "neighbourAddressLine": null,
+        "neighbourName": null
+    },
+    "deliveryAttempts": [
+        {
+            "stateName": "SHIPMENT_DELIVERED",
+            "setAt": "2026-05-18T18:58:48.771Z",
+            "reasonCode": null
+        }
+    ],
+    "shipmentId": "19102145",
+    "recipientLocation": {
+        "version": 0,
+        "recipient_id": 37743400,
+        "address": "Streetname 420",
+        "postal_code": "1234AB",
+        "city": "CITY",
+        "country": "NL",
+        "latitude": 52.0,
+        "longitude": 5.1,
+        "postalCode": "1234AB"
+    },
+    "timeSlot": {
+        "high": "2026-05-18T20:30:00.000Z",
+        "low": "2026-05-18T15:00:00.000Z",
+        "to": "2026-05-18T19:07:19.169Z",
+        "from": "2026-05-18T18:49:02.617Z"
+    },
+    "merchantAllowsAddressChange": true,
+    "auditLogs": [
+        {
+            "shipmentId": "19102145",
+            "createdAt": "2026-05-18T18:58:48.788Z",
+            "userSub": "e20ac756-a856-4392-bdbd-e3558351be68",
+            "source": "[DRIVER-APP]: Shipment delivered"
+        },
+        {
+            "shipmentId": "19102145",
+            "createdAt": "2026-05-18T18:58:41.489Z",
+            "userSub": "e20ac756-a856-4392-bdbd-e3558351be68",
+            "source": "[DRIVER-APP]: Scan before delivery successful"
+        },
+        {
+            "shipmentId": "19102145",
+            "createdAt": "2026-05-18T15:14:54.920Z",
+            "userSub": "e20ac756-a856-4392-bdbd-e3558351be68",
+            "source": "[DRIVER-APP]: Accept shipment successful"
+        },
+        {
+            "shipmentId": "19102145",
+            "createdAt": "2026-05-18T15:14:54.607Z",
+            "userSub": "e20ac756-a856-4392-bdbd-e3558351be68",
+            "source": "[DRIVER-APP]: Accepted by driver"
+        },
+        {
+            "shipmentId": "19102145",
+            "createdAt": "2026-05-18T14:13:41.373Z",
+            "userSub": "1ijc69jrrklt4g5bmq0m0hb0o0",
+            "source": "[PLANNER]: sorted at partner CNW"
+        },
+        {
+            "shipmentId": "19102145",
+            "createdAt": "2026-05-18T14:13:26.410Z",
+            "userSub": "1ijc69jrrklt4g5bmq0m0hb0o0",
+            "source": "[PLANNER]: sorted at partner CNW"
+        },
+        {
+            "shipmentId": "19102145",
+            "createdAt": "2026-05-18T14:13:26.000Z",
+            "userSub": "[HANDSORTER-ROLE_SORTER_BELT_A_BLUE]: REGION-SAVE_ON-",
+            "source": "[HANDSORTER-ROLE_SORTER_BELT_A_BLUE]: REGION-SAVE_ON-"
+        },
+        {
+            "shipmentId": "19102145",
+            "createdAt": "2026-05-18T10:53:48.920Z",
+            "userSub": "1ijc69jrrklt4g5bmq0m0hb0o0",
+            "source": "[SORT]: Handsorted at center"
+        },
+        {
+            "shipmentId": "19102145",
+            "createdAt": "2026-05-18T10:53:48.000Z",
+            "userSub": "[HANDSORTER-ROLE_SORTER_BELT_B_RED]: CENTRAL-SAVE_ON-",
+            "source": "[HANDSORTER-ROLE_SORTER_BELT_B_RED]: CENTRAL-SAVE_ON-"
+        },
+        {
+            "shipmentId": "19102145",
+            "createdAt": "2026-05-18T10:53:43.190Z",
+            "userSub": "system",
+            "source": "[SORT]: Autosorted at VCS_B"
+        }
+    ],
+    "theme": null,
+    "merchantConfiguration": {
+        "isAddressChangeAllowed": true,
+        "isLeaveBehindAllowed": true
+    },
+    "tourDetails": {
+        "collationId": 106174942,
+        "polyline": "wtw|Hovj^Mc@CKEOIL]ZCDKJ}BoIi@sBKq@e@cBCGECCAA?CBMHIFk@h@m@`@EFON_@f@g@|@EFABABW^_A|Ac@|@GLo@~@GTAH?P@NXfCLdAHbA@HFl@BZ?FJ|AFt@HdCHvC?pA@f@@`ECjAC`A@RDNBD@DDDB@LDF@HC\\Hz@Xb@LRHj@VFRXRRNR?NNNLXXVVFRFHRP?l@EpCA|@MbD?J?HATANANUtC?DCVM~@Of@IRc@n@C@Y\\IPIPGTEVCV?X?VBPBPHn@@BVxA?`@Ef@MlAa@bECVGf@TJPDb@Lb@NjAf@`@LVJ|@\\j@R|Aj@JDPDPFrAh@LDVHJDGn@Gn@Q`BOrAx@Z?H?DBF^LB?DCBI\\L",
+        "position": 51,
+        "shipmentId": 19102145,
+        "tourId": 2556231,
+        "tourDate": "2026-05-18T00:00:00.000Z",
+        "driverId": 13151,
+        "eta": "2026-05-18T18:58:26.411Z",
+        "totalDelay": 916,
+        "legDistance": null,
+        "legDuration": 5,
+        "networkType": "NIGHT"
+    }
+}

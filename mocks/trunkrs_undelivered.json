@@ -1,0 +1,53 @@
+{
+    "trunkrsNr": "419108119",
+    "merchantName": "Sender name",
+    "senderName": "Sender name",
+    "merchantProfileName": "Sender B.V.",
+    "merchantId": 6883,
+    "recipientName": "Receiver name",
+    "remark": null,
+    "shipmentFeatures": {
+        "requirePOD": false,
+        "noSignature": false,
+        "noNeighbourDelivery": false,
+        "deliverInMailbox": false,
+        "leaveBehindPermission": false
+    },
+    "region": "CNW",
+    "leaveBehindRemark": null,
+    "product": "SAME_DAY",
+    "currentState": {
+        "stateName": "DATA_PROCESSED",
+        "setAt": "2026-05-15T12:57:34.838Z",
+        "reasonCode": null,
+        "neighbourAddressLine": null,
+        "neighbourName": null
+    },
+    "deliveryAttempts": [],
+    "shipmentId": "19102145",
+    "recipientLocation": {
+        "version": 0,
+        "recipient_id": 37743400,
+        "address": "Streetname 420",
+        "postal_code": "1234AB",
+        "city": "CITY",
+        "country": "NL",
+        "latitude": 52.0,
+        "longitude": 5.1,
+        "postalCode": "1234AB"
+    },
+    "timeSlot": {
+        "high": "2026-05-18T20:30:00.000Z",
+        "low": "2026-05-18T15:00:00.000Z",
+        "from": "2026-05-18T15:00:00.000Z",
+        "to": "2026-05-18T20:30:00.000Z"
+    },
+    "merchantAllowsAddressChange": true,
+    "auditLogs": [],
+    "theme": null,
+    "merchantConfiguration": {
+        "isAddressChangeAllowed": true,
+        "isLeaveBehindAllowed": true
+    },
+    "tourDetails": null
+}

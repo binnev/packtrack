@@ -53,7 +53,7 @@ impl GlsPackage {
         let mut events = vec![];
         if let Some(scans) = &self.scans {
             for scan in scans.iter() {
-                let event = scan.to_event()?;
+                let event = scan.to_event()?; // TODO: this interrupts the whole flow
                 events.push(event);
             }
         }
