@@ -4,9 +4,12 @@ use std::fmt::Display;
 use byte_unit::{Byte, UnitType};
 use chrono::{DateTime, Datelike, Local, TimeZone};
 use packtrack::{
+    Result,
     api::Job,
     tracker::{Event, Package, PackageStatus, TimeWindow},
 };
+
+use packtrack::settings::Settings;
 
 /// Print a nice heading with the given text like this:
 /// ╭──────────────────────────────────────────────────────────────────────────╮
@@ -171,6 +174,16 @@ fn display_status(s: &PackageStatus) -> String {
         }
         InTransit => "In transit".into(),
     }
+}
+pub fn display_settings(settings: &Settings) -> Result<()> {
+    let value = serde_json::to_value(settings)?;
+    let dict = value
+        .as_object()
+        .ok_or("Couldn't cast settings to dict!")?;
+    for (key, value) in dict.iter() {
+        println!("{key}: {value}");
+    }
+    Ok(())
 }
 
 #[cfg(test)]

@@ -1,7 +1,6 @@
 mod commands;
 mod display;
 mod main;
-mod settings;
 
 pub use main::*;
 

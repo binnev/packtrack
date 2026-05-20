@@ -1,7 +1,7 @@
-use crate::cli::settings;
-use crate::cli::settings::Settings;
+use crate::cli::display::display_settings;
 use clap::Subcommand;
 use packtrack::Result;
+use packtrack::settings::{FileSettingsManager, Settings, SettingsManager};
 
 #[derive(Subcommand)]
 pub enum ConfigCommand {
@@ -15,15 +15,19 @@ pub enum ConfigCommand {
 
 pub fn handle_config_command(
     command: ConfigCommand,
-    sets: Settings,
+    settings_manager: &mut FileSettingsManager,
 ) -> Result<()> {
+    let settings = &mut settings_manager.settings;
     match command {
-        ConfigCommand::List => settings::print()?,
+        ConfigCommand::List => display_settings(settings)?,
         ConfigCommand::Set { key, value } => {
-            let sets = sets.update(&key, value)?;
-            settings::save(&sets)?;
+            settings.update(&key, value)?;
+            settings_manager.save()?;
         }
-        ConfigCommand::Reset => settings::reset()?,
+        ConfigCommand::Reset => {
+            settings_manager.settings = Settings::default()?;
+            settings_manager.save()?;
+        }
     }
     Ok(())
 }

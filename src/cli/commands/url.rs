@@ -1,7 +1,7 @@
-use crate::cli::settings::Settings;
 use clap::Args;
 use clap::Subcommand;
 use packtrack::Result;
+use packtrack::settings::Settings;
 use packtrack::url_store::{AnnotatedUrl, FileUrlStore, UrlStore};
 use packtrack::utils::check_path_exists;
 use std::path::PathBuf;

@@ -1,6 +1,5 @@
 use crate::cli::cache::{CacheCommand, handle_cache_command};
 use crate::cli::config::{ConfigCommand, handle_config_command};
-use crate::cli::settings;
 use crate::cli::track::{TrackArgs, track};
 use crate::cli::url::{UrlCommand, handle_url_command};
 use clap::Args;
@@ -9,6 +8,7 @@ use log::{self, LevelFilter};
 use packtrack::Result;
 use packtrack::api::Context;
 use packtrack::api::Filters;
+use packtrack::settings::{FileSettingsManager, get_settings_file};
 
 pub async fn main() -> Result<()> {
     let args = Cli::parse();
@@ -27,12 +27,14 @@ pub async fn main() -> Result<()> {
         .init();
     log::debug!("Verbosity {verbosity}");
 
-    let sets = settings::load()?;
+    let settings_file = get_settings_file()?;
+    let mut settings_manager = FileSettingsManager::new(settings_file)?;
+    let settings = &settings_manager.settings;
     let ctx = Context {
         cache_seconds:      args
             .tracking
             .cache_seconds
-            .unwrap_or(sets.cache_seconds.clone()),
+            .unwrap_or(settings.cache_seconds.clone()),
         use_cache:          !args.tracking.no_cache,
         filters:            Filters {
             url:       args.tracking.url.clone(),
@@ -44,27 +46,27 @@ pub async fn main() -> Result<()> {
             .tracking
             .postcode
             .clone()
-            .or(sets.postcode.clone()),
+            .or(settings.postcode.clone()),
         preferred_language: args
             .tracking
             .language
             .clone()
-            .or(sets.language.clone())
+            .or(settings.language.clone())
             .unwrap_or(Context::default().preferred_language),
     };
     log::debug!("Cache seconds: {}", ctx.cache_seconds);
 
     // Handle subcommands
     match args.subcommand {
-        None => track(&sets, &ctx, args.tracking).await?,
+        None => track(&settings, &ctx, args.tracking).await?,
         Some(Command::Url { command }) => {
-            handle_url_command(command, &sets).await?
+            handle_url_command(command, &settings).await?
         }
         Some(Command::Config { command }) => {
-            handle_config_command(command, sets)?
+            handle_config_command(command, &mut settings_manager)?
         }
         Some(Command::Cache { command }) => {
-            handle_cache_command(command, &sets).await?
+            handle_cache_command(command, &settings).await?
         }
     }
     Ok(())

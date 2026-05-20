@@ -1,9 +1,9 @@
 use crate::cli::display::human_readable_bytes;
-use crate::cli::settings::Settings;
 use crate::cli::url::UrlArgs;
 use clap::Subcommand;
 use packtrack::Result;
 use packtrack::cache::{Cache, FileCache};
+use packtrack::settings::Settings;
 use packtrack::url_store::{FileUrlStore, UrlStore};
 
 pub async fn handle_cache_command(

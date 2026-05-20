@@ -1,11 +1,11 @@
 use crate::cli::display::{display_job, heading, line};
-use crate::cli::settings::Settings;
 use clap::Args;
 use log;
 use packtrack::Result;
 use packtrack::api::Job;
 use packtrack::api::{Context, track_urls};
 use packtrack::cache::FileCache;
+use packtrack::settings::Settings;
 use packtrack::url_store::{AnnotatedUrl, FileUrlStore, UrlStore};
 use packtrack::utils::check_path_exists;
 use std::cmp::Ordering;

@@ -1,14 +1,9 @@
-use packtrack::cache::get_cache_dir;
-use packtrack::{
-    Result,
-    utils::{get_home_dir, load_json, project_dirs, save_json},
-};
-use std::{collections::HashMap, path::PathBuf};
+use crate::cache::get_cache_dir;
+use crate::{Result, utils::get_home_dir};
+use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
-use serde_json::{Map, Value};
 
-// TODO: This should be in core
 #[derive(Serialize, Deserialize)]
 pub struct Settings {
     pub urls_file:         PathBuf, // owned equivalent to Path
@@ -24,10 +19,10 @@ impl Settings {
     /// Handle updating arbitrary key/value pairs. These could come from the CLI
     /// or API query parameters, for example.
     pub fn update(
-        mut self,
+        &mut self,
         key: &str,
         value: impl Into<String>,
-    ) -> Result<Self> {
+    ) -> Result<()> {
         let value: String = value.into();
         match key {
             "urls_file" => {
@@ -45,9 +40,9 @@ impl Settings {
             "cache_max_entries" => self.cache_max_entries = value.parse()?,
             _ => return Err(format!("Invalid setting key: {key}").into()),
         }
-        Ok(self)
+        Ok(())
     }
-    fn default() -> Result<Self> {
+    pub fn default() -> Result<Self> {
         let home = get_home_dir().expect("Couldn't compute home dir!");
         let urls_file = home.join("packtrack.urls");
         Ok(Self {
@@ -59,62 +54,6 @@ impl Settings {
             cache_max_entries: 10,
         })
     }
-}
-
-/// Reset the settings file to the default values
-pub fn reset() -> Result<()> {
-    let settings = Settings::default()?;
-    save(&settings)
-}
-
-pub fn print() -> Result<()> {
-    let dict = get_settings_as_dict()?;
-    for (key, value) in dict.iter() {
-        println!("{key}: {value}");
-    }
-    Ok(())
-}
-
-/// Load settings from file
-pub fn load() -> Result<Settings> {
-    // Load settings from file (these may be incomplete, so we don't cast them
-    // to Settings just yet)
-    let from_file: HashMap<String, Value> = load_json(&get_settings_path()?)?;
-    // Use defaults to supply any missing values
-    let mut defaults = serde_json::to_value(Settings::default()?)?
-        .as_object()
-        .ok_or("Couldn't cast default Settings to HashMap?!")?
-        .clone();
-    // Merge the two, with the values from file taking priority. Now we should
-    // have a complete settings dict.
-    defaults.extend(from_file);
-    // deserialize to Settings
-    let sets: Settings = serde_json::from_value(Value::Object(defaults))?;
-    Ok(sets)
-}
-
-/// Save settings to file
-pub fn save(settings: &Settings) -> Result<()> {
-    let path = get_settings_path()?;
-    log::info!("Saving settings to {path:?}");
-    save_json(&path, settings)
-}
-
-fn get_config_dir() -> Result<PathBuf> {
-    project_dirs().map(|dirs| dirs.config_dir().into())
-}
-
-fn get_settings_path() -> Result<PathBuf> {
-    get_config_dir().map(|config| config.join("settings.json"))
-}
-
-fn get_settings_as_dict() -> Result<Map<String, Value>> {
-    let sets = load()?;
-    let value = serde_json::to_value(sets)?;
-    let dict = value
-        .as_object()
-        .ok_or("Couldn't cast settings to dict!")?;
-    Ok(dict.clone())
 }
 
 #[cfg(test)]
@@ -130,14 +69,16 @@ mod tests {
 
     #[test]
     fn test_settings_update_string() -> Result<()> {
-        let settings = Settings::default()?.update("postcode", "1234AB")?;
+        let mut settings = Settings::default()?;
+        settings.update("postcode", "1234AB")?;
         assert_eq!(settings.postcode.unwrap(), "1234AB");
         Ok(())
     }
 
     #[test]
     fn test_settings_update_int() -> Result<()> {
-        let settings = Settings::default()?.update("cache_seconds", "30")?;
+        let mut settings = Settings::default()?;
+        settings.update("cache_seconds", "30")?;
         assert_eq!(settings.cache_seconds, 30);
 
         let result = Settings::default()?.update("cache_seconds", "thirty");
@@ -149,7 +90,8 @@ mod tests {
 
     #[test]
     fn test_settings_update_path() -> Result<()> {
-        let settings = Settings::default()?.update("urls_file", ".")?;
+        let mut settings = Settings::default()?;
+        settings.update("urls_file", ".")?;
         assert_eq!(format!("{:?}", settings.urls_file), "\".\"");
 
         let result = Settings::default()?.update("urls_file", "xxxxx");
