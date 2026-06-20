@@ -2,6 +2,131 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] - 2026-06-20
+
+### 🚀 Features
+
+- Function to display human-readable bytes
+
+
+- [**breaking**] Added cache clear method
+  - Implemented cache clear for JsonCache. Moved some file logic from CLI into JsonCache.
+  - **BREAKING CHANGE:** Cache.save is no longer async. Cache is no longer an async trait. 
+- *(UrlStore)* [**breaking**] Added save method
+
+  - **BREAKING CHANGE:** UrlStore implementations no longer persist changes to file in their `add` and `remove` methods. The caller must explicitly call `.save()`. 
+- Added DeliveredToNeighbour status and updated package display
+
+
+- [**breaking**] Made Package.status a field, not a method
+
+  - **BREAKING CHANGE:** Tracker implementations will now have to provide the Package.status field themselves 
+- *(DHL)* Implemented DeliveredToNeighbour support
+
+
+- *(GLS)* Implemented DeliveredToNeighbour support
+
+
+- *(PostNL)* Implemented DeliveredToNeighbour support
+
+
+- Added the concept of a "final" package status
+  - A package status is considered "final" if there will be no more updates. Previously, Delivered was the only "final" status. Now, however, DeliveredToNeighbour also needs to be treated as final, and there may be other final statuses in future as well -- for example a status to represent a package reaching an international border and being handed over to another carrier.
+
+- *(CLI)* Package display now sorts packages by final/non-final status
+
+
+- *(CLI)* Oneliner display now includes delivered to neighbour info
+
+
+- *(Trunkrs)* Added Tracker implementation for Trunkrs
+
+
+- Added FileHandler trait for easy mocking
+
+
+- [**breaking**] Replaced SimpleUrlStore and JsonUrlStore with FileUrlStore
+
+
+- [**breaking**] Replaced JsonCache with FileCache
+
+
+- [**breaking**] Replaced cli settings module with FileSettingsManager
+
+
+### 🐛 Bug Fixes
+
+- JsonCache size works when there's no file
+
+
+- *(CLI)* Refer to "completed" packages instead of "delivered" packages
+
+
+- *(GLS)* Fixed false positive delivered to neighbour
+
+
+- UrlStore implementations now use FileHandler
+
+
+- *(CLI)* Config update now displays updated values
+
+
+### 🚜 Refactor
+
+- Cached tracker
+
+
+- Rename cli -> main
+
+
+- *(CLI)* Separate file for cache commands
+
+
+- *(CLI)* Separate file for URL commands
+
+
+- *(CLI)* Separate file for config commands
+
+
+- *(CLI)* Separate file for track command
+
+
+- Grouped tracker implementations
+
+
+- Grouped UrlStore implementations
+
+
+- Rename tracker traits file
+
+
+- *(UrlStore)* Separated errors and models
+  - Also added UrlError as a crate::Error member
+
+- *(CLI)* Move commands to folder
+
+
+- [**breaking**] Removed cli urls module and instead used FileUrlStore directly
+
+
+### 📚 Documentation
+
+- Update tracking how-to
+
+
+- URL management and readme updates
+
+
+### 🧪 Testing
+
+- Added test which generates some docs
+
+
+### ⚙️ Miscellaneous Tasks
+
+- Removed dead code
+
+
 ## [2.8.0] - 2026-05-03
 
 ### 🚀 Features
