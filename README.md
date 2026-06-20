@@ -58,7 +58,7 @@ events:
     [Thu 18 Jun 14:00] Package out for delivery
 ```
 
-See the [tracking how-to page](/how-to/tracking) for more information. 
+See the [tracking how-to page](./how-to/tracking) for more information. 
 
 
 Consult the help for more options: 
