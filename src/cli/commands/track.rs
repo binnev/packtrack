@@ -103,11 +103,16 @@ pub fn display_jobs(jobs: Vec<Job>, completed_detail: bool) {
     // display final packages
     if completed.len() > 0 {
         heading(&"completed");
+        let separator = if completed_detail {
+            format!("\n{}\n", line())
+        } else {
+            "\n".into()
+        };
         let s = completed
             .iter()
             .map(|job| display_job(job, completed_detail))
             .collect::<Vec<_>>()
-            .join("\n");
+            .join(&separator);
         println!("{s}")
     }
 
