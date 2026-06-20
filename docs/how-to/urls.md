@@ -9,8 +9,17 @@ Added example.com/barcode/1234
 
 Add an optional description: 
 ```
-❯ packtrack url add example.com/barcode/1234 --description foo
-Added example.com/barcode/1234
+❯ packtrack url add https://jouw.postnl.nl/track-and-trace/POSTNL1-NL-1234AB --description shoes
+Added https://jouw.postnl.nl/track-and-trace/POSTNL1-NL-1234AB
+```
+
+The description will be displayed in the tracking output:
+```
+❯ packtrack
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                              C O M P L E T E D                               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+[Thu 18 Jun 14:00] PostNL POSTNL1 from Zalando to Packtrack user (shoes)
 ```
 
 ## Remove a URL 
@@ -32,6 +41,7 @@ example.com/barcode/1234
     ```
     
 ## View the list of tracked URLs
+URLs will be displayed in the order they were added (most recent last) and with their description, if they have one:
 ```sh 
 ❯ packtrack url list 
 https://my.dhlecommerce.nl/home/tracktrace/JVGLOTC0065912345/
@@ -39,7 +49,7 @@ https://my.dhlecommerce.nl/home/tracktrace/CF56620412345/1234AB
 https://jouw.postnl.nl/track-and-trace/3SFJSY998812345-NL-1234AB
 https://jouw.postnl.nl/track-and-trace/3SPTBD402412345-NL-1234AB?language=nl
 https://jouw.postnl.nl/track-and-trace/3SYZRF007412345-NL-1234AB
-https://jouw.postnl.nl/track-and-trace/3SDMDN031112345-NL-1234AB
+https://jouw.postnl.nl/track-and-trace/POSTNL1-NL-1234AB (shoes)
 ```
 
 !!! note 

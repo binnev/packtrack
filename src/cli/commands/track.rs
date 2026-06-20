@@ -216,8 +216,12 @@ mod tests {
             },
             Job {
                 url:
-                    "https://jouw.postnl.nl/track-and-trace/POSTNL1-NL-1234AB"
-                        .into(),
+                AnnotatedUrl{
+                    url: "https://jouw.postnl.nl/track-and-trace/POSTNL1-NL-1234AB".into(),
+                    description: Some("shoes".into()), 
+                    created: None,
+
+                },
                 result: Ok(Package {
                     barcode:    "POSTNL1".into(),
                     sender:     Some("Zalando".into()),

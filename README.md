@@ -23,41 +23,43 @@ packtrack config set postcode 1234
 
 Run packtrack to track all the urls: 
 ```
-❯ packtrack 
+❯ packtrack
 ╭──────────────────────────────────────────────────────────────────────────────╮
-│                               D E L I V E R E D                              │
+│                              C O M P L E T E D                               │
 ╰──────────────────────────────────────────────────────────────────────────────╯
-[Tue 25 Mar 13:04] DHL Package ABCD1
-[Tue 15 Apr 12:49] DHL Package ABCD2 from Coolblue to Packtrack User
-[Fri 02 May 10:53] PostNL Package ABCD3 from Zalando to Packtrack User
-[Mon 12 May 10:09] DHL Package ABCD4 from Packtrack User to Coolblue
-[Sat 19 Jul 13:39] DHL Package ABCD5 from bol.com to Packtrack User
-[Tue 22 Jul 11:58] PostNL Package ABCD6
-[Thu 14 Aug 11:45] PostNL Package ABCD7 from Packtrack User to Zalando
-```
-
-
-filter by carrier: 
-
-```
-❯ packtrack --carrier dhl
+[Thu 18 Jun 13:30] DHL DHL1 from Bol.com to Packtrack user
+  ╰─ Delivered to neighbour at Streetname 420
+[Thu 18 Jun 14:00] PostNL POSTNL1 from Zalando to Packtrack user (shoes)
 ╭──────────────────────────────────────────────────────────────────────────────╮
-│                               D E L I V E R E D                              │
+│                            I N   P R O G R E S S                             │
 ╰──────────────────────────────────────────────────────────────────────────────╯
-[Tue 25 Mar 13:04] DHL Package ABCD1
-[Tue 15 Apr 12:49] DHL Package ABCD2 from Coolblue to Packtrack User
-[Mon 12 May 10:09] DHL Package ABCD4 from Packtrack User to Coolblue
-[Sat 19 Jul 13:39] DHL Package ABCD5 from bol.com to Packtrack User
+PostNL POSTNL2
+URL: https://jouw.postnl.nl/track-and-trace/POSTNL2-NL-1234AB
+Status: In transit
+From: Packtrack user
+To: Zalando
+ETA: Thu 18 Jun 14:00
+ETA window: Thu 18 Jun 12:00 -- 16:00
+events:
+    [Tue 16 Jun 14:00] Package accepted
+    [Wed 17 Jun 14:00] Package sorted at depot
+    [Thu 18 Jun 14:00] Package out for delivery
+────────────────────────────────────────────────────────────────────────────────
+DHL DHL2
+URL: https://www.dhl.com/nl-nl/home/tracking.html?submit=1&tracking-id=DHL2
+Status: In transit
+From: Packtrack user
+To: Bol.com
+ETA: Thu 18 Jun 14:00
+ETA window: Thu 18 Jun 12:00 -- 16:00
+events:
+    [Tue 16 Jun 14:00] Package accepted
+    [Wed 17 Jun 14:00] Package sorted at depot
+    [Thu 18 Jun 14:00] Package out for delivery
 ```
 
-...or sender: 
-```
-❯ packtrack --sender coolblue
-╭──────────────────────────────────────────────────────────────────────────────╮
-│                               D E L I V E R E D                              │
-╰──────────────────────────────────────────────────────────────────────────────╯
-[Tue 15 Apr 12:49] DHL Package ABCD2 from Coolblue to Packtrack User
-```
+See the [tracking how-to page](/how-to/tracking) for more information. 
+
 
 Consult the help for more options: 
 

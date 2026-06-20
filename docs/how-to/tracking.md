@@ -9,7 +9,7 @@ To track all the URLs in your URLs file and receive a summary, simply run packtr
 ╰──────────────────────────────────────────────────────────────────────────────╯
 [Thu 18 Jun 13:30] DHL DHL1 from Bol.com to Packtrack user
   ╰─ Delivered to neighbour at Streetname 420
-[Thu 18 Jun 14:00] PostNL POSTNL1 from Zalando to Packtrack user
+[Thu 18 Jun 14:00] PostNL POSTNL1 from Zalando to Packtrack user (shoes)
 ╭──────────────────────────────────────────────────────────────────────────────╮
 │                            I N   P R O G R E S S                             │
 ╰──────────────────────────────────────────────────────────────────────────────╯
@@ -37,6 +37,7 @@ events:
     [Wed 17 Jun 14:00] Package sorted at depot
     [Thu 18 Jun 14:00] Package out for delivery
 ```
+
 ## Track a specific URL
 You can also filter for URLs that contain a given string. The package's barcode or tracking code often works here, because it is usually in the URL.
 ```
@@ -70,7 +71,7 @@ Filter for packages carried by PostNL:
 ╭──────────────────────────────────────────────────────────────────────────────╮
 │                              C O M P L E T E D                               │
 ╰──────────────────────────────────────────────────────────────────────────────╯
-[Thu 18 Jun 14:00] PostNL POSTNL1 from Zalando to Packtrack user
+[Thu 18 Jun 14:00] PostNL POSTNL1 from Zalando to Packtrack user (shoes)
 ╭──────────────────────────────────────────────────────────────────────────────╮
 │                            I N   P R O G R E S S                             │
 ╰──────────────────────────────────────────────────────────────────────────────╯
@@ -86,7 +87,6 @@ events:
     [Wed 17 Jun 14:00] Package sorted at depot
     [Thu 18 Jun 14:00] Package out for delivery
 ```
-
 !!! note 
     Filters do a partial string match, so `packtrack --carrier post` will also match PostNL. This goes for all the filters.
 
@@ -97,7 +97,7 @@ Filter for packages sent by Zalando:
 ╭──────────────────────────────────────────────────────────────────────────────╮
 │                              C O M P L E T E D                               │
 ╰──────────────────────────────────────────────────────────────────────────────╯
-[Thu 18 Jun 14:00] PostNL POSTNL1 from Zalando to Packtrack user
+[Thu 18 Jun 14:00] PostNL POSTNL1 from Zalando to Packtrack user (shoes)
 ```
 
 ## Filter by recipient
