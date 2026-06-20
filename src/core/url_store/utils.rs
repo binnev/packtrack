@@ -68,13 +68,6 @@ pub fn filter<'a>(
 mod tests {
     use super::*;
 
-    // Test utilities
-    impl Into<AnnotatedUrl> for &str {
-        fn into(self) -> AnnotatedUrl {
-            let url = self.to_string();
-            AnnotatedUrl::new(url, None)
-        }
-    }
     impl PartialEq<&str> for AnnotatedUrl {
         fn eq(&self, other: &&str) -> bool {
             self.url == *other

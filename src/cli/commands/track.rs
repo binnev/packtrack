@@ -169,3 +169,220 @@ pub async fn track(
     log::info!("track_all took {:?}", start.elapsed());
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use packtrack::tracker::{Event, Package, PackageStatus, TimeWindow};
+
+    use super::*;
+    fn get_jobs() -> Result<Vec<Job>> {
+        Ok(vec![
+            Job {
+                url:    "https://www.dhl.com/nl-nl/home/tracking.html?submit=1&tracking-id=DHL1"
+                    .into(),
+                result: Ok(Package {
+                    barcode:    "DHL1".into(),
+                    channel:    "DHL".into(),
+                    sender:     Some("Bol.com".into()),
+                    recipient:  Some("Packtrack user".into()),
+                    status:     PackageStatus::DeliveredToNeighbour {
+                        address: "Streetname 420".into(),
+                    },
+                    delivered:  Some("2026-06-18T11:30:00Z".parse()?),
+                    eta:        Some("2026-06-18T12:00:00Z".parse()?),
+                    eta_window: Some(TimeWindow {
+                        start: "2026-06-18T10:00:00Z".parse()?,
+                        end:   "2026-06-18T14:00:00Z".parse()?,
+                    }),
+                    events:     vec![
+                        Event {
+                            text:      "Package accepted".into(),
+                            timestamp: "2026-06-16T12:00:00Z".parse()?,
+                        },
+                        Event {
+                            text:      "Package sorted at depot".into(),
+                            timestamp: "2026-06-17T12:00:00Z".parse()?,
+                        },
+                        Event {
+                            text:      "Package out for delivery".into(),
+                            timestamp: "2026-06-18T12:00:00Z".parse()?,
+                        },
+                        Event {
+                            text:      "Package delivered to neighbour".into(),
+                            timestamp: "2026-06-18T13:00:00Z".parse()?,
+                        },
+                    ],
+                }),
+            },
+            Job {
+                url:
+                    "https://jouw.postnl.nl/track-and-trace/POSTNL1-NL-1234AB"
+                        .into(),
+                result: Ok(Package {
+                    barcode:    "POSTNL1".into(),
+                    sender:     Some("Zalando".into()),
+                    recipient:  Some("Packtrack user".into()),
+                    status:     PackageStatus::Delivered,
+                    channel:    "PostNL".into(),
+                    delivered:  Some("2026-06-18T12:00:00Z".parse()?),
+                    eta:        Some("2026-06-18T12:00:00Z".parse()?),
+                    eta_window: Some(TimeWindow {
+                        start: "2026-06-18T10:00:00Z".parse()?,
+                        end:   "2026-06-18T14:00:00Z".parse()?,
+                    }),
+                    events:     vec![
+                        Event {
+                            text:      "Package accepted".into(),
+                            timestamp: "2026-06-16T12:00:00Z".parse()?,
+                        },
+                        Event {
+                            text:      "Package sorted at depot".into(),
+                            timestamp: "2026-06-17T12:00:00Z".parse()?,
+                        },
+                        Event {
+                            text:      "Package out for delivery".into(),
+                            timestamp: "2026-06-18T12:00:00Z".parse()?,
+                        },
+                        Event {
+                            text:      "Package delivered".into(),
+                            timestamp: "2026-06-18T13:00:00Z".parse()?,
+                        },
+                    ],
+                }),
+            },
+            Job {
+                url:
+                    "https://jouw.postnl.nl/track-and-trace/POSTNL2-NL-1234AB"
+                        .into(),
+                result: Ok(Package {
+                    channel:    "PostNL".into(),
+                    barcode:    "POSTNL2".into(),
+                    sender:     Some("Packtrack user".into()),
+                    recipient:  Some("Zalando".into()),
+                    status:     PackageStatus::InTransit,
+                    delivered:  None,
+                    eta:        Some("2026-06-18T12:00:00Z".parse()?),
+                    eta_window: Some(TimeWindow {
+                        start: "2026-06-18T10:00:00Z".parse()?,
+                        end:   "2026-06-18T14:00:00Z".parse()?,
+                    }),
+                    events:     vec![
+                        Event {
+                            text:      "Package accepted".into(),
+                            timestamp: "2026-06-16T12:00:00Z".parse()?,
+                        },
+                        Event {
+                            text:      "Package sorted at depot".into(),
+                            timestamp: "2026-06-17T12:00:00Z".parse()?,
+                        },
+                        Event {
+                            text:      "Package out for delivery".into(),
+                            timestamp: "2026-06-18T12:00:00Z".parse()?,
+                        },
+                    ],
+                }),
+            },
+            Job {
+                url: "https://www.dhl.com/nl-nl/home/tracking.html?submit=1&tracking-id=DHL2".into(),
+                result: Ok(Package {
+                    channel:    "DHL".into(),
+                    barcode:    "DHL2".into(),
+                    sender:     Some("Packtrack user".into()),
+                    recipient:  Some("Bol.com".into()),
+                    status:     PackageStatus::InTransit,
+                    delivered:  None,
+                    eta:        Some("2026-06-18T12:00:00Z".parse()?),
+                    eta_window: Some(TimeWindow {
+                        start: "2026-06-18T10:00:00Z".parse()?,
+                        end:   "2026-06-18T14:00:00Z".parse()?,
+                    }),
+                    events:     vec![
+                        Event {
+                            text:      "Package accepted".into(),
+                            timestamp: "2026-06-16T12:00:00Z".parse()?,
+                        },
+                        Event {
+                            text:      "Package sorted at depot".into(),
+                            timestamp: "2026-06-17T12:00:00Z".parse()?,
+                        },
+                        Event {
+                            text:      "Package out for delivery".into(),
+                            timestamp: "2026-06-18T12:00:00Z".parse()?,
+                        },
+                    ],
+                }),
+            },
+        ])
+    }
+
+    #[test]
+    fn test_display_jobs_all() -> Result<()> {
+        let jobs = get_jobs()?;
+        println!("## Track all URLs");
+        println!(
+            "To track all the URLs in your URLs file and receive a summary, simply run packtrack with no arguments: "
+        );
+        println!("```");
+        println!("❯ packtrack");
+        display_jobs(jobs, false);
+        println!("```");
+
+        println!("## Track a specific URL");
+        println!(
+            "You can also filter for URLs that contain a given string. The package's barcode or tracking code often works here, because it is usually in the URL."
+        );
+        println!("```");
+        println!("❯ packtrack DHL1");
+        let mut jobs = get_jobs()?;
+        jobs = jobs
+            .into_iter()
+            .filter(|j| j.result.as_ref().unwrap().barcode == "DHL1")
+            .collect();
+        display_jobs(jobs, false);
+        println!("```");
+        println!(
+            "You can also pass a whole new URL. If packtrack can't find the string in your URLs file, it will assume it is a new URL and track it"
+        );
+
+        println!("## Filter by carrier");
+        println!("Filter for packages carried by PostNL:");
+        println!("```");
+        println!("❯ packtrack --carrier postnl");
+        let mut jobs = get_jobs()?;
+        jobs = jobs
+            .into_iter()
+            .filter(|j| j.result.as_ref().unwrap().channel == "PostNL")
+            .collect();
+        display_jobs(jobs, false);
+        println!("```");
+
+        println!("## Filter by sender");
+        println!("Filter for packages sent by Zalando:");
+        println!("```");
+        println!("❯ packtrack --sender zalando");
+        let mut jobs = get_jobs()?;
+        jobs = jobs
+            .into_iter()
+            .filter(|j| {
+                j.result.as_ref().unwrap().sender == Some("Zalando".into())
+            })
+            .collect();
+        display_jobs(jobs, false);
+        println!("```");
+
+        println!("## Filter by recipient");
+        println!("Filter for packages sent _to_ Zalando:");
+        println!("```");
+        println!("❯ packtrack --recipient zalando");
+        let mut jobs = get_jobs()?;
+        jobs = jobs
+            .into_iter()
+            .filter(|j| {
+                j.result.as_ref().unwrap().recipient == Some("Zalando".into())
+            })
+            .collect();
+        display_jobs(jobs, false);
+        println!("```");
+        Ok(())
+    }
+}

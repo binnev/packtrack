@@ -31,3 +31,14 @@ impl Display for AnnotatedUrl {
         Ok(())
     }
 }
+/// Mostly useful for tests where we're not concerned with the `description` or
+/// `created` fields
+impl From<&str> for AnnotatedUrl {
+    fn from(value: &str) -> Self {
+        AnnotatedUrl {
+            url:         value.into(),
+            description: None,
+            created:     None,
+        }
+    }
+}
