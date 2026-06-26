@@ -60,7 +60,8 @@ fn get_barcode_and_postcode(
     url: &str,
 ) -> (Option<&str>, Option<&str>, Option<&str>) {
     let rx =   Regex::new(
-        r"track-and-trace/(?P<barcode>[0-9A-Z]+)(?:[-/](?P<country>[A-Z]{2})[-/](?P<postcode>\d{4}[A-Z]{2}))?"    ).unwrap();
+        r"track-and-trace/(?P<barcode>[0-9A-Z]+)(?:[-/](?P<country>[A-Z]{2})[-/](?P<postcode>[0-9A-Z]+))?"
+    ).unwrap();
 
     let mut barcode = None;
     let mut country = None;
@@ -341,6 +342,12 @@ mod tests {
                 Some("1ABCDE1234567"),
                 None,
                 None,
+            ),
+            (
+                "https://tracking.postnl.nl/track-and-trace/RN488875617NL-GB-NN188UA",
+                Some("RN488875617NL"),
+                Some("GB"),
+                Some("NN188UA"),
             ),
         ] {
             let (barcode, country, postcode) = get_barcode_and_postcode(url);
