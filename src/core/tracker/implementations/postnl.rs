@@ -278,17 +278,24 @@ struct PostNLTimeWindow {
     end_date_time:   Option<UtcTime>,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 struct PostNLEvent {
     observation_date: UtcTime,
-    description:      String,
+    description:      Option<String>,
 }
 impl PostNLEvent {
     fn to_event(&self) -> Event {
+        let text = match &self.description {
+            Some(t) => t.clone(),
+            None => {
+                log::warn!("PostNLEvent contained no description: {self:?}");
+                "NO DESCRIPTION".to_string()
+            }
+        };
         Event {
             timestamp: self.observation_date,
-            text:      self.description.clone(),
+            text,
         }
     }
 }
@@ -561,6 +568,13 @@ mod tests {
         let package: PostNLPackage = serde_json::from_value(data)?;
         let recipient = package.recipient().ok_or("")?;
         assert_eq!(recipient, "Streetname 420");
+        Ok(())
+    }
+
+    #[test]
+    fn test_deserialization_null_expected_string() -> Result<()> {
+        let mock = mocks::load_text("postnl_error_null_expected_string.json")?;
+        let package = PostNLTracker.parse(mock)?;
         Ok(())
     }
 

@@ -1,0 +1,354 @@
+{
+    "colli": {
+        "3STUBA013976928": {
+            "barcode": "3STUBA013976928",
+            "partnerBarcode": null,
+            "identification": "3STUBA013976928-NL-1234AB",
+            "deliveryShipmentIdentification": null,
+            "effectiveDate": "2026-07-10T00:00:00+02:00",
+            "context": {
+                "countryIsoNumber": 31,
+                "shipmentType": "Parcel"
+            },
+            "description": "C00095T38L-2207177096",
+            "emailHash": "7EFF861532783569881CF3D791EF9EEFB924E36DF2B0D65B80AD9E6BB2305BA1",
+            "phoneHash": "",
+            "deliveryAddressType": "Recipient",
+            "recipient": {
+                "names": {
+                    "companyName": null,
+                    "personName": "Receiver Name"
+                },
+                "address": {
+                    "street": "Receiver street",
+                    "houseNumber": "20",
+                    "houseNumberSuffix": null,
+                    "postalCode": "1234AB",
+                    "town": "City",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "sender": {
+                "names": {
+                    "companyName": "bol",
+                    "personName": ""
+                },
+                "address": {
+                    "street": "Postbus",
+                    "houseNumber": "10004",
+                    "houseNumberSuffix": null,
+                    "postalCode": "5140DA",
+                    "town": "Waalwijk",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "accountId": null,
+            "isValidated": null,
+            "isMatched": null,
+            "deliveryAddress": {
+                "names": {
+                    "companyName": null,
+                    "personName": "Receiver Name"
+                },
+                "address": {
+                    "street": "Receiver street",
+                    "houseNumber": "20",
+                    "houseNumberSuffix": null,
+                    "postalCode": "1234AB",
+                    "town": "City",
+                    "country": "NL"
+                },
+                "international": {
+                    "building": null,
+                    "region": null,
+                    "district": null,
+                    "departmentName": null,
+                    "doorCode": null,
+                    "floor": null,
+                    "deliveryInstruction": null
+                }
+            },
+            "retailDeliveryLocation": null,
+            "eta": {
+                "type": "Specific",
+                "start": "2026-07-13T14:20:00+02:00",
+                "end": "2026-07-13T16:20:00+02:00",
+                "minutesOverdue": null
+            },
+            "isDelivered": true,
+            "isAtRetailLocation": false,
+            "isPickedUpAtRetailLocation": false,
+            "isAbroadRetailLocation": false,
+            "beforeFirstDeliveryAttempt": true,
+            "expectedReturnDate": null,
+            "deliveryDate": "2026-07-13T14:56:20+02:00",
+            "isDeliveryDateChanged": false,
+            "routeInformation": null,
+            "isReturnShipment": false,
+            "hasProofOfDelivery": false,
+            "details": {
+                "cashOnDelivery": null,
+                "productCode": "3085",
+                "isBelgianProduct": false,
+                "productOptionNotifications": null,
+                "businessPartnerCode": "TUBA",
+                "businessPartnerNumber": "10704330",
+                "dimensions": {
+                    "height": 356.0,
+                    "width": 380.0,
+                    "depth": 685.0,
+                    "weight": 13540.0
+                },
+                "deliveryPreferences": {
+                    "hasStandardDeliveryPlace": false,
+                    "hasNotAtHomeDeliveryPlace": false,
+                    "hasRetailDeliveryPlace": false,
+                    "isTooBigForRetail": false,
+                    "hasPbaDeliveryPlace": false,
+                    "hasStandardHomeAddressDeliveryPreference": false,
+                    "hasStandardRetailDeliveryPreference": false,
+                    "hasStandardPbaDeliveryPreference": false,
+                    "hasStandardParcelLockerAtHomeDeliveryPreference": false,
+                    "hasStandardSafePlaceDeliveryPreference": false,
+                    "hasNotAtHomeNeighborsDeliveryPreference": false,
+                    "hasNotAtHomeRetailDeliveryPreference": false,
+                    "hasNotAtHomeSafePlaceDeliveryPreference": false,
+                    "hasNotAtHomePbaDeliveryPreference": false
+                },
+                "productOptions": [
+                    {
+                        "optionCode": "028",
+                        "characteristicCode": "122"
+                    },
+                    {
+                        "optionCode": "017",
+                        "characteristicCode": "122"
+                    },
+                    {
+                        "optionCode": "001",
+                        "characteristicCode": "190"
+                    }
+                ],
+                "isRegistered": false,
+                "isInsured": false
+            },
+            "statusPhase": {
+                "index": 4,
+                "message": "Shipment delivered",
+                "route": null
+            },
+            "lastObservation": "2026-07-13T14:56:20+02:00",
+            "extraInformation": [],
+            "observations": [
+                {
+                    "observationDate": "2026-07-13T08:55:25+02:00",
+                    "observationCode": "J05",
+                    "description": "Driver is en route"
+                },
+                {
+                    "observationDate": "2026-07-13T07:56:33+02:00",
+                    "observationCode": "J01",
+                    "description": "Shipment has been sorted"
+                },
+                {
+                    "observationDate": "2026-07-12T21:15:32.999+02:00",
+                    "observationCode": "B01",
+                    "description": "Shipment received by PostNL"
+                },
+                {
+                    "observationDate": "2026-07-10T20:16:38.475+02:00",
+                    "observationCode": "A01",
+                    "description": "Shipment expected, but not yet arrived or processed at PostNL"
+                }
+            ],
+            "previouslyRerouted": false,
+            "inReroutableState": false,
+            "rerouteOptions": {
+                "otherTimeFrame": null,
+                "otherTimeFrameAvailable": false,
+                "postOfficeDelivery": false,
+                "packstationDelivery": false,
+                "reroutingUnauthorized": false,
+                "safePlaceDelivery": false,
+                "pbaDelivery": false,
+                "postOfficeDeliveryIdinFlow": false,
+                "safePlaceDeliveryIdinFlow": false,
+                "pbaDeliveryIdinFlow": false,
+                "postOfficeDeliverySustainableOption": false,
+                "pbaSustainableOption": false,
+                "isOriginalRerouteOwner": false,
+                "unavailableReasons": [
+                    2
+                ]
+            },
+            "relatedCollos": [],
+            "analyticsInfo": {
+                "features": {
+                    "none": "None"
+                },
+                "allObservations": [
+                    {
+                        "observationDate": "2026-07-10T20:16:38+02:00",
+                        "observationCode": "A98",
+                        "description": "Pre-alerted shipment enriched by PostNL management."
+                    },
+                    {
+                        "observationDate": "2026-07-10T20:16:38.475+02:00",
+                        "observationCode": "A01",
+                        "description": "Shipment expected, but not yet arrived or processed at PostNL"
+                    },
+                    {
+                        "observationDate": "2026-07-10T20:16:39.292+02:00",
+                        "observationCode": "A96",
+                        "description": "Delivery can be changed"
+                    },
+                    {
+                        "observationDate": "2026-07-12T19:12:40+02:00",
+                        "observationCode": "B03",
+                        "description": null
+                    },
+                    {
+                        "observationDate": "2026-07-12T21:15:32+02:00",
+                        "observationCode": "A04",
+                        "description": "PIOS notice"
+                    },
+                    {
+                        "observationDate": "2026-07-12T21:15:32.999+02:00",
+                        "observationCode": "B01",
+                        "description": "Shipment received by PostNL"
+                    },
+                    {
+                        "observationDate": "2026-07-12T21:16:01.596+02:00",
+                        "observationCode": "A96",
+                        "description": "Delivery can be changed"
+                    },
+                    {
+                        "observationDate": "2026-07-13T05:10:10+02:00",
+                        "observationCode": "A65",
+                        "description": "Shipment rescheduled"
+                    },
+                    {
+                        "observationDate": "2026-07-13T07:56:33+02:00",
+                        "observationCode": "J01",
+                        "description": "Shipment has been sorted"
+                    },
+                    {
+                        "observationDate": "2026-07-13T07:57:57+02:00",
+                        "observationCode": "J40",
+                        "description": "Pre-alerted and sorted on journey"
+                    },
+                    {
+                        "observationDate": "2026-07-13T08:55:25+02:00",
+                        "observationCode": "J05",
+                        "description": "Driver is en route"
+                    },
+                    {
+                        "observationDate": "2026-07-13T08:55:25+02:00",
+                        "observationCode": "A19",
+                        "description": "ETA changed"
+                    },
+                    {
+                        "observationDate": "2026-07-13T14:56:20+02:00",
+                        "observationCode": "I01",
+                        "description": "Shipment delivered"
+                    }
+                ],
+                "productOptions": [
+                    {
+                        "optionCode": "028",
+                        "characteristicCode": "122"
+                    },
+                    {
+                        "optionCode": "017",
+                        "characteristicCode": "122"
+                    },
+                    {
+                        "optionCode": "001",
+                        "characteristicCode": "190"
+                    }
+                ],
+                "shipmentStage": "Delivered",
+                "inAdvancePeriod": null,
+                "reroutableType": null,
+                "validationStatusInfo": {
+                    "isValidated": false
+                }
+            },
+            "phaseBlock": {
+                "phaseContent": null,
+                "phaseAction": null,
+                "relatedFaqs": []
+            },
+            "showRetailMap": false,
+            "linkToNetworkPartner": null,
+            "networkPartnerName": null,
+            "networkPartnerCountry": null,
+            "customsFees": null,
+            "customerFeedbackInfo": {
+                "showFeedbackOptions": false,
+                "feedbackGiven": false
+            },
+            "isInternational": false,
+            "internationalStatus": {
+                "isForeignShipment": false,
+                "phase": "ReceivedByPostNl",
+                "delay": null
+            },
+            "showOriginalDeliveryAddress": false,
+            "alerts": [
+                {
+                    "type": 3,
+                    "message": "",
+                    "suffixMessage": null,
+                    "faq": null,
+                    "title": "TrackAndTrace.Delivered",
+                    "category": 10
+                }
+            ],
+            "firstMile": null,
+            "willBeReturnedAtRetail": false,
+            "retailPickupBarcode": "O3STUBA013976928",
+            "returnPickupCancelled": false,
+            "uncertainRetailLocation": false,
+            "isSustainableDelivery": false,
+            "isSustainableOption": false,
+            "safePlaceFailure": null,
+            "isPba": false,
+            "isDeliveredAtPba": false,
+            "isPickedUpAtPba": false,
+            "isPincodeAtDoorShipment": false,
+            "isInPreAnnouncedStatus": false,
+            "pincodeStatus": null,
+            "floatingChatBot": null,
+            "shipmentAdvertisement": null,
+            "thirdPartyAdvertisements": null,
+            "isPostNLIDForPilotZipCodes": false,
+            "extraAtHome": null,
+            "canBePickedUpWithPostNLId": false,
+            "isShipmentAddressChanged": false,
+            "isPbaDelivery": false,
+            "isDelayed": false,
+            "showLastUpdateDate": false,
+            "temporaryShipment": null
+        }
+    },
+    "processed": "2026-07-16T21:57:21.7408786+02:00"
+}
