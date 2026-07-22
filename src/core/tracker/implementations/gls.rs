@@ -209,9 +209,13 @@ fn get_barcode_postcode_gls_info(
     default_postcode: Option<&str>,
 ) -> Result<(String, String)> {
     // https://www.gls-info.nl/tracking?parcelNo=123412341234&zipcode=1234AB
+    // https://www.gls-info.nl/?trackid=ACBD1234&zipcode=1234AB&lang=nl
     log::debug!("Parsing GLS url {url}");
-    let barcode = Regex::new(r".*parcelNo=([A-Z0-9]+).*")?
+    let rx1 = Regex::new(r".*parcelNo=([A-Z0-9]+).*")?;
+    let rx2 = Regex::new(r".*trackid=([A-Z0-9]+).*")?;
+    let barcode = rx1
         .captures(url)
+        .or(rx2.captures(url))
         .and_then(|caps| caps.get(1))
         .map(|m| m.as_str())
         .ok_or(format!("Couldn't get barcode from url {url}"))?
@@ -301,6 +305,15 @@ mod tests {
             )
             .unwrap(),
             ("123456789012".to_owned(), "1234AB".to_owned())
+        );
+
+        assert_eq!(
+            get_barcode_postcode(
+                    "https://www.gls-info.nl/?trackid=ACBD1234&zipcode=1234AB&lang=nl",
+                    None
+            )
+            .unwrap(),
+            ("ACBD1234".into(), "1234AB".into())
         );
 
         // sad flows
