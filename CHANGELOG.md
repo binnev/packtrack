@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.3] - 2026-07-22
+
+### 🐛 Bug Fixes
+
+- *(GLS)* Support for new URL format
+  - Am I... good at Rust?
+
 ## [3.0.2] - 2026-06-26
 
 ### 🐛 Bug Fixes
