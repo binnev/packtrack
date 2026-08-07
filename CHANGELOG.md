@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.4] - 2026-08-07
+
+### 🐛 Bug Fixes
+
+- *(PostNL)* Can now handle events without a description
+
+
 ## [3.0.3] - 2026-07-22
 
 ### 🐛 Bug Fixes
