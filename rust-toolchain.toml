@@ -1,2 +1,3 @@
 [toolchain]
-channel = "nightly"  # allows extra rustfmt features.
+channel = "nightly"            # allows extra rustfmt features.
+components = ["rust-analyzer"]
