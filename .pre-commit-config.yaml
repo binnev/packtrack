@@ -7,10 +7,23 @@ repos:
     repo: https://github.com/commitizen-tools/commitizen
     rev: v4.8.2
 
-  - repo: https://github.com/doublify/pre-commit-rust
-    rev: v1.0
+  - repo: local
     hooks:
-      - id: fmt
-        # args: ['--verbose', '--edition', '2018', '--']
-      - id: cargo-check
-        stages: [pre-commit]
+      - id: cargo fmt
+        name: cargo fmt
+        entry: cargo fmt
+        language: system
+        pass_filenames: false
+        types: [rust]
+      - id: cargo check
+        name: cargo check
+        entry: cargo check
+        language: system
+        pass_filenames: false
+        types: [rust]
+      - id: cargo clippy
+        name: cargo clippy
+        entry: cargo clippy --all-targets -- -D warnings
+        language: system
+        pass_filenames: false
+        types: [rust]
