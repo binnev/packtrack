@@ -6,17 +6,19 @@ use crate::url_store::models::AnnotatedUrl;
 /// list
 pub fn add_to_list(
     urls: &mut Vec<AnnotatedUrl>,
-    url: AnnotatedUrl,
+    new_url: AnnotatedUrl,
 ) -> Result<()> {
-    if urls
-        .iter()
-        .any(|u| u.url.contains(&url.url))
-    {
-        Err(UrlError::AlreadyInStore(url.url).into())
-    } else {
-        urls.push(url);
-        Ok(())
+    for existing_url in urls.iter() {
+        if existing_url.url.contains(&new_url.url)
+            || new_url.url.contains(&existing_url.url)
+        {
+            return Err(
+                UrlError::AlreadyInStore(existing_url.url.clone()).into()
+            );
+        }
     }
+    urls.push(new_url);
+    Ok(())
 }
 
 /// Remove URLs from a list if they match a pattern. Return an error if the
@@ -118,9 +120,18 @@ mod tests {
         Ok(())
     }
     #[test]
-    fn test_add_sad() {
+    fn test_add_fails_because_url_in_store_contains_new_url() {
         let mut urls = urls();
-        let result = add_to_list(&mut urls, "www.ups.org".into());
+        let result = add_to_list(&mut urls, "www.ups".into());
+        assert_eq!(
+            result.err().unwrap(),
+            UrlError::AlreadyInStore("www.ups.org".into()).into()
+        );
+    }
+    #[test]
+    fn test_add_fails_because_new_url_contains_url_in_store() {
+        let mut urls = urls();
+        let result = add_to_list(&mut urls, "www.ups.org?foo".into());
         assert_eq!(
             result.err().unwrap(),
             UrlError::AlreadyInStore("www.ups.org".into()).into()
