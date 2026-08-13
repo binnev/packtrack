@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.5] - 2026-08-13
+
+### 🐛 Bug Fixes
+
+- *(UrlStore)* Better duplicate detection when adding a URL
+
+
 ## [3.0.4] - 2026-08-07
 
 ### 🐛 Bug Fixes
